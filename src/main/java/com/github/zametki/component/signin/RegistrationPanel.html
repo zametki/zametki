@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <form wicket:id="register_form">
+        <h2 class="txtc mt10">Регистрация</h2>
+        <hr class="mb30">
+        <div class="form-group">
+            <label>Email</label>
+            <input wicket:id="email_field" class="form-control" type="text" required autofocus/>
+            <span wicket:id="email_error"></span>
+        </div>
+        <div class="form-group">
+            <label>Псевдоним</label>
+            <input wicket:id="login_field" class="form-control" type="text" required/>
+            <span wicket:id="login_error"></span>
+        </div>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input wicket:id="password1_field" class="form-control" type="password" required/>
+            <span wicket:id="password1_error"></span>
+        </div>
+        <div class="form-group">
+            <label>Повтор пароля</label>
+            <input wicket:id="password2_field" class="form-control" type="password" required/>
+            <span wicket:id="password2_error"></span>
+        </div>
+        <div class="txtc">
+            <a wicket:id="submit" class="btn btn-primary w100">Зарегистрироваться</a>
+        </div>
+    </form>
+</wicket:panel>
+</body>
+</html>

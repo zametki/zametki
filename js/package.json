@@ -1,0 +1,25 @@
+{
+  "name": "zametki-js",
+  "version": "0.0.1",
+  "description": "Scripts and widgets for Zametki.Org",
+  "author": "Mikhail Fursov <mike.fursov@gmail.com> (https://github.com/zametki)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zametki/zametki.git"
+  },
+  "devDependencies": {
+    "typescript": "2.1.5"
+  },
+  "dependencies": {
+    "autolinker": "1.4.0",
+    "bootstrap": "4.0.0-alpha.6",
+    "jquery": "v=1.12.4",
+    "loglevel": "1.4.1",
+    "parsleyjs": "2.6.2",
+    "ts-loader": "2.0.0"
+  },
+  "scripts": {
+    "build": "webpack"
+  }
+}

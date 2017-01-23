@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+
+    <form wicket:id="login_form">
+        <h2 class="txtc mt10">Вход</h2>
+        <hr class="mb30">
+
+        <div class="form-group">
+            <label>Email или Имя</label>
+            <input wicket:id="email_or_login_field" class="form-control" type="text" required autofocus/>
+            <span wicket:id="login_error"></span>
+        </div>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input wicket:id="password_field" class="form-control" type="password" required/>
+            <span wicket:id="password_error"></span>
+        </div>
+        <div class="txtc">
+            <a wicket:id="login_link" class="btn btn-primary w100">Вход</a>
+        </div>
+        <div class="mt15 txtc">
+            <a wicket:id="restore_link" class="txt-muted">Забыли пароль?</a>
+        </div>
+    </form>
+</wicket:panel>
+</body>
+</html>
