@@ -2,9 +2,9 @@ package com.github.zametki.component.signin;
 
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
-import com.github.zametki.component.HomePage;
-import com.github.zametki.component.form.PasswordField;
+import com.github.zametki.component.LentaPage;
 import com.github.zametki.component.form.InputField;
+import com.github.zametki.component.form.PasswordField;
 import com.github.zametki.component.parsley.LoginJsValidator;
 import com.github.zametki.component.parsley.ParsleyUtils;
 import com.github.zametki.component.parsley.PasswordJsValidator;
@@ -76,7 +76,7 @@ public class LoginPanel extends Panel {
 
                 }
                 UserSessionUtils.login(user);
-                setResponsePage(HomePage.class);
+                setResponsePage(LentaPage.class);
             }
         };
         form.add(loginButton);

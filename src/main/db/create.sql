@@ -33,3 +33,15 @@ CREATE TABLE verification_record (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+# Персональная заметка
+CREATE TABLE zametka (
+  id            INTEGER AUTO_INCREMENT PRIMARY KEY,
+  # Автор заметки.
+  user_id       INTEGER  NOT NULL REFERENCES users (id),
+  # Дата создания заметки.
+  creation_date DATETIME NOT NULL,
+  # Соредржание заметки. Сегодня - прямо в ее теле. В будущем можно поменять.
+  content       TEXT     NOT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;

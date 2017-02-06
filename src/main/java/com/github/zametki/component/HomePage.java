@@ -11,6 +11,7 @@ import com.github.zametki.util.UserSessionUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 
 import static com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
@@ -45,6 +46,7 @@ public class HomePage extends BasePage {
         loggedInBlock.setVisible(user != null);
         add(loggedInBlock);
         if (loggedInBlock.isVisible()) {
+            loggedInBlock.add(new BookmarkablePageLink("lenta_link", LentaPage.class));
             loggedInBlock.add(new AjaxLink<Void>("logout_link") {
                 @Override
                 public void onClick(AjaxRequestTarget ajaxRequestTarget) {

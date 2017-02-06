@@ -18,7 +18,7 @@ import java.util.Date;
  */
 public final class UDate implements DbTimestamp, IClusterable {
 
-    public static final UDate MIN_DATE = UDate.fromDate(new Date(0));
+    public static final UDate UNDEFINED = UDate.fromDate(new Date(0));
 
     @NotNull
     public final Instant instant;

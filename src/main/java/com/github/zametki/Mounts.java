@@ -2,6 +2,7 @@ package com.github.zametki;
 
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.InternalErrorPage;
+import com.github.zametki.component.LentaPage;
 import com.github.zametki.component.PageNotFoundPage;
 import com.github.zametki.component.help.AboutPage;
 import com.github.zametki.component.signin.ForgotPasswordPage;
@@ -23,6 +24,7 @@ public class Mounts {
                 ResetPasswordPage.class,
 
                 // User pages
+                LentaPage.class,
                 UserProfileSettingsPage.class,
 
                 // Public resources

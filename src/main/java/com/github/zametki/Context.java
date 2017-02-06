@@ -2,7 +2,9 @@ package com.github.zametki;
 
 import com.github.mjdbc.Db;
 import com.github.zametki.db.dbi.UsersDbi;
+import com.github.zametki.db.dbi.ZametkiDbi;
 import com.github.zametki.db.dbi.impl.UsersDbiImpl;
+import com.github.zametki.db.dbi.impl.ZametkiDbiImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +20,7 @@ public class Context {
 
     private static HikariDataSource ds;
     private static UsersDbi usersDbi;
+    private static ZametkiDbi zametkiDbi;
 
     private static Properties prodConfig = new Properties();
 
@@ -29,6 +32,7 @@ public class Context {
             ds = new HikariDataSource(prepareDbConfig("/hikari.properties"));
             Db db = Db.newInstance(ds);
             usersDbi = db.attachDbi(new UsersDbiImpl(db), UsersDbi.class);
+            zametkiDbi = db.attachDbi(new ZametkiDbiImpl(db), ZametkiDbi.class);
         } catch (Exception e) {
             log.error("", e);
             shutdown();
@@ -49,6 +53,10 @@ public class Context {
 
     public static UsersDbi getUsersDbi() {
         return usersDbi;
+    }
+
+    public static ZametkiDbi getZametkaDbi() {
+        return zametkiDbi;
     }
 
     public static boolean isProduction() {

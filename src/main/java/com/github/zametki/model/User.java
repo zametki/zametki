@@ -41,7 +41,7 @@ public class User extends Identifiable<UserId> {
      * Status.
      */
     @NotNull
-    public UDate registrationDate = UDate.MIN_DATE;
+    public UDate registrationDate = UDate.UNDEFINED;
 
     @Nullable
     public UDate terminationDate;
@@ -50,7 +50,7 @@ public class User extends Identifiable<UserId> {
      * Tracking.
      */
     @NotNull
-    public UDate lastLoginDate = UDate.MIN_DATE;
+    public UDate lastLoginDate = UDate.UNDEFINED;
 
     @NotNull
     public UserSettings settings = new UserSettings("");
