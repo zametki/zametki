@@ -4,9 +4,14 @@ import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.basic.ContainerWithId;
+import com.github.zametki.component.form.CategorySelector;
 import com.github.zametki.component.form.InputArea;
+import com.github.zametki.component.form.InputField;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.component.user.BaseUserPage;
+import com.github.zametki.event.UserCategoriesUpdatedEvent;
+import com.github.zametki.model.Category;
+import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.util.AbstractListProvider;
@@ -14,6 +19,8 @@ import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.UDate;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -22,6 +29,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,8 +58,14 @@ public class LentaPage extends BaseUserPage {
                     return;
                 }
                 item.add(new Label("content", z.content));
+                Category cat = Context.getCategoryDbi().getById(z.categoryId);
+                item.add(new Label("category", cat == null ? "???" : cat.title));
             }
         });
+
+        UserId userId = WebUtils.getUserOrRedirectHome().id;
+        CategorySelector categorySelector = new CategorySelector("category", userId);
+        form.add(categorySelector);
 
         InputArea textField = new InputArea("text", "");
         form.add(textField);
@@ -68,6 +82,9 @@ public class LentaPage extends BaseUserPage {
                 z.userId = WebUtils.getUserOrRedirectHome().id;
                 z.creationDate = UDate.now();
                 z.content = content;
+                z.categoryId = categorySelector.getConvertedInput();
+                //todo: check user is owner of category
+                //todo: check category is not null
                 Context.getZametkaDbi().create(z);
 
                 textField.clearInput();
@@ -78,13 +95,32 @@ public class LentaPage extends BaseUserPage {
             }
         });
 
+        InputField categoryNameField = new InputField("new_category_name", "");
+        form.add(categoryNameField);
+        form.add(new AjaxSubmitLink("add_category") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                String newCategoryName = categoryNameField.getInputString();
+                //todo: error reporting
+                if (TextUtils.isEmpty(newCategoryName)) {
+                    return;
+                }
+                Category category = new Category();
+                category.title = newCategoryName;
+                category.userId = userId;
+                Context.getCategoryDbi().create(category);
+                send(getPage(), Broadcast.BREADTH, new UserCategoriesUpdatedEvent(target, userId));
+            }
+        });
+
     }
 
     private static class LentaProvider extends AbstractListProvider<ZametkaId> {
-
         @Override
         public List<ZametkaId> getList() {
-            return Context.getZametkaDbi().getByUser(UserSession.get().getUserId());
+            List<ZametkaId> res = Context.getZametkaDbi().getByUser(UserSession.get().getUserId());
+            Collections.reverse(res);
+            return res;
         }
 
         @Override

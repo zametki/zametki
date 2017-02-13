@@ -33,6 +33,17 @@ CREATE TABLE verification_record (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+# Категория (логическа группа) заметок
+CREATE TABLE category (
+  id      INTEGER AUTO_INCREMENT PRIMARY KEY,
+  # Владелец категории.
+  user_id INTEGER     NOT NULL REFERENCES users (id),
+  # Короткое название категории.
+  title   VARCHAR(48) NOT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
 # Персональная заметка
 CREATE TABLE zametka (
   id            INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -41,7 +52,9 @@ CREATE TABLE zametka (
   # Дата создания заметки.
   creation_date DATETIME NOT NULL,
   # Соредржание заметки. Сегодня - прямо в ее теле. В будущем можно поменять.
-  content       TEXT     NOT NULL
+  content       TEXT     NOT NULL,
+  # Категория заметки
+  category      INTEGER  NOT NULL REFERENCES category (id)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

@@ -12,19 +12,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Set of 'users' table queries
+ * Set of 'zametka' table queries
  */
-public interface ZametkiSql {
+public interface ZametkaSql {
 
     @NotNull
-    @Sql("INSERT INTO zametka (creation_date, user_id, content) VALUES (:creationDate, :userId, :content)")
+    @Sql("INSERT INTO zametka (creation_date, user_id, content, category) " +
+            "VALUES (:creationDate, :userId, :content, :categoryId)")
     ZametkaId insert(@BindBean Zametka zametka);
 
     @Nullable
     @Sql("SELECT * FROM zametka WHERE id = :id")
     Zametka getById(@Bind("id") ZametkaId id);
 
-    @Nullable
+    @NotNull
     @Sql("SELECT id FROM zametka WHERE user_id = :id")
     List<ZametkaId> getByUser(@Bind("id") UserId userId);
 

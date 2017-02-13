@@ -1,3 +1,7 @@
 .w100 {
     width: 100%;
 }
+
+.inline-b {
+    display: inline-block;
+}

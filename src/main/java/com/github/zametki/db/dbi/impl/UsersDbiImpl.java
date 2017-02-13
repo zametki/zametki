@@ -1,10 +1,12 @@
 package com.github.zametki.db.dbi.impl;
 
 import com.github.mjdbc.Db;
+import com.github.zametki.Context;
 import com.github.zametki.db.dbi.AbstractDbi;
 import com.github.zametki.db.dbi.UsersDbi;
 import com.github.zametki.db.sql.UsersSql;
 import com.github.zametki.db.sql.VerificationRecordSql;
+import com.github.zametki.model.Category;
 import com.github.zametki.model.User;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.VerificationRecord;
@@ -48,6 +50,11 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
     public void createUser(@NotNull User user) {
         user.uid = UUID.randomUUID().toString();
         user.id = usersSql.insertUser(user);
+
+        Category c = new Category();
+        c.userId = user.id;
+        c.title = Category.WITHOUT_CATEGORY_TITLE;
+        Context.getCategoryDbi().create(c);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.github.mjdbc.DbMapper;
 import com.github.mjdbc.Mapper;
 
 public class ZametkaId extends AbstractId {
+
     public ZametkaId(int value) {
         super(value);
     }

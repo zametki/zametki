@@ -2,8 +2,8 @@ package com.github.zametki.db.dbi.impl;
 
 import com.github.mjdbc.Db;
 import com.github.zametki.db.dbi.AbstractDbi;
-import com.github.zametki.db.dbi.ZametkiDbi;
-import com.github.zametki.db.sql.ZametkiSql;
+import com.github.zametki.db.dbi.ZametkaDbi;
+import com.github.zametki.db.sql.ZametkaSql;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class ZametkiDbiImpl extends AbstractDbi implements ZametkiDbi {
-    private final ZametkiSql sql;
+public class ZametkaDbiImpl extends AbstractDbi implements ZametkaDbi {
+    private final ZametkaSql sql;
 
-    public ZametkiDbiImpl(@NotNull Db db) {
+    public ZametkaDbiImpl(@NotNull Db db) {
         super(db);
-        sql = db.attachSql(ZametkiSql.class);
+        sql = db.attachSql(ZametkaSql.class);
     }
 
     @Override
@@ -26,9 +26,10 @@ public class ZametkiDbiImpl extends AbstractDbi implements ZametkiDbi {
         z.id = sql.insert(z);
     }
 
+    @NotNull
     @Override
     public List<ZametkaId> getByUser(@Nullable UserId userId) {
-        return userId == null ? Collections.emptyList() : sql.getByUser(userId);
+        return userId == null || userId.equals(UserId.INVALID_ID) ? Collections.emptyList() : sql.getByUser(userId);
     }
 
     @Nullable

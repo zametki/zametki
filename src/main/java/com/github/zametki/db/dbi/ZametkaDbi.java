@@ -8,10 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface ZametkiDbi {
+public interface ZametkaDbi {
 
-    void create(@NotNull Zametka z);
+    void create(@NotNull Zametka zametka);
 
+    @NotNull
     List<ZametkaId> getByUser(@Nullable UserId userId);
 
     @Nullable

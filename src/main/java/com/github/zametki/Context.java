@@ -1,10 +1,12 @@
 package com.github.zametki;
 
 import com.github.mjdbc.Db;
+import com.github.zametki.db.dbi.CategoryDbi;
 import com.github.zametki.db.dbi.UsersDbi;
-import com.github.zametki.db.dbi.ZametkiDbi;
+import com.github.zametki.db.dbi.ZametkaDbi;
+import com.github.zametki.db.dbi.impl.CategoryDbiImpl;
 import com.github.zametki.db.dbi.impl.UsersDbiImpl;
-import com.github.zametki.db.dbi.impl.ZametkiDbiImpl;
+import com.github.zametki.db.dbi.impl.ZametkaDbiImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +22,8 @@ public class Context {
 
     private static HikariDataSource ds;
     private static UsersDbi usersDbi;
-    private static ZametkiDbi zametkiDbi;
+    private static ZametkaDbi zametkaDbi;
+    private static CategoryDbi categoryDbi;
 
     private static Properties prodConfig = new Properties();
 
@@ -32,7 +35,8 @@ public class Context {
             ds = new HikariDataSource(prepareDbConfig("/hikari.properties"));
             Db db = Db.newInstance(ds);
             usersDbi = db.attachDbi(new UsersDbiImpl(db), UsersDbi.class);
-            zametkiDbi = db.attachDbi(new ZametkiDbiImpl(db), ZametkiDbi.class);
+            zametkaDbi = db.attachDbi(new ZametkaDbiImpl(db), ZametkaDbi.class);
+            categoryDbi = db.attachDbi(new CategoryDbiImpl(db), CategoryDbi.class);
         } catch (Exception e) {
             log.error("", e);
             shutdown();
@@ -55,8 +59,12 @@ public class Context {
         return usersDbi;
     }
 
-    public static ZametkiDbi getZametkaDbi() {
-        return zametkiDbi;
+    public static ZametkaDbi getZametkaDbi() {
+        return zametkaDbi;
+    }
+
+    public static CategoryDbi getCategoryDbi() {
+        return categoryDbi;
     }
 
     public static boolean isProduction() {
@@ -64,7 +72,7 @@ public class Context {
     }
 
     public static String getBaseUrl() {
-        return isProduction() ? "http://zametki.online" : "http://localhost:8080";
+        return isProduction() ? "https://zametki.online" : "http://localhost:8080";
     }
 
     public static Properties getProdConfig() {
