@@ -22,7 +22,7 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
         super(id);
         this.userId = userId;
         setOutputMarkupId(true);
-        updateChoices(userId);
+        updateChoices();
         setChoiceRenderer(new ChoiceRenderer<CategoryId>() {
             @Override
             public Object getDisplayValue(CategoryId id) {
@@ -32,7 +32,7 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
         });
     }
 
-    private void updateChoices(@NotNull UserId userId) {
+    public void updateChoices() {
         List<CategoryId> choices = Context.getCategoryDbi().getByUser(userId);
         //todo: sort
         setChoices(choices);
@@ -44,7 +44,8 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
     @OnPayload(UserCategoriesUpdatedEvent.class)
     public void onCategoriesUpdate(UserCategoriesUpdatedEvent e) {
         if (e.userId.equals(userId)) {
-            updateChoices(userId);
+            updateChoices();
+            setDefaultModelObject(e.categoryId);
             e.target.add(this);
         }
     }

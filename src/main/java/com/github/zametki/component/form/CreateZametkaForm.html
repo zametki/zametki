@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <form wicket:id="form" class="mt20">
+
+        <div>
+            Категория:
+            <select wicket:id="category" class="custom-select ml10 form-control-sm"></select>
+            <input wicket:id="new_category_name" class="form-control form-control-sm ml10 inline-b" style="max-width: 200px;">
+            <a wicket:id="add_category" class="btn btn-sm btn-secondary ml10">Добавить категорию</a>
+        </div>
+
+        <div class="pt5">
+            <textarea wicket:id="text" class="form-control"></textarea>
+            <a wicket:id="save_button" class="btn btn-sm btn-primary mt10" style="float:right">Добавить заметку</a>
+        </div>
+    </form>
+
+</wicket:panel>
+</body>
+</html>

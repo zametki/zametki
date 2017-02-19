@@ -5,3 +5,7 @@
 .inline-b {
     display: inline-block;
 }
+
+.dropdown-hover:hover .dropdown-menu {
+    display: block;
+}

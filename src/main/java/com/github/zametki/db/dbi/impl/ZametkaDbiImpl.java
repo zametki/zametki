@@ -38,4 +38,9 @@ public class ZametkaDbiImpl extends AbstractDbi implements ZametkaDbi {
         return id == null ? null : sql.getById(id);
     }
 
+    @Override
+    public void delete(@NotNull ZametkaId zametkaId) {
+        sql.delete(zametkaId);
+    }
+
 }
