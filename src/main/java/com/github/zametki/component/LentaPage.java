@@ -16,7 +16,6 @@ import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.util.AbstractListProvider;
 import com.github.zametki.util.TextUtils;
-import com.github.zametki.util.UDate;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -29,6 +28,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -80,7 +80,7 @@ public class LentaPage extends BaseUserPage {
                 }
                 Zametka z = new Zametka();
                 z.userId = WebUtils.getUserOrRedirectHome().id;
-                z.creationDate = UDate.now();
+                z.creationDate = Instant.now();
                 z.content = content;
                 z.categoryId = categorySelector.getConvertedInput();
                 //todo: check user is owner of category

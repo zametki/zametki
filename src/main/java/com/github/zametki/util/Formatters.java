@@ -2,5 +2,5 @@ package com.github.zametki.util;
 
 public class Formatters {
 
-    public static final UDateFormat SONG_DATE_FORMAT = UDateFormat.getMskInstance("yyyy, dd MMM");
+    public static final ZDateFormat SONG_DATE_FORMAT = ZDateFormat.getMskInstance("yyyy, dd MMM");
 }

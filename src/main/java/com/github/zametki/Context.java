@@ -1,5 +1,6 @@
 package com.github.zametki;
 
+import com.github.mjdbc.Binders;
 import com.github.mjdbc.Db;
 import com.github.zametki.db.dbi.CategoryDbi;
 import com.github.zametki.db.dbi.UsersDbi;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.FileInputStream;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Properties;
 
 public class Context {
@@ -34,6 +37,7 @@ public class Context {
             }
             ds = new HikariDataSource(prepareDbConfig("/hikari.properties"));
             Db db = Db.newInstance(ds);
+            registerBuiltInTypes(db);
             usersDbi = db.attachDbi(new UsersDbiImpl(db), UsersDbi.class);
             zametkaDbi = db.attachDbi(new ZametkaDbiImpl(db), ZametkaDbi.class);
             categoryDbi = db.attachDbi(new CategoryDbiImpl(db), CategoryDbi.class);
@@ -42,6 +46,14 @@ public class Context {
             shutdown();
             throw new RuntimeException(e);
         }
+    }
+
+    private static void registerBuiltInTypes(@NotNull Db db) {
+        db.registerBinder(Instant.class, (statement, idx, value) -> Binders.TimestampBinder.bind(statement, idx, value == null ? null : new Timestamp(value.toEpochMilli())));
+        db.registerMapper(Instant.class, r -> {
+            Timestamp v = r.getTimestamp(1);
+            return v == null ? null : v.toInstant();
+        });
     }
 
     public static void shutdown() {

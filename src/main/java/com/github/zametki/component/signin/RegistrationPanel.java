@@ -3,6 +3,7 @@ package com.github.zametki.component.signin;
 
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
+import com.github.zametki.component.HomePage;
 import com.github.zametki.component.form.InputField;
 import com.github.zametki.component.form.PasswordField;
 import com.github.zametki.component.parsley.EmailJsValidator;
@@ -12,10 +13,8 @@ import com.github.zametki.component.parsley.PasswordJsValidator;
 import com.github.zametki.component.parsley.RequiredFieldJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.model.User;
-import com.github.zametki.component.HomePage;
 import com.github.zametki.util.RegistrationUtils;
 import com.github.zametki.util.TextUtils;
-import com.github.zametki.util.UDate;
 import com.github.zametki.util.UserSessionUtils;
 import com.github.zametki.util.ValidatorUtils;
 import com.github.zametki.util.WebUtils;
@@ -27,6 +26,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Instant;
 
 public class RegistrationPanel extends Panel {
 
@@ -114,8 +115,8 @@ public class RegistrationPanel extends Panel {
 
                 user = new User();
                 user.login = login;
-                user.lastLoginDate = UDate.now();
-                user.registrationDate = UDate.now();
+                user.registrationDate = Instant.now();
+                user.lastLoginDate = user.registrationDate;
                 user.email = email;
                 user.passwordHash = UserSessionUtils.password2Hash(password1);
                 Context.getUsersDbi().createUser(user);

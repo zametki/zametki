@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+
 import static org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT;
 
 /**
@@ -59,7 +61,7 @@ public class UserSessionUtils {
     public static void login(@NotNull User user) {
         UserSession.get().setUser(user);
         UserSessionUtils.setUserAutoLoginInfo(user.id.getDbValue() + ID_PASSWORD_SEPARATOR_CHAR + user.passwordHash);
-        user.lastLoginDate = UDate.now();
+        user.lastLoginDate = Instant.now();
         Context.getUsersDbi().updateLastLoginDate(user);
     }
 
@@ -101,14 +103,4 @@ public class UserSessionUtils {
         return Cookies.getCookieValue(UserSessionUtils.USER_AUTH_TOKEN);
     }
 
-
-    @NotNull
-    public static UserId getUserIdOrRedirectHome() {
-        UserSession us = UserSession.get();
-        UserId userId = us.getUserId();
-        if (userId == null) {
-            throw new RestartResponseException(HomePage.class);
-        }
-        return userId;
-    }
 }

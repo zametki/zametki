@@ -13,10 +13,11 @@ import com.github.zametki.model.VerificationRecord;
 import com.github.zametki.model.VerificationRecordId;
 import com.github.zametki.model.VerificationRecordType;
 import com.github.zametki.util.TextUtils;
-import com.github.zametki.util.UDate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -59,7 +60,7 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
 
     @Override
     public void updateLastLoginDate(@NotNull User user) {
-        user.lastLoginDate = UDate.now();
+        user.lastLoginDate = Instant.now();
         usersSql.updateLastLoginDate(user);
     }
 
@@ -81,7 +82,7 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
                 () -> "Некорректная запись: " + r + " user: " + user);
         usersSql.updatePasswordHash(user.id, user.passwordHash);
         if (r != null) {
-            vrSql.updateVerificationDate(r.id, UDate.now());
+            vrSql.updateVerificationDate(r.id, new Date());
         }
     }
 

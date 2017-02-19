@@ -16,7 +16,6 @@ import com.github.zametki.model.VerificationRecordId;
 import com.github.zametki.model.VerificationRecordType;
 import com.github.zametki.util.DigestUtils;
 import com.github.zametki.util.RegistrationUtils;
-import com.github.zametki.util.UDate;
 import com.github.zametki.util.UserSessionUtils;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.RestartResponseException;
@@ -29,6 +28,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.Instant;
 
 import static org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT;
 
@@ -70,7 +72,7 @@ public class ResetPasswordPage extends BasePage {
             return;
         }
 
-        boolean expired = r.creationDate.isBefore(UDate.now().minusHours(REQUEST_VALID_HOURS));
+        boolean expired = r.creationDate.isBefore(Instant.now().minus(Duration.ofHours(REQUEST_VALID_HOURS)));
         if (expired) {
             resetBlock.setVisible(false);
             feedback.error("Время действия кода истекло. Создайте запрос снова!");
