@@ -9,3 +9,7 @@
 .dropdown-hover:hover .dropdown-menu {
     display: block;
 }
+
+.dropdown-toggle-no-caret::after {
+    display: none;
+}
