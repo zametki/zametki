@@ -1,5 +1,3 @@
-declare const window:Window;
-
 if (window.Parsley) {
     //noinspection SpellCheckingInspection
     window.Parsley.addMessages("ru", {

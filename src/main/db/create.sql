@@ -20,7 +20,7 @@ CREATE TABLE users (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-# Запрос на что-либо: сброс пароля и тп. Определяется типом (type).
+# Запрос на что-либо: сброс пароля и тп. Определяется типом type.
 CREATE TABLE verification_record (
   id                INTEGER AUTO_INCREMENT PRIMARY KEY,
   hash              CHAR(36)     NOT NULL UNIQUE,

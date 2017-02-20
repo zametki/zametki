@@ -7,14 +7,17 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class InputArea extends TextArea<String> {
 
     private boolean autofocus;
 
-    public InputArea(@NotNull String id, @Nullable String val) {
-        super(id, Model.of(val == null ? "" : val));
+    public InputArea(@NotNull String id) {
+        this(id, "");
+    }
+
+    public InputArea(@NotNull String id, @NotNull String val) {
+        super(id, Model.of(val));
         setOutputMarkupId(true);
     }
 

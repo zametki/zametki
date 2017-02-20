@@ -31,4 +31,7 @@ public interface ZametkaSql {
 
     @Sql("DELETE FROM zametka WHERE id = :id")
     void delete(@Bind("id") ZametkaId id);
+
+    @Sql("UPDATE zametka SET content = :content, category = :categoryId WHERE id = :id")
+    void update(@NotNull @BindBean Zametka z);
 }

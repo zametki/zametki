@@ -19,4 +19,6 @@ public interface ZametkaDbi {
     Zametka getById(@Nullable ZametkaId id);
 
     void delete(@NotNull ZametkaId zametkaId);
+
+    void update(@NotNull Zametka z);
 }

@@ -8,8 +8,10 @@ import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -18,11 +20,19 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
     @NotNull
     private final UserId userId;
 
-    public CategorySelector(@NotNull String id, @NotNull UserId userId) {
+    public CategorySelector(@NotNull String id, @NotNull UserId userId, @Nullable CategoryId selectedId) {
         super(id);
         this.userId = userId;
         setOutputMarkupId(true);
-        updateChoices();
+        setDefaultModel(Model.of(selectedId));
+
+        setChoices(new LoadableDetachableModel<List<? extends CategoryId>>() {
+            @Override
+            protected List<? extends CategoryId> load() {
+                return Context.getCategoryDbi().getByUser(userId);
+            }
+        });
+
         setChoiceRenderer(new ChoiceRenderer<CategoryId>() {
             @Override
             public Object getDisplayValue(CategoryId id) {
@@ -32,20 +42,10 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
         });
     }
 
-    public void updateChoices() {
-        List<CategoryId> choices = Context.getCategoryDbi().getByUser(userId);
-        //todo: sort
-        setChoices(choices);
-        if (getDefaultModelObject() == null && !choices.isEmpty()) {
-            setDefaultModel(Model.of(choices.get(0)));
-        }
-    }
-
     @OnPayload(UserCategoriesUpdatedEvent.class)
-    public void onCategoriesUpdate(UserCategoriesUpdatedEvent e) {
+    public void onCategoriesUpdate(@NotNull UserCategoriesUpdatedEvent e) {
         if (e.userId.equals(userId)) {
-            updateChoices();
-            setDefaultModelObject(e.categoryId);
+            detach();
             e.target.add(this);
         }
     }

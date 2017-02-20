@@ -20,4 +20,8 @@ public class InputField extends TextField<String> {
     public String getInputString() {
         return TextUtils.notNull(getModelObject(), "");
     }
+
+    public void clear() {
+        setDefaultModelObject("");
+    }
 }

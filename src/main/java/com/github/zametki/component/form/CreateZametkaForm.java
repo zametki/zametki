@@ -4,6 +4,7 @@ import com.github.zametki.Context;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.event.UserCategoriesUpdatedEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
+import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.model.Category;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
@@ -27,10 +28,11 @@ public class CreateZametkaForm extends Panel {
         add(form);
 
         UserId userId = WebUtils.getUserOrRedirectHome().id;
-        CategorySelector categorySelector = new CategorySelector("category", userId);
+        //todo: save last selected category id to settings
+        CategorySelector categorySelector = new CategorySelector("category_selector", userId, null);
         form.add(categorySelector);
 
-        InputArea textField = new InputArea("text", "");
+        InputArea textField = new InputArea("text");
         form.add(textField);
 
         form.add(new ValidatingJsAjaxSubmitLink("save_button", form) {
@@ -53,17 +55,17 @@ public class CreateZametkaForm extends Panel {
                 textField.clearInput();
                 target.add(form);
 
-                send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, z.id));
+                send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, z.id, ZametkaUpdateType.CREATED));
             }
         });
 
-        InputField categoryNameField = new InputField("new_category_name", "");
+        InputField categoryNameField = new InputField("new_category_name");
         form.add(categoryNameField);
         form.add(new AjaxSubmitLink("add_category") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 String newCategoryName = categoryNameField.getInputString();
-                //todo: error reporting
+                //todo: validation & error reporting
                 if (TextUtils.isEmpty(newCategoryName)) {
                     return;
                 }
@@ -71,6 +73,11 @@ public class CreateZametkaForm extends Panel {
                 category.title = newCategoryName;
                 category.userId = userId;
                 Context.getCategoryDbi().create(category);
+
+                categoryNameField.clear();
+                target.add(categoryNameField);
+                categorySelector.setDefaultModelObject(category.id);
+
                 send(getPage(), Broadcast.BREADTH, new UserCategoriesUpdatedEvent(target, userId, category.id));
             }
         });
