@@ -24,6 +24,7 @@ public class ZametkaContentLabel extends Label {
             }
         });
         this.zametkaId = zametkaId;
+        setOutputMarkupId(true);
     }
 
     @OnPayload(ZametkaUpdateEvent.class)

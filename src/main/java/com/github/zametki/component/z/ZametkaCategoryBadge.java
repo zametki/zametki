@@ -62,7 +62,7 @@ public class ZametkaCategoryBadge extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         Zametka z = Context.getZametkaDbi().getById(zametkaId);
-                        if (z == null) {
+                        if (z == null || z.categoryId.equals(categoryId)) {
                             return;
                         }
                         z.categoryId = categoryId;

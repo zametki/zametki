@@ -5,6 +5,7 @@ import com.github.zametki.util.TextUtils;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,11 @@ public class InputArea extends TextArea<String> {
     }
 
     public InputArea(@NotNull String id, @NotNull String val) {
-        super(id, Model.of(val));
+        this(id, Model.of(val));
+    }
+
+    public InputArea(@NotNull String id, @NotNull IModel<String> m) {
+        super(id, m);
         setOutputMarkupId(true);
     }
 

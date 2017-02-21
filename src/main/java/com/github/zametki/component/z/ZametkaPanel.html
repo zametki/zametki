@@ -4,17 +4,19 @@
 <wicket:panel>
     <div wicket:id="panel">
 
-        <div wicket:id="content" class="inline-b"></div>
+        <div wicket:id="content" class="inline"></div>
 
         <wicket:container wicket:id="category_badge"/>
-        <div class="dropdown inline-b">
+        <div class="dropdown inline">
             <a href="#" class="dropdown-toggle dropdown-toggle-no-caret txt-normal f14px" data-toggle="dropdown" title="Действия">
                 <i class="fa fa-cogs"></i>
             </a>
             <div class="dropdown-menu">
+                <a wicket:id="edit_link" class="dropdown-item f14px">Редактировать</a>
                 <a wicket:id="delete_link" class="dropdown-item f14px">Удалить</a>
             </div>
         </div>
+        <div wicket:id="edit_panel"></div>
     </div>
 </wicket:panel>
 </body>

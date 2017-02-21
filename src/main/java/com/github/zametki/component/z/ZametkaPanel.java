@@ -1,6 +1,7 @@
 package com.github.zametki.component.z;
 
 import com.github.zametki.Context;
+import com.github.zametki.component.basic.AjaxCallback;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
@@ -33,6 +34,22 @@ public class ZametkaPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 Context.getZametkaDbi().delete(zametkaId);
                 send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, zametkaId, ZametkaUpdateType.DELETED));
+            }
+        });
+        panel.add(new WebMarkupContainer("edit_panel"));
+        panel.add(new AjaxLink<Void>("edit_link") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (panel.get("edit_panel") instanceof EditZametkaPanel) {
+                    return;
+                }
+                panel.get("edit_panel").replaceWith(new EditZametkaPanel("edit_panel", zametkaId, (AjaxCallback) this::closeEditPanel));
+                target.add(panel);
+            }
+
+            private void closeEditPanel(AjaxRequestTarget target) {
+                panel.get("edit_panel").replaceWith(new WebMarkupContainer("edit_panel"));
+                target.add(panel);
             }
         });
     }
