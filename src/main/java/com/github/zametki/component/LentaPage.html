@@ -3,17 +3,34 @@
 
 <wicket:extend>
 
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Zametki</a>
+        <div class="collapse navbar-collapse">
+        </div>
+    </nav>
+
     <div class="container-fluid">
 
-        <div wicket:id="create_form"></div>
+        <div class="row">
 
-        <div wicket:id="lenta" class="mt10">
-            <div wicket:id="zametka">
-                <wicket:panel wicket:id="z"></wicket:panel>
-            </div>
+            <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+                <wicket:container wicket:id="categories"/>
+            </nav>
+
+            <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+                <div wicket:id="create_form"></div>
+
+                <div wicket:id="lenta" class="mt10">
+                    <div wicket:id="zametka">
+                        <wicket:panel wicket:id="z"></wicket:panel>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
-
 </wicket:extend>
 
 </html>

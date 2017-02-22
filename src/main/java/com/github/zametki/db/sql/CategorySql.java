@@ -25,7 +25,7 @@ public interface CategorySql {
     Category getById(@Bind("id") CategoryId id);
 
     @NotNull
-    @Sql("SELECT id FROM category WHERE user_id = :userId")
+    @Sql("SELECT id FROM category WHERE user_id = :userId ORDER BY title")
     List<CategoryId> getByUser(@Bind("userId") UserId userId);
 
     @Sql("DELETE FROM category WHERE id = :id")
