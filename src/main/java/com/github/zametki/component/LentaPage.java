@@ -21,6 +21,7 @@ import org.apache.wicket.model.Model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -69,7 +70,7 @@ public class LentaPage extends BaseUserPage {
             if (state.selectedCategoryId != null) {
                 res = res.stream()
                         .map(id -> Context.getZametkaDbi().getById(id))
-                        .filter(z -> z != null && z.categoryId == state.selectedCategoryId)
+                        .filter(z -> z != null && Objects.equals(z.categoryId, state.selectedCategoryId))
                         .map(z -> z.id)
                         .collect(Collectors.toList());
             }
