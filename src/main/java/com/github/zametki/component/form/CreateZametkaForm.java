@@ -24,7 +24,7 @@ import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
 
-    public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> categoryModel) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory) {
         super(id);
 
         Form form = new Form("form");
@@ -33,7 +33,7 @@ public class CreateZametkaForm extends Panel {
 
         UserId userId = WebUtils.getUserOrRedirectHome().id;
         //todo: save last selected category id to settings
-        CategorySelector categorySelector = new CategorySelector("category_selector", userId, categoryModel);
+        CategorySelector categorySelector = new CategorySelector("category_selector", userId, activeCategory);
         form.add(categorySelector);
 
         InputArea textField = new InputArea("text");
@@ -52,7 +52,7 @@ public class CreateZametkaForm extends Panel {
                 z.creationDate = Instant.now();
                 z.content = content;
                 z.categoryId = categorySelector.getConvertedInput();
-                WicketUtils.reactiveUpdate(categoryModel, z.categoryId, target);
+                WicketUtils.reactiveUpdate(activeCategory, z.categoryId, target);
                 //todo: check user is owner of category
                 //todo: check category is not null
                 Context.getZametkaDbi().create(z);

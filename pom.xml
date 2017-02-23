@@ -126,6 +126,7 @@
             <version>2.5.1</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.github.mjdbc</groupId>
             <artifactId>mjdbc</artifactId>
@@ -172,7 +173,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>13.0</version>
+            <version>15.0</version>
             <scope>provided</scope>
         </dependency>
 

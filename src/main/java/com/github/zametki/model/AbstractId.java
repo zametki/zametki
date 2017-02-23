@@ -38,4 +38,8 @@ public class AbstractId implements DbInt, IClusterable {
     public String toString() {
         return getClass().getSimpleName() + "[" + value + "]";
     }
+
+    public boolean isValid() {
+        return value > 0;
+    }
 }

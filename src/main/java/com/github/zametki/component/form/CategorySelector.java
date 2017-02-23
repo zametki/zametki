@@ -12,8 +12,8 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -22,11 +22,18 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
     @NotNull
     private final UserId userId;
 
-    public CategorySelector(@NotNull String id, @NotNull UserId userId, @Nullable IModel<CategoryId> selectedId) {
+    /**
+     * Selector follows this model, but do not update it.
+     */
+    @NotNull
+    private final IModel<CategoryId> modelToFollow;
+
+    public CategorySelector(@NotNull String id, @NotNull UserId userId, @NotNull IModel<CategoryId> modelToFollow) {
         super(id);
         this.userId = userId;
+        this.modelToFollow = modelToFollow;
         setOutputMarkupId(true);
-        setDefaultModel(selectedId);
+        setDefaultModel(Model.of(modelToFollow.getObject()));
 
         setChoices(new LoadableDetachableModel<List<? extends CategoryId>>() {
             @Override
@@ -46,7 +53,8 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
 
     @OnModelUpdate
     public void onModelUpdated(@NotNull ModelUpdateAjaxEvent e) {
-        if (e.model == getDefaultModel()) {
+        if (e.model == modelToFollow) {
+            setModelObject(modelToFollow.getObject());
             e.target.add(this);
         }
     }
