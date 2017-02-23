@@ -12,6 +12,9 @@ public interface ZametkaDbi {
 
     void create(@NotNull Zametka zametka);
 
+    /**
+     * Список заметок сортированный по дате.
+     */
     @NotNull
     List<ZametkaId> getByUser(@Nullable UserId userId);
 

@@ -9,6 +9,7 @@ import com.github.zametki.component.form.CreateZametkaForm;
 import com.github.zametki.component.user.BaseUserPage;
 import com.github.zametki.component.z.ZametkaPanel;
 import com.github.zametki.event.ZametkaUpdateEvent;
+import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
@@ -22,6 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +58,9 @@ public class LentaPage extends BaseUserPage {
 
     @OnPayload(ZametkaUpdateEvent.class)
     public void onZametkaUpdated(ZametkaUpdateEvent e) {
+        if (e.updateType == ZametkaUpdateType.CONTENT_CHANGED) {
+            return;
+        }
         provider.detach();
         e.target.add(lenta);
     }
@@ -72,13 +77,15 @@ public class LentaPage extends BaseUserPage {
         @Override
         public List<ZametkaId> getList() {
             List<ZametkaId> res = Context.getZametkaDbi().getByUser(UserSession.get().getUserId());
-            CategoryId selectedId = state.activeCategory.getObject();
-            if (selectedId != null) {
+            CategoryId activeCategory = state.activeCategory.getObject();
+            if (activeCategory != null) {
                 res = res.stream()
                         .map(id -> Context.getZametkaDbi().getById(id))
-                        .filter(z -> z != null && Objects.equals(z.categoryId, selectedId))
+                        .filter(z -> z != null && Objects.equals(z.categoryId, activeCategory))
                         .map(z -> z.id)
                         .collect(Collectors.toList());
+            } else {
+                res = new ArrayList<>(res);
             }
             Collections.reverse(res);
             return res;

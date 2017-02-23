@@ -5,6 +5,7 @@ import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,7 +30,7 @@ public class CategoryCache {
     }
 
     public List<CategoryId> getByUser(@NotNull UserId userId, @NotNull Function<UserId, List<CategoryId>> loader) {
-        return categoriesByUser.computeIfAbsent(userId, loader);
+        return categoriesByUser.computeIfAbsent(userId, id -> Collections.unmodifiableList(loader.apply(id)));
     }
 
     public void remove(@NotNull UserId userId) {
