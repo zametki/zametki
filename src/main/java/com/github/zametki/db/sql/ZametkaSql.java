@@ -26,7 +26,7 @@ public interface ZametkaSql {
     Zametka getById(@Bind("id") ZametkaId id);
 
     @NotNull
-    @Sql("SELECT id FROM zametka WHERE user_id = :id")
+    @Sql("SELECT id FROM zametka WHERE user_id = :id ORDER BY creation_date")
     List<ZametkaId> getByUser(@Bind("id") UserId userId);
 
     @Sql("DELETE FROM zametka WHERE id = :id")
