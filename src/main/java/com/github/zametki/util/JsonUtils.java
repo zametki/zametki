@@ -1,43 +1,44 @@
 package com.github.zametki.util;
 
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class JsonUtils {
+
     public static void putOpt(JSONObject obj, boolean condition, String property, int value) throws JSONException {
         if (condition) {
-            obj.putOnce(property, value);
+            obj.put(property, value);
         }
     }
 
     public static void putOpt(JSONObject obj, boolean condition, String property, double value) throws JSONException {
         if (condition) {
-            obj.putOnce(property, value);
+            obj.put(property, value);
         }
     }
 
     public static void putOpt(JSONObject obj, boolean condition, String property, String value) throws JSONException {
         if (condition) {
-            obj.putOnce(property, value);
+            obj.put(property, value);
         }
     }
 
     public static void putOpt(JSONObject obj, boolean condition, String property, JSONArray value) throws JSONException {
         if (condition) {
-            obj.putOnce(property, value);
+            obj.put(property, value);
         }
     }
 
     public static void putOpt(JSONObject obj, boolean condition, String property, JSONObject value) throws JSONException {
         if (condition) {
-            obj.putOnce(property, value);
+            obj.put(property, value);
         }
     }
 
