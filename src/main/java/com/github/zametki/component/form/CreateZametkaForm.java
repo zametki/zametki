@@ -6,21 +6,25 @@ import com.github.zametki.event.UserCategoriesUpdatedEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.model.Category;
+import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.WebUtils;
+import com.github.zametki.util.WicketUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
 
-    public CreateZametkaForm(String id) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> categoryModel) {
         super(id);
 
         Form form = new Form("form");
@@ -29,7 +33,7 @@ public class CreateZametkaForm extends Panel {
 
         UserId userId = WebUtils.getUserOrRedirectHome().id;
         //todo: save last selected category id to settings
-        CategorySelector categorySelector = new CategorySelector("category_selector", userId, null);
+        CategorySelector categorySelector = new CategorySelector("category_selector", userId, categoryModel);
         form.add(categorySelector);
 
         InputArea textField = new InputArea("text");
@@ -48,6 +52,7 @@ public class CreateZametkaForm extends Panel {
                 z.creationDate = Instant.now();
                 z.content = content;
                 z.categoryId = categorySelector.getConvertedInput();
+                WicketUtils.reactiveUpdate(categoryModel, z.categoryId, target);
                 //todo: check user is owner of category
                 //todo: check category is not null
                 Context.getZametkaDbi().create(z);

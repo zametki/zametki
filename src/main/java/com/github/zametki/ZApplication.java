@@ -3,6 +3,7 @@ package com.github.zametki;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.HomePage;
 import com.github.zametki.component.InternalErrorPage;
+import com.github.zametki.event.dispatcher.ModelUpdatesDispatcher;
 import com.github.zametki.event.dispatcher.PayloadEventDispatcher;
 import com.github.zametki.util.NoVersionHomePageMapper;
 import com.github.zametki.util.NoVersionPageMapper;
@@ -42,6 +43,7 @@ public class ZApplication extends WebApplication {
         getMarkupSettings().setCompressWhitespace(true);
 
         getFrameworkSettings().add(new PayloadEventDispatcher());
+        getFrameworkSettings().add(new ModelUpdatesDispatcher());
 
         getRootRequestMapperAsCompound().add(new NoVersionHomePageMapper());
         ApplicationSettings appSettings = getApplicationSettings();

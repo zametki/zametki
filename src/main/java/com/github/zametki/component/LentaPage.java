@@ -8,9 +8,11 @@ import com.github.zametki.component.category.CategoryNavBar;
 import com.github.zametki.component.form.CreateZametkaForm;
 import com.github.zametki.component.user.BaseUserPage;
 import com.github.zametki.component.z.ZametkaPanel;
-import com.github.zametki.event.LentaPageSelectedCategoryChanged;
 import com.github.zametki.event.ZametkaUpdateEvent;
+import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
+import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
+import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.util.AbstractListProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -18,6 +20,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +40,8 @@ public class LentaPage extends BaseUserPage {
 
     public LentaPage() {
 
-        add(new CategoryNavBar("categories", this));
-        add(new CreateZametkaForm("create_form"));
+        add(new CategoryNavBar("categories", state.activeCategory));
+        add(new CreateZametkaForm("create_form", state.activeCategory));
         add(lenta);
 
         //todo: move to separate component
@@ -57,20 +60,23 @@ public class LentaPage extends BaseUserPage {
         e.target.add(lenta);
     }
 
-    @OnPayload(LentaPageSelectedCategoryChanged.class)
-    public void onLentaPageSelectedCategoryChanged(LentaPageSelectedCategoryChanged e) {
-        provider.detach();
-        e.target.add(lenta);
+    @OnModelUpdate
+    public void onModelUpdate(@NotNull ModelUpdateAjaxEvent e) {
+        if (e.model == state.activeCategory) {
+            provider.detach();
+            e.target.add(lenta);
+        }
     }
 
     private class LentaProvider extends AbstractListProvider<ZametkaId> {
         @Override
         public List<ZametkaId> getList() {
             List<ZametkaId> res = Context.getZametkaDbi().getByUser(UserSession.get().getUserId());
-            if (state.selectedCategoryId != null) {
+            CategoryId selectedId = state.activeCategory.getObject();
+            if (selectedId != null) {
                 res = res.stream()
                         .map(id -> Context.getZametkaDbi().getById(id))
-                        .filter(z -> z != null && Objects.equals(z.categoryId, state.selectedCategoryId))
+                        .filter(z -> z != null && Objects.equals(z.categoryId, selectedId))
                         .map(z -> z.id)
                         .collect(Collectors.toList());
             }

@@ -2,14 +2,16 @@ package com.github.zametki.component.form;
 
 import com.github.zametki.Context;
 import com.github.zametki.event.UserCategoriesUpdatedEvent;
+import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
+import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Category;
 import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,11 +22,11 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
     @NotNull
     private final UserId userId;
 
-    public CategorySelector(@NotNull String id, @NotNull UserId userId, @Nullable CategoryId selectedId) {
+    public CategorySelector(@NotNull String id, @NotNull UserId userId, @Nullable IModel<CategoryId> selectedId) {
         super(id);
         this.userId = userId;
         setOutputMarkupId(true);
-        setDefaultModel(Model.of(selectedId));
+        setDefaultModel(selectedId);
 
         setChoices(new LoadableDetachableModel<List<? extends CategoryId>>() {
             @Override
@@ -40,6 +42,13 @@ public class CategorySelector extends DropDownChoice<CategoryId> {
                 return c == null ? "???" : c.title;
             }
         });
+    }
+
+    @OnModelUpdate
+    public void onModelUpdated(@NotNull ModelUpdateAjaxEvent e) {
+        if (e.model == getDefaultModel()) {
+            e.target.add(this);
+        }
     }
 
     @OnPayload(UserCategoriesUpdatedEvent.class)

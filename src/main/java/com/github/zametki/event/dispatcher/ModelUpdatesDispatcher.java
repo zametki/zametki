@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 
-public class PayloadEventDispatcher implements IEventDispatcher {
+public class ModelUpdatesDispatcher implements IEventDispatcher {
 
     // Optimization -> deliver events only to app components.
     private static final String APP_PACKAGE = ZApplication.class.getPackage().getName();
@@ -17,19 +17,19 @@ public class PayloadEventDispatcher implements IEventDispatcher {
     @Override
     public void dispatchEvent(@NotNull Object sink, @NotNull IEvent event, @Nullable Component component) {
         Object payload = event.getPayload();
-        if (payload == null || !sink.getClass().getName().startsWith(APP_PACKAGE)) {
+        if (payload == null || !(payload instanceof ModelUpdateAjaxEvent) || !sink.getClass().getName().startsWith(APP_PACKAGE)) {
             return;
         }
         for (Method method : sink.getClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(OnPayload.class)) {
+            if (method.isAnnotationPresent(OnModelUpdate.class)) {
                 try {
                     Class[] parTypes = method.getParameterTypes();
                     //noinspection unchecked
-                    if (parTypes.length == 1 && parTypes[0].isAssignableFrom(payload.getClass())) {
+                    if (parTypes.length == 1 && parTypes[0].isAssignableFrom(ModelUpdateAjaxEvent.class)) {
                         method.invoke(sink, payload);
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException("Exception when delivering event object " + payload.getClass() + " to component " + sink.getClass() + " and method " + method.getName(), e);
+                    throw new RuntimeException("Exception when delivering model update to component " + sink.getClass() + " and method " + method.getName(), e);
                 }
             }
         }

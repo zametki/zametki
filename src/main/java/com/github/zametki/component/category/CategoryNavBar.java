@@ -3,16 +3,15 @@ package com.github.zametki.component.category;
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.behavior.ClassAppender;
-import com.github.zametki.component.LentaPage;
 import com.github.zametki.component.basic.ContainerWithId;
-import com.github.zametki.event.LentaPageSelectedCategoryChanged;
 import com.github.zametki.event.UserCategoriesUpdatedEvent;
+import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
+import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.CategoryId;
 import com.github.zametki.util.AbstractListProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -27,14 +26,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.github.zametki.util.WicketUtils.reactiveUpdate;
+
 public class CategoryNavBar extends Panel {
 
     private final ContainerWithId panel = new ContainerWithId("panel");
 
     private final CategoriesProvider provider = new CategoriesProvider();
 
-    public CategoryNavBar(String id, @NotNull LentaPage page) {
+    @NotNull
+    private final IModel<CategoryId> categoryModel;
+
+    public CategoryNavBar(String id, @NotNull IModel<CategoryId> categoryModel) {
         super(id);
+        this.categoryModel = categoryModel;
 
         add(panel);
 
@@ -45,11 +50,10 @@ public class CategoryNavBar extends Panel {
                 AjaxLink<Void> link = new AjaxLink<Void>("link") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        page.state.selectedCategoryId = o.categoryId;
-                        send(getPage(), Broadcast.BREADTH, new LentaPageSelectedCategoryChanged(target));
+                        reactiveUpdate(categoryModel, o.categoryId, target);
                     }
                 };
-                if (Objects.equals(o.categoryId, page.state.selectedCategoryId)) {
+                if (Objects.equals(o.categoryId, categoryModel.getObject())) {
                     link.add(new ClassAppender("active"));
                 }
                 item.add(link);
@@ -76,10 +80,12 @@ public class CategoryNavBar extends Panel {
         }
     }
 
-    @OnPayload(LentaPageSelectedCategoryChanged.class)
-    public void onLentaPageSelectedCategoryChanged(LentaPageSelectedCategoryChanged e) {
-        provider.detach();
-        e.target.add(panel);
+    @OnModelUpdate
+    public void onModelUpdateAjaxEvent(@NotNull ModelUpdateAjaxEvent e) {
+        if (e.model == categoryModel) {
+            provider.detach();
+            e.target.add(panel);
+        }
     }
 
     @OnPayload(UserCategoriesUpdatedEvent.class)
