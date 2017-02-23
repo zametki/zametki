@@ -39,7 +39,7 @@ public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
     @NotNull
     @Override
     public List<CategoryId> getByUser(@Nullable UserId userId) {
-        if (userId == null || !userId.isValid()) {
+        if (isInvalid(userId)) {
             return Collections.emptyList();
         }
         return cc().getByUser(userId, sql::getByUser);
@@ -48,7 +48,7 @@ public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
     @Nullable
     @Override
     public Category getById(@Nullable CategoryId id) {
-        if (id == null || !id.isValid()) {
+        if (isInvalid(id)) {
             return null;
         }
         return cc().getById(id, sql::getById);

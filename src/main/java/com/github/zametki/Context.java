@@ -3,6 +3,7 @@ package com.github.zametki;
 import com.github.mjdbc.Binders;
 import com.github.mjdbc.Db;
 import com.github.zametki.db.cache.CategoryCache;
+import com.github.zametki.db.cache.ZametkaCache;
 import com.github.zametki.db.dbi.CategoryDbi;
 import com.github.zametki.db.dbi.UsersDbi;
 import com.github.zametki.db.dbi.ZametkaDbi;
@@ -32,6 +33,7 @@ public class Context {
     private static Properties prodConfig = new Properties();
 
     private static final CategoryCache categoryCache = new CategoryCache();
+    private static final ZametkaCache zametkaCache = new ZametkaCache();
 
     public static void init() {
         try {
@@ -84,6 +86,10 @@ public class Context {
 
     public static CategoryCache getCategoryCache() {
         return categoryCache;
+    }
+
+    public static ZametkaCache getZametkaCache() {
+        return zametkaCache;
     }
 
     public static boolean isProduction() {
