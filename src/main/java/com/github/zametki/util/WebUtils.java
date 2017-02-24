@@ -39,31 +39,43 @@ public class WebUtils {
         target.appendJavaScript("$('#" + id + "').focus();");
     }
 
-    public static void addFocusOnEnter(@NotNull Component keypressComponent, @NotNull Component component) {
+    public static void focusOnEnter(@NotNull Component keypressComponent, @NotNull Component component) {
         String markupId = component.getMarkupId();
         if (TextUtils.isEmpty(markupId)) {
             log.error("Component has no markup id: " + component);
             return;
         }
-        addFocusOnEnter(keypressComponent, markupId);
+        focusOnEnter(keypressComponent, markupId);
     }
 
-    public static void addFocusOnEnter(@NotNull Component keypressComponent, @NotNull String focusedId) {
+    public static void focusOnEnter(@NotNull Component keypressComponent, @NotNull String focusedId) {
         keypressComponent.add(new AttributeAppender("onkeypress", "$site.Utils.focusOnEnter(event, '#" + focusedId + "');"));
     }
 
-    public static void addClickOnEnter(@NotNull Component keypressComponent, @NotNull Component component) {
+    public static void clickOnEnter(@NotNull Component keypressComponent, @NotNull Component component) {
         String markupId = component.getMarkupId();
         if (TextUtils.isEmpty(markupId)) {
             log.error("Component has no markup id: " + component);
             return;
         }
-        addClickOnEnter(keypressComponent, markupId);
-
+        clickOnEnter(keypressComponent, markupId);
     }
 
-    public static void addClickOnEnter(@NotNull Component keypressComponent, @NotNull String clickedId) {
+    public static void clickOnEnter(@NotNull Component keypressComponent, @NotNull String clickedId) {
         keypressComponent.add(new AttributeAppender("onkeypress", "$site.Utils.clickOnEnter(event, '#" + clickedId + "');"));
+    }
+
+    public static void clickOnCtrlEnter(@NotNull Component keypressComponent, @NotNull Component component) {
+        String markupId = component.getMarkupId();
+        if (TextUtils.isEmpty(markupId)) {
+            log.error("Component has no markup id: " + component);
+            return;
+        }
+        clickOnCtrlEnter(keypressComponent, markupId);
+    }
+
+    public static void clickOnCtrlEnter(@NotNull Component keypressComponent, @NotNull String clickedId) {
+        keypressComponent.add(new AttributeAppender("onkeypress", "$site.Utils.clickOnCtrlEnter(event, '#" + clickedId + "');"));
     }
 
     @NotNull

@@ -81,8 +81,8 @@ public class LoginPanel extends Panel {
         };
         form.add(loginButton);
 
-        WebUtils.addFocusOnEnter(emailOrLoginField, passwordField);
-        WebUtils.addClickOnEnter(passwordField, loginButton);
+        WebUtils.focusOnEnter(emailOrLoginField, passwordField);
+        WebUtils.clickOnEnter(passwordField, loginButton);
     }
 
 }

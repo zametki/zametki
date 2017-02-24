@@ -2,11 +2,12 @@ package com.github.zametki.model;
 
 import com.github.mjdbc.type.DbInt;
 import org.apache.wicket.util.io.IClusterable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Base class for all Ids. Serializable DB value.
  */
-public class AbstractId implements DbInt, IClusterable {
+public class AbstractId implements DbInt, IClusterable, Comparable<AbstractId> {
     protected final int value;
 
     public AbstractId(int value) {
@@ -41,5 +42,10 @@ public class AbstractId implements DbInt, IClusterable {
 
     public boolean isValid() {
         return value > 0;
+    }
+
+    @Override
+    public int compareTo(@NotNull AbstractId o) {
+        return Integer.compare(value, o.value);
     }
 }

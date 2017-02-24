@@ -113,8 +113,8 @@ public class ForgotPasswordPage extends BasePage {
         };
         form.add(resetLink);
 
-        WebUtils.addFocusOnEnter(emailOrLoginField, captchaField);
-        WebUtils.addClickOnEnter(captchaField, resetLink);
+        WebUtils.focusOnEnter(emailOrLoginField, captchaField);
+        WebUtils.clickOnEnter(captchaField, resetLink);
     }
 
 }

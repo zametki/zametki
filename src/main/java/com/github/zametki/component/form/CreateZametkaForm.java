@@ -1,19 +1,21 @@
 package com.github.zametki.component.form;
 
 import com.github.zametki.Context;
+import com.github.zametki.component.basic.AjaxCallback;
+import com.github.zametki.component.basic.ComponentFactory;
+import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
+import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
-import com.github.zametki.event.UserCategoriesUpdatedEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
-import com.github.zametki.model.Category;
 import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
+import com.github.zametki.util.CategoryUtils;
 import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.WebUtils;
 import com.github.zametki.util.WicketUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
+    private BootstrapModal addCategoryModal;
 
     public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory) {
         super(id);
@@ -39,7 +42,8 @@ public class CreateZametkaForm extends Panel {
         InputArea textField = new InputArea("text");
         form.add(textField);
 
-        form.add(new ValidatingJsAjaxSubmitLink("save_button", form) {
+
+        ValidatingJsAjaxSubmitLink createLink = new ValidatingJsAjaxSubmitLink("save_button", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
@@ -51,7 +55,11 @@ public class CreateZametkaForm extends Panel {
                 z.userId = WebUtils.getUserOrRedirectHome().id;
                 z.creationDate = Instant.now();
                 z.content = content;
-                z.categoryId = categorySelector.getConvertedInput();
+                CategoryId categoryId = categorySelector.getConvertedInput();
+                if (categoryId == null) {
+                    categoryId = CategoryUtils.getDefaultCategoryForUser(userId);
+                }
+                z.categoryId = categoryId;
                 WicketUtils.reactiveUpdate(activeCategory, z.categoryId, target);
                 //todo: check user is owner of category
                 //todo: check category is not null
@@ -62,29 +70,17 @@ public class CreateZametkaForm extends Panel {
 
                 send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, z.id, ZametkaUpdateType.CREATED));
             }
-        });
+        };
+        form.add(createLink);
 
-        InputField categoryNameField = new InputField("new_category_name");
-        form.add(categoryNameField);
-        form.add(new AjaxSubmitLink("add_category") {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target) {
-                String newCategoryName = categoryNameField.getInputString();
-                //todo: validation & error reporting
-                if (TextUtils.isEmpty(newCategoryName)) {
-                    return;
-                }
-                Category category = new Category();
-                category.title = newCategoryName;
-                category.userId = userId;
-                Context.getCategoryDbi().create(category);
+        WebUtils.clickOnCtrlEnter(textField, createLink);
 
-                categoryNameField.clear();
-                target.add(categoryNameField);
-                categorySelector.setDefaultModelObject(category.id);
+        addCategoryModal = new BootstrapModal("add_category_modal", "Добавить категорию",
+                (ComponentFactory) markupId -> new CreateCategoryForm(markupId, categorySelector.getModel(),
+                        (AjaxCallback) target -> addCategoryModal.hide(target)),
+                BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);
+        add(addCategoryModal);
 
-                send(getPage(), Broadcast.BREADTH, new UserCategoriesUpdatedEvent(target, userId, category.id));
-            }
-        });
+        form.add(new BootstrapLazyModalLink("add_category", addCategoryModal));
     }
 }

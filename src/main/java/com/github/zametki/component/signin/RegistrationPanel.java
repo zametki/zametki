@@ -133,10 +133,10 @@ public class RegistrationPanel extends Panel {
         };
         form.add(registerButton);
 
-        WebUtils.addFocusOnEnter(emailField, loginField);
-        WebUtils.addFocusOnEnter(loginField, password1Field);
-        WebUtils.addFocusOnEnter(password1Field, password2Field);
-        WebUtils.addClickOnEnter(password2Field, registerButton);
+        WebUtils.focusOnEnter(emailField, loginField);
+        WebUtils.focusOnEnter(loginField, password1Field);
+        WebUtils.focusOnEnter(password1Field, password2Field);
+        WebUtils.clickOnEnter(password2Field, registerButton);
 
     }
 }
