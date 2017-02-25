@@ -3,8 +3,12 @@ package com.github.zametki.component;
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.annotation.MountPath;
+import com.github.zametki.component.basic.ComponentFactory;
 import com.github.zametki.component.basic.ContainerWithId;
-import com.github.zametki.component.category.CategoryNavBar;
+import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
+import com.github.zametki.component.bootstrap.BootstrapModal;
+import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
+import com.github.zametki.component.category.CategoriesListPanel;
 import com.github.zametki.component.form.CreateZametkaForm;
 import com.github.zametki.component.user.BaseUserPage;
 import com.github.zametki.component.z.ZametkaPanel;
@@ -39,10 +43,16 @@ public class LentaPage extends BaseUserPage {
     private final LentaProvider provider = new LentaProvider();
 
     public final LentaPageState state = new LentaPageState();
+    private final BootstrapModal categoriesModal;
 
     public LentaPage() {
 
-        add(new CategoryNavBar("categories", state.activeCategory));
+        ComponentFactory f = markupId -> new CategoriesListPanel(markupId, state.activeCategory);
+        categoriesModal = new BootstrapModal("categories_modal", "Выбор категории", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
+        add(categoriesModal);
+        add(new BootstrapLazyModalLink("categories_popup_link", categoriesModal));
+
+        add(new CategoriesListPanel("categories", state.activeCategory));
         add(new CreateZametkaForm("create_form", state.activeCategory));
         add(lenta);
 
@@ -70,6 +80,7 @@ public class LentaPage extends BaseUserPage {
         if (e.model == state.activeCategory) {
             provider.detach();
             e.target.add(lenta);
+            categoriesModal.hide(e.target);
         }
     }
 

@@ -28,7 +28,7 @@ import java.util.Objects;
 
 import static com.github.zametki.util.WicketUtils.reactiveUpdate;
 
-public class CategoryNavBar extends Panel {
+public class CategoriesListPanel extends Panel {
 
     private final ContainerWithId panel = new ContainerWithId("panel");
 
@@ -37,7 +37,7 @@ public class CategoryNavBar extends Panel {
     @NotNull
     private final IModel<CategoryId> categoryModel;
 
-    public CategoryNavBar(String id, @NotNull IModel<CategoryId> categoryModel) {
+    public CategoriesListPanel(String id, @NotNull IModel<CategoryId> categoryModel) {
         super(id);
         this.categoryModel = categoryModel;
 

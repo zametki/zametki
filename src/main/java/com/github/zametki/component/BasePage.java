@@ -28,7 +28,7 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
     public static final String DEFAULT_KEYWORDS = "Заметки, персональные заметки";
     public static final String DEFAULT_DESCRIPTION = "Персональные заметки";
 
-    protected Label title = new Label("title", "Zаметки");
+    protected Label title = new Label("title", "Zametki");
 
     private final WebMarkupContainer keysField = new WebMarkupContainer("meta_keywords");
     private final WebMarkupContainer descField = new WebMarkupContainer("meta_description");
@@ -138,4 +138,3 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
         return STYLE_CSS_HREF;
     }
 }
-

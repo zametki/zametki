@@ -21,10 +21,6 @@ public class ZDateFormat {
         fixMonthNames = format.contains("MMM");
     }
 
-    @NotNull
-    public static ZDateFormat getMskInstance(@NotNull String format) {
-        return getInstance(format, Constants.MOSCOW_TZ);
-    }
 
     @NotNull
     public static ZDateFormat getInstance(@NotNull String format, @NotNull TimeZone timeZone) {
