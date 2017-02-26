@@ -7,6 +7,7 @@ import com.github.zametki.model.User;
 import com.github.zametki.model.UserId;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.StringValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +37,7 @@ public class UserSessionUtils {
         }
         // try auto login user.
         try {
-            String autoLoginData = UserSessionUtils.getUserAutoLoginInfo();
+            String autoLoginData = getUserAutoLoginInfo();
             if (autoLoginData == null || autoLoginData.length() < 3) {
                 return;
             }
@@ -59,6 +60,8 @@ public class UserSessionUtils {
     }
 
     public static void login(@NotNull User user) {
+        log.info("login: " + user);
+
         UserSession.get().setUser(user);
         UserSessionUtils.setUserAutoLoginInfo(user.id.getDbValue() + ID_PASSWORD_SEPARATOR_CHAR + user.passwordHash);
         user.lastLoginDate = Instant.now();
@@ -67,10 +70,11 @@ public class UserSessionUtils {
 
 
     public static void logout() {
+        log.info("logout");
+
         UserSession session = UserSession.get();
-        log.debug("Logging out: " + session.getUserEmail());
         session.cleanOnLogout();
-        UserSessionUtils.setUserAutoLoginInfo(null);
+        setUserAutoLoginInfo(null);
     }
 
     public static boolean checkPassword(String password, String dbHash) {
@@ -92,7 +96,7 @@ public class UserSessionUtils {
      * Sets user auth data to cookies. It will be reused to automatically sign in user on next visit.
      */
     public static void setUserAutoLoginInfo(@Nullable String authData) {
-        Cookies.setCookieValue(UserSessionUtils.USER_AUTH_TOKEN, authData, Cookies.MONTH_1_COOKIE_DEFAULTS);
+        new CookieUtils(Cookies.MONTH_1_COOKIE_DEFAULTS).save(UserSessionUtils.USER_AUTH_TOKEN, authData);
     }
 
     /**
@@ -100,7 +104,7 @@ public class UserSessionUtils {
      */
     @Nullable
     public static String getUserAutoLoginInfo() {
-        return Cookies.getCookieValue(UserSessionUtils.USER_AUTH_TOKEN);
+        return new CookieUtils().load(UserSessionUtils.USER_AUTH_TOKEN);
     }
 
 }

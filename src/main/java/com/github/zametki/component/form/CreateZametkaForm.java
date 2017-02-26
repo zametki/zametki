@@ -75,7 +75,7 @@ public class CreateZametkaForm extends Panel {
 
         WebUtils.clickOnCtrlEnter(textField, createLink);
 
-        addCategoryModal = new BootstrapModal("add_category_modal", "Добавить категорию",
+        addCategoryModal = new BootstrapModal("add_category_modal", "Новая категория",
                 (ComponentFactory) markupId -> new CreateCategoryForm(markupId, categorySelector.getModel(),
                         (AjaxCallback) target -> addCategoryModal.hide(target)),
                 BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);

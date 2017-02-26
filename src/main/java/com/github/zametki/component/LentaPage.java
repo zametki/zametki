@@ -21,6 +21,7 @@ import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.util.AbstractListProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
@@ -46,6 +47,9 @@ public class LentaPage extends BaseUserPage {
     private final BootstrapModal categoriesModal;
 
     public LentaPage() {
+
+        add(new LogoPanel("brand_logo"));
+        add(new BookmarkablePageLink("logout_link", LogoutPage.class));
 
         ComponentFactory f = markupId -> new CategoriesListPanel(markupId, state.activeCategory);
         categoriesModal = new BootstrapModal("categories_modal", "Выбор категории", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
