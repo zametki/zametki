@@ -9,6 +9,7 @@ import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.CategoryId;
+import com.github.zametki.model.UserId;
 import com.github.zametki.util.AbstractListProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -57,6 +58,10 @@ public class CategoriesListPanel extends Panel {
                     link.add(new ClassAppender("active"));
                 }
                 item.add(link);
+
+                UserId userId = UserSession.get().getUserId();
+                int count = userId == null || o.categoryId == null ? 0 : Context.getZametkaDbi().countByCategory(userId, o.categoryId);
+                link.add(new Label("count", "" + count).setVisible(count > 0));
                 link.add(new Label("title", o.title));
             }
         });

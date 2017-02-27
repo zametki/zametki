@@ -9,8 +9,8 @@ import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
 import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import com.github.zametki.component.category.CategoriesListPanel;
-import com.github.zametki.component.form.CreateZametkaForm;
 import com.github.zametki.component.user.BaseUserPage;
+import com.github.zametki.component.z.CreateZametkaButtonPanel;
 import com.github.zametki.component.z.ZametkaPanel;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
@@ -57,15 +57,19 @@ public class LentaPage extends BaseUserPage {
         add(new BootstrapLazyModalLink("categories_popup_link", categoriesModal));
 
         add(new CategoriesListPanel("categories", state.activeCategory));
-        add(new CreateZametkaForm("create_form", state.activeCategory));
+        add(new CreateZametkaButtonPanel("create_panel", state.activeCategory));
         add(lenta);
+
+        lenta.add(new CategoryHeader("category_name", state.activeCategory));
 
         //todo: move to separate component
         lenta.add(new DataView<ZametkaId>("zametka", provider) {
             @Override
             protected void populateItem(Item<ZametkaId> item) {
                 ZametkaId id = item.getModelObject();
-                item.add(new ZametkaPanel("z", id));
+                ZametkaPanel.Settings settings = new ZametkaPanel.Settings();
+                settings.showCategory = state.activeCategory.getObject() == null;
+                item.add(new ZametkaPanel("z", id, settings));
             }
         });
     }

@@ -16,18 +16,20 @@ import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.WebUtils;
 import com.github.zametki.util.WicketUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
     private BootstrapModal addCategoryModal;
 
-    public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory, @Nullable AjaxCallback doneCallback) {
         super(id);
 
         Form form = new Form("form");
@@ -69,11 +71,22 @@ public class CreateZametkaForm extends Panel {
                 target.add(form);
 
                 send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, z.id, ZametkaUpdateType.CREATED));
+                if (doneCallback != null) {
+                    doneCallback.callback(target);
+                }
             }
         };
         form.add(createLink);
-
         WebUtils.clickOnCtrlEnter(textField, createLink);
+
+        form.add(new AjaxLink<Void>("cancel_button") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (doneCallback != null) {
+                    doneCallback.callback(target);
+                }
+            }
+        }.setVisible(doneCallback != null));
 
         addCategoryModal = new BootstrapModal("add_category_modal", "Новая категория",
                 (ComponentFactory) markupId -> new CreateCategoryForm(markupId, categorySelector.getModel(),

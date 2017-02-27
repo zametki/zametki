@@ -2,17 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <div wicket:id="panel" class="dropdown inline-b">
+    <div wicket:id="panel" class="dropdown d-inline-block">
+
         <a href="#" class="dropdown-toggle dropdown-toggle-no-caret txt-normal" data-toggle="dropdown" title="Действия">
-            <span wicket:id="category_label" class="badge badge-default mr10"></span>
+            <span wicket:id="category_label" class="badge badge-default"></span>
         </a>
+
         <div class="dropdown-menu">
             <wicket:container wicket:id="category_option">
-                <a wicket:id="category_link" class="dropdown-item f14px">
+                <a wicket:id="category_link" class="dropdown-item pt-0 pb-0">
                     <span wicket:id="category_name" class="badge badge-default mr10"></span>
                 </a>
             </wicket:container>
         </div>
+
     </div>
 
 </wicket:panel>

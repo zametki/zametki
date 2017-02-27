@@ -9,7 +9,6 @@ import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Category;
 import com.github.zametki.model.CategoryId;
-import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,28 +25,21 @@ import org.jetbrains.annotations.NotNull;
 
 public class ZametkaCategoryBadge extends Panel {
 
-    private final WebMarkupContainer panel = new ContainerWithId("panel");
-
-    @NotNull
-    private final UserId userId;
-
     @NotNull
     private final IDataProvider<CategoryId> provider;
 
     public ZametkaCategoryBadge(@NotNull String id, @NotNull ZametkaId zametkaId) {
         super(id);
-
         Zametka zametka = Context.getZametkaDbi().getById(zametkaId);
         if (zametka == null) {
             setVisible(false);
-            userId = UserId.INVALID_ID;
             provider = new EmptyDataProvider<>();
             return;
         }
-        userId = zametka.userId;
-        provider = new CategoriesProvider(zametka.userId);
-
+        WebMarkupContainer panel = new ContainerWithId("panel");
         add(panel);
+
+        provider = new CategoriesProvider(zametka.userId);
         panel.add(new ZametkaCategoryLabel("category_label", zametkaId));
         panel.add(new DataView<CategoryId>("category_option", provider) {
             @Override
@@ -79,9 +71,6 @@ public class ZametkaCategoryBadge extends Panel {
 
     @OnPayload(UserCategoriesUpdatedEvent.class)
     public void onCategoriesUpdate(@NotNull UserCategoriesUpdatedEvent e) {
-        if (e.userId.equals(userId)) {
-            assert provider != null;
-            e.target.add(panel);
-        }
+        assert provider != null;
     }
 }

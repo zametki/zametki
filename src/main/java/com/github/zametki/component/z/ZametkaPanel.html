@@ -2,20 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <div wicket:id="panel">
 
-        <div wicket:id="content" class="inline"></div>
+    <div wicket:id="panel" class="zametka-panel">
 
-        <wicket:container wicket:id="category_badge"/>
-        <div class="dropdown inline">
-            <a href="#" class="dropdown-toggle dropdown-toggle-no-caret txt-normal f14px" data-toggle="dropdown" title="Действия">
-                <i class="fa fa-cogs"></i>
-            </a>
-            <div class="dropdown-menu">
-                <a wicket:id="edit_link" class="dropdown-item f14px">Редактировать</a>
-                <a wicket:id="delete_link" class="dropdown-item f14px">Удалить</a>
+        <div>
+            <span wicket:id="date" class="txt-muted f12px"></span>
+
+            <div wicket:id="category_badge" class="d-inline pl-1"></div>
+
+            <div class="dropdown d-inline pl-1">
+                <a href="#" class="dropdown-toggle dropdown-toggle-no-caret f14px" data-toggle="dropdown" title="Действия">
+                    <i class="fa fa-angle-down txt-muted"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a wicket:id="edit_link" class="dropdown-item f14px">Редактировать</a>
+                    <a wicket:id="delete_link" class="dropdown-item f14px">Удалить</a>
+                </div>
             </div>
         </div>
+
+        <div wicket:id="content" class="zametka-content"></div>
+
         <div wicket:id="edit_panel"></div>
     </div>
 </wicket:panel>

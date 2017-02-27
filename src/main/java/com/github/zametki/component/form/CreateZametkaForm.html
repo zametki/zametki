@@ -3,16 +3,19 @@
 <body>
 <wicket:panel>
     <div wicket:id="add_category_modal"></div>
-    <form wicket:id="form" class="mt20">
+    <form wicket:id="form">
         <div>
-            Категория:
+            <label>Категория</label>
             <select wicket:id="category_selector" class="custom-select ml-1 form-control-sm"></select>
             <a wicket:id="add_category" class="btn btn-sm btn-secondary"><i class="fa fa-plus"></i></a>
         </div>
 
-        <div class="pt5">
-            <textarea wicket:id="text" class="form-control"></textarea>
-            <a wicket:id="save_button" class="btn btn-sm btn-primary mt10" style="float:right">Добавить заметку</a>
+        <div class="pt-2">
+            <textarea wicket:id="text" class="form-control" autofocus></textarea>
+            <div class="mt-2 float-right">
+                <a wicket:id="cancel_button" class="btn btn-sm btn-secondary mr-1">Отменить</a>
+                <a wicket:id="save_button" class="btn btn-sm btn-primary">Создать</a>
+            </div>
         </div>
     </form>
 

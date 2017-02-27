@@ -2,14 +2,6 @@
     width: 100%;
 }
 
-.inline-b {
-    display: inline-block;
-}
-
-.inline {
-    display: inline;
-}
-
 .dropdown-hover:hover .dropdown-menu {
     display: block;
 }

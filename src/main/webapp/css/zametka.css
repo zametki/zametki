@@ -1,0 +1,17 @@
+.zametka-panel {
+    padding-bottom: 10px;
+}
+
+.zametka-content {
+    white-space: pre-line;
+}
+
+.zametka-form-panel {
+    border: 1px solid #ccc;
+    padding: 20px 20px 50px;
+}
+
+.zametka-count-badge {
+    background-color: #bbb;
+    border-radius: 2px;
+}
