@@ -95,3 +95,9 @@ body.home-page {
 .fade.in {
     opacity: 1;
 }
+
+/* Home page menu link */
+.hp-menu a {
+    color: #888 !important;
+    text-decoration: none;
+}
