@@ -13,13 +13,16 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import static com.github.zametki.component.bootstrap.BootstrapModal.FooterMode;
 
 public class HomePage extends BasePage {
 
-    public HomePage() {
+    public HomePage(PageParameters pp) {
+        super(pp);
+
         User user = UserSession.get().getUser();
 
         WebMarkupContainer notLoggedInBlock = new WebMarkupContainer("not_logged_in_block");
@@ -28,11 +31,11 @@ public class HomePage extends BasePage {
 
         if (notLoggedInBlock.isVisible()) {
             BootstrapModal loginModal = new BootstrapModal("login_modal", null, LoginPanel::new, BodyMode.Static, FooterMode.Hide);
-            loginModal.dialog.add(new StyleAppender("padding-left: 30px; padding-right: 30px; width:270px;"));
+            loginModal.dialog.add(new StyleAppender("padding: 30px; width:370px;"));
             add(loginModal);
 
             BootstrapModal registrationModal = new BootstrapModal("registration_modal", null, RegistrationPanel::new, BodyMode.Static, FooterMode.Hide);
-            registrationModal.dialog.add(new StyleAppender("padding-left: 30px; padding-right: 30px; width:350px;"));
+            registrationModal.dialog.add(new StyleAppender("padding: 30px; width:450px;"));
             add(registrationModal);
 
             notLoggedInBlock.add(new BootstrapStaticModalLink("login_link", loginModal));

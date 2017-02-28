@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,20 +39,16 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
     protected final WebMarkupContainer header = new WebMarkupContainer("header");
     protected final WebMarkupContainer footer = new WebMarkupContainer("footer");
 
-    public BasePage() {
+    public BasePage(PageParameters pp) {
+        super(pp);
+
         checkCorrectMount();
         UserSessionUtils.initializeSession();
         pageInitCallback();
 
-        add(header);
-        add(footer);
-
         WebMarkupContainer styleCssLink = new WebMarkupContainer("style_css_link");
         styleCssLink.add(new AttributeModifier("href", getStyleCssHref()));
         add(styleCssLink);
-
-        add(scrollTop);
-        scrollTop.setVisible(false);
 
         setPageKeywords(DEFAULT_KEYWORDS);
         add(keysField);
@@ -60,6 +57,13 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
         add(descField);
 
         add(title);
+
+
+        add(header);
+        add(footer);
+
+        add(scrollTop);
+        scrollTop.setVisible(false);
     }
 
     private void checkCorrectMount() {
@@ -119,6 +123,9 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
         response.render(new PriorityHeaderItem(Scripts.BOOTSTRAP_JS));
         response.render(new PriorityHeaderItem(Scripts.PARSLEY_JS));
         response.render(new PriorityHeaderItem(Scripts.AUTOLINKER_JS));
+        response.render(new PriorityHeaderItem(Scripts.LETTERING_JS));
+        response.render(new PriorityHeaderItem(Scripts.FIT_TEXT_JS));
+        response.render(new PriorityHeaderItem(Scripts.TEXTILLATE_JS));
         response.render(new PriorityHeaderItem(Scripts.SITE_JS));
     }
 

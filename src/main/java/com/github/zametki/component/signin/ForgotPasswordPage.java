@@ -5,6 +5,7 @@ import com.github.zametki.Context;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.BasePage;
 import com.github.zametki.component.HomePage;
+import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.form.CaptchaField;
 import com.github.zametki.component.form.Feedback;
 import com.github.zametki.component.form.InputField;
@@ -13,7 +14,6 @@ import com.github.zametki.component.parsley.LoginJsValidator;
 import com.github.zametki.component.parsley.ParsleyUtils;
 import com.github.zametki.component.parsley.RequiredFieldJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
-import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.db.dbi.UsersDbi;
 import com.github.zametki.model.User;
 import com.github.zametki.model.VerificationRecord;
@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,9 @@ import org.slf4j.LoggerFactory;
 public class ForgotPasswordPage extends BasePage {
     private static final Logger log = LoggerFactory.getLogger(ForgotPasswordPage.class);
 
-    public ForgotPasswordPage() {
+    public ForgotPasswordPage(PageParameters pp) {
+        super(pp);
+
         UserSessionUtils.redirectHomeIfSignedIn();
 
         WebMarkupContainer panel = new ContainerWithId("panel");

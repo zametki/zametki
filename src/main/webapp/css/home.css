@@ -1,0 +1,97 @@
+body.home-page {
+    background: #282828;
+}
+
+.jumbotron {
+    /* No header on home page */
+    position: relative;
+    text-align: center;
+    background: #242424;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding: 3em 0;
+}
+
+.jumbotron h1 {
+    color: #fff;
+    font-size: 13em;
+    font-weight: 200;
+    text-shadow: 0.025em 0.025em 0.025em rgba(0, 0, 0, 0.8);
+    visibility: hidden;
+}
+
+.jumbotron h1 .char1 {
+    color: #7fffd4
+}
+
+.jumbotron h1 .char2 {
+    color: #ffe4c4;
+}
+
+.jumbotron h1 .char3 {
+    color: #e1a8a8;
+}
+
+.jumbotron h1 .char4 {
+    color: #fce8ae;
+}
+
+.jumbotron h1 .char5 {
+    color: #9bf89b;
+}
+
+.jumbotron h1 .char6 {
+    color: #cde4f8;
+}
+
+.jumbotron h1 .char7 {
+    color: #ff9e9e;
+}
+
+.jumbotron h1 .char8 {
+    color: #ED303C;
+}
+
+.jumbotron p {
+    margin-top: -1em;
+    letter-spacing: 0.15em;
+    color: #ccc;
+    font-size: 1.25em;
+    font-weight: 200;
+    text-shadow: 0.1em 0.1em 0.1em rgba(0, 0, 0, 0.8);
+    visibility: hidden;
+    text-align: center;
+}
+
+.decal {
+    height: 2px;
+    background-color: #000;
+    border-bottom: 1px solid #333;
+}
+
+/* EFFECTS */
+
+.glow {
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    -webkit-transition: text-shadow 1s linear;
+    -moz-transition: text-shadow 1s linear;
+    -o-transition: text-shadow 1s linear;
+    transition: text-shadow 1s linear;
+}
+
+.glow.in {
+    text-shadow: 0.025em 0.025em 0.025em rgba(0, 0, 0, 0.8),
+    0 0 0.5em rgba(255, 255, 255, 0.3);
+}
+
+.fade {
+    opacity: 0;
+    -webkit-transition: opacity 1s linear;
+    -moz-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+    transition: opacity 1s linear;
+}
+
+.fade.in {
+    opacity: 1;
+}

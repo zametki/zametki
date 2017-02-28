@@ -1,21 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--suppress CssUnusedSymbol -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 <wicket:extend>
 
+    <div style="background: #282828; height:100vh; margin-top: -50px;">
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="glow in tlt">Zametki</h1>
+                <p class="tlt" data-in-effect="bounceInDown">
+                    Ваши персональные заметки
+                </p>
+            </div>
+        </div>
+
+        <div class="decal"></div>
+
+        <div class="container fade text-center pt-5 f30px" style="color: #888;">
+            <div wicket:id="not_logged_in_block">
+                <div><a wicket:id="login_link">Вход</a></div>
+                <div><a wicket:id="registration_link">Регистрация</a></div>
+            </div>
+
+            <div wicket:id="logged_in_block">
+                <div><a wicket:id="lenta_link">Лента</a></div>
+                <div><a wicket:id="logout_link">Выход</a></div>
+            </div>
+        </div>
+    </div>
+
     <div wicket:id="login_modal"></div>
     <div wicket:id="registration_modal"></div>
 
-    <div wicket:id="not_logged_in_block" class="front">
-        <div class="menu-item"><a wicket:id="login_link">Вход</a></div>
-        <div class="menu-item"><a wicket:id="registration_link">Регистрация</a></div>
-    </div>
+    <!--suppress ReservedWordAsName -->
+    <script>
+        $("body").addClass("home-page");
 
-    <div wicket:id="logged_in_block" class="front">
-        <div class="menu-item"><a wicket:id="lenta_link">Лента</a></div>
-        <div class="menu-item"><a wicket:id="logout_link">Выход</a></div>
-    </div>
+        $(function () {
+            $('code').each(function () {
+                var $this = $(this);
+                $this.text($this.html());
+            })
 
+            $('.jumbotron h1')
+                .fitText(0.5)
+                .textillate({in: {effect: 'flipInY'}});
 
+            $('.jumbotron p')
+                .fitText(3.2, {maxFontSize: 18})
+                .textillate({initialDelay: 1000, in: {delay: 3, shuffle: true}});
+
+            setTimeout(function () {
+                $('.fade').addClass('in');
+            }, 250);
+
+            setTimeout(function () {
+                $('h1.glow').removeClass('in');
+            }, 2000);
+        });
+    </script>
 </wicket:extend>
 </html>

@@ -12,6 +12,7 @@
 }
 
 .zametka-count-badge {
+    margin-top: 3px;
     background-color: #bbb;
     border-radius: 2px;
 }

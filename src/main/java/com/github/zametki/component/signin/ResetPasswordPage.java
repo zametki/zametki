@@ -39,7 +39,8 @@ public class ResetPasswordPage extends BasePage {
 
     public static final int REQUEST_VALID_HOURS = 24;
 
-    public ResetPasswordPage(PageParameters params) {
+    public ResetPasswordPage(PageParameters pp) {
+        super(pp);
         if (UserSession.get().isSignedIn()) {
             throw new RestartResponseException(new PageProvider(HomePage.class), NEVER_REDIRECT);
         }
@@ -53,7 +54,7 @@ public class ResetPasswordPage extends BasePage {
         BookmarkablePageLink newRequestLink = new BookmarkablePageLink("new_request_link", ForgotPasswordPage.class);
         add(newRequestLink);
 
-        StringValue hash = params.get("id");
+        StringValue hash = pp.get("id");
         if (hash.isEmpty() || !DigestUtils.isValidUUID(hash.toString())) {
             resetBlock.setVisible(false);
             feedback.error("Некорректный код!");

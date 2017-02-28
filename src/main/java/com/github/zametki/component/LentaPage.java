@@ -3,6 +3,7 @@ package com.github.zametki.component;
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.annotation.MountPath;
+import com.github.zametki.behavior.ClassAppender;
 import com.github.zametki.component.basic.ComponentFactory;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
@@ -26,6 +27,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -46,7 +48,8 @@ public class LentaPage extends BaseUserPage {
     public final LentaPageState state = new LentaPageState();
     private final BootstrapModal categoriesModal;
 
-    public LentaPage() {
+    public LentaPage(PageParameters pp) {
+        super(pp);
 
         add(new LogoPanel("brand_logo"));
         add(new BookmarkablePageLink("logout_link", LogoutPage.class));

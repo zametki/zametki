@@ -3,6 +3,7 @@ package com.github.zametki.component.user;
 import com.github.zametki.Context;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.HomePage;
+import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.form.CaptchaField;
 import com.github.zametki.component.form.Feedback;
 import com.github.zametki.component.form.PasswordField;
@@ -11,7 +12,6 @@ import com.github.zametki.component.parsley.ParsleyUtils;
 import com.github.zametki.component.parsley.PasswordJsValidator;
 import com.github.zametki.component.parsley.RequiredFieldJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
-import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.model.User;
 import com.github.zametki.util.RegistrationUtils;
 import com.github.zametki.util.UserSessionUtils;
@@ -23,11 +23,14 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 @MountPath("/my/profile")
 public class UserProfileSettingsPage extends BaseUserPage {
 
-    public UserProfileSettingsPage() {
+    public UserProfileSettingsPage(PageParameters pp) {
+        super(pp);
+
         setTitleAndDesc("Профиль пользователя", "Редактирование персонального профиля пользователя");
         WebMarkupContainer panel = new ContainerWithId("panel");
         add(panel);
