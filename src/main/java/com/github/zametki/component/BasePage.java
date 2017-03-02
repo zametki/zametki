@@ -36,9 +36,6 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
 
     protected final WebMarkupContainer scrollTop = new WebMarkupContainer("top_link");
 
-    protected final WebMarkupContainer header = new WebMarkupContainer("header");
-    protected final WebMarkupContainer footer = new WebMarkupContainer("footer");
-
     public BasePage(PageParameters pp) {
         super(pp);
 
@@ -57,10 +54,6 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
         add(descField);
 
         add(title);
-
-
-        add(header);
-        add(footer);
 
         add(scrollTop);
         scrollTop.setVisible(false);

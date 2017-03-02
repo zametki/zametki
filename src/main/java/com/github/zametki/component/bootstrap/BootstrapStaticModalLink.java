@@ -16,6 +16,6 @@ public class BootstrapStaticModalLink extends WebMarkupContainer {
 
         add(new StyleAppender("cursor: pointer;"));
         add(new AttributeModifier("onclick", "$('#" + modal.getDataTargetId() + "').modal();"));
-        add(new AttributeModifier("href", "javascript:void(0)"));
+        add(new AttributeModifier("href", "javascript:;"));
     }
 }

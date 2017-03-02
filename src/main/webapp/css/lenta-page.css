@@ -1,6 +1,8 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
-body {
+
+.lp-body {
     padding-top: 50px;
+    height: 100%;
 }
 
 /*
@@ -8,7 +10,7 @@ body {
  */
 .sidebar {
     position: fixed;
-    top: 51px;
+    top: 50px;
     bottom: 0;
     left: 0;
     z-index: 1000;

@@ -1,52 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress CssUnusedSymbol -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 <wicket:extend>
 
-    <div style="background: #282828; height:100vh; margin-top: -50px;">
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="glow in tlt">Zametki</h1>
-                <p class="tlt" data-in-effect="bounceInDown">
-                    Ваши персональные заметки
-                </p>
-            </div>
-        </div>
-
-        <div class="decal"></div>
-
-        <div class="container fade text-center pt-5 f30px hp-menu">
-            <div wicket:id="not_logged_in_block">
-                <div><a wicket:id="login_link">Вход</a></div>
-                <div><a wicket:id="registration_link">Регистрация</a></div>
-            </div>
-
-            <div wicket:id="logged_in_block">
-                <div><a wicket:id="lenta_link">Лента</a></div>
-                <div><a wicket:id="logout_link">Выход</a></div>
-            </div>
-        </div>
-    </div>
+    <script>
+        var cls = document.createAttribute("class");
+        cls.value = "hp-body";
+        document.getElementsByTagName("body")[0].setAttributeNode(cls);
+    </script>
 
     <div wicket:id="login_modal"></div>
     <div wicket:id="registration_modal"></div>
 
+    <div class="hp-container">
+
+        <div class="hp-content">
+            <div class="hp-logo-block">
+                <div style="max-width: 700px; margin: auto">
+                    <h1 class="glow in tlt">Zametki</h1>
+                    <p class="tlt" data-in-effect="bounceInDown">
+                        Ваши персональные заметки
+                    </p>
+                </div>
+            </div>
+
+            <div class="decal"></div>
+
+            <div class="fade text-center pt-5 f30px hp-menu">
+                <div wicket:id="not_logged_in_block">
+                    <div><a wicket:id="login_link">Вход</a></div>
+                    <div><a wicket:id="registration_link">Регистрация</a></div>
+                </div>
+
+                <div wicket:id="logged_in_block">
+                    <div><a wicket:id="lenta_link">Лента</a></div>
+                    <div><a wicket:id="logout_link">Выход</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="hp-footer">
+            <div class="decal"></div>
+            <a wicket:id="about_link" class="f12px" style="color:#999;">О сервисе</a>
+        </div>
+    </div>
+
     <!--suppress ReservedWordAsName -->
     <script>
-        $("body").addClass("home-page");
-
         $(function () {
             $('code').each(function () {
                 var $this = $(this);
                 $this.text($this.html());
             })
 
-            $('.jumbotron h1')
+            $('.hp-logo-block h1')
                 .fitText(0.5)
                 .textillate({in: {effect: 'flipInY'}});
 
-            $('.jumbotron p')
+            $('.hp-logo-block p')
                 .fitText(3.2, {maxFontSize: 18})
                 .textillate({initialDelay: 1000, in: {delay: 3, shuffle: true}});
 
