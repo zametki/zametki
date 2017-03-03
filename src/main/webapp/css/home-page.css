@@ -38,6 +38,14 @@
     padding: 1em 0;
 }
 
+.hp-subtitle {
+    margin-top: -0.7em;
+    margin-bottom: 0;
+    letter-spacing: .15em;
+    color: #ccc;
+    font-weight: 200;
+}
+
 .hp-logo-block h1 {
     color: #fff;
     font-size: 13em;
