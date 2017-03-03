@@ -23,6 +23,7 @@
 
 /* Home page menu link */
 .hp-menu a {
+    font-weight: 100;
     color: #888 !important;
     text-decoration: none;
 }
