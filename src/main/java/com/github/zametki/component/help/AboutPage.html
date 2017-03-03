@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <wicket:extend>
-    <div class="container mt50 txtc">
-        <h1>- О сайте -</h1>
 
-        <p class="lead">
-            Zametki.org - это сервис персональных заметок.
-        </p>
+    <script>
+        var cls = document.createAttribute("class");
+        cls.value = "ap-body";
+        document.getElementsByTagName("body")[0].setAttributeNode(cls);
+    </script>
+
+    <div class="ap-container">
+
+        <div class="ap-content">
+            <img src="/img/feather.svg" class="mb5" style="width: 65px; margin-left: 55px;">
+            <h1>О сайте</h1>
+
+            <p class="lead mt-3">Zametki.org - сервис персональных заметок</p>
+
+            <div class="font-italic mt-4">Начните сохранять то, что понравилось, уже сейчас!</div>
+            <div class="font-italic mt-2">
+                <i class="badge badge-default">Цитаты</i>
+                <i class="badge badge-success">Стихи</i>
+                <i class="badge badge-warning">Мысли</i>
+                <i class="badge badge-danger">Идеи</i>
+                <i class="badge badge-brown">Ссылки</i>
+                <i class="badge badge-dark-cyan">Анекдоты</i>
+                <i class="badge badge-primary">Тосты</i>
+                <i class="badge badge-magenta-1">Рецепты</i>
+                <i class="badge badge-dark-yellow">Даты</i>
+                <i class="badge badge-blue-1">Дневники</i>
+                <i class="badge badge-lsg">Задачи</i> …
+            </div>
+
+            <div class="lead mt-4">
+                <a href="/" class="btn btn-primary" target="_blank">Начать »</a>
+            </div>
+
+        </div>
+        <div class="ap-footer">
+            <a href="https://github.com/zametki/zametki" class="text-muted" target="_blank" title="Перейти на страницу проекта на GitHub">
+                <i class="fa fa-github f24px"></i>
+                <div>исходный код проекта</div>
+            </a>
+        </div>
 
     </div>
 </wicket:extend>

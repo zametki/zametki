@@ -52,6 +52,7 @@ public class BootstrapModal extends Panel {
 
         body.setOutputMarkupId(true);
         body.add(bodyMode == BodyMode.Lazy ? new EmptyPanel("body_content") : bodyFactory.create("body_content"));
+        body.add(new WebMarkupContainer("in_body_close").setVisible(!header.isVisible()));
         dialog.add(body);
 
         footer.setVisible(footerMode == FooterMode.Show);
