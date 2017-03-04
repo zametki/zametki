@@ -16,8 +16,9 @@
 
 .ap-footer {
     position: absolute;
-    bottom: 15px;
+    bottom: 0;
     width: 100%;
-    height: 45px;
+    height: 60px;
     text-align: center;
+    background-color: white;
 }
