@@ -5,11 +5,13 @@
 .btn-primary {
     background-color: #7d7d7d;
     border-color: #5e5e5e;
+    color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:focus {
     background-color: #5e5e5e;
     border-color: #3c3c3c;
+    color: white;
 }
 
 .nav-link.active {

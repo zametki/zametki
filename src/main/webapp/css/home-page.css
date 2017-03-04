@@ -53,6 +53,7 @@
     text-shadow: 0.025em 0.025em 0.025em rgba(0, 0, 0, 0.8);
     visibility: hidden;
     text-align: center;
+    margin-top: -15px;
 }
 
 .hp-logo-block h1 .char1 {

@@ -93,11 +93,11 @@ public class Context {
     }
 
     public static boolean isProduction() {
-        return System.getProperty("online.zametki.production") != null;
+        return System.getProperty("zametki.org.production") != null;
     }
 
     public static String getBaseUrl() {
-        return isProduction() ? "https://zametki.online" : "http://localhost:8080";
+        return isProduction() ? "https://zametki.org" : "http://localhost:8080";
     }
 
     public static Properties getProdConfig() {

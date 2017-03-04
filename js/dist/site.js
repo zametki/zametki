@@ -45,6 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	exports.__esModule = true;
 	var site_def_1 = __webpack_require__(1);
 	__webpack_require__(2);
 	var site_utils_1 = __webpack_require__(3);
@@ -103,6 +104,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	exports.__esModule = true;
 	var $ = __webpack_require__(4);
 	var Autolinker = __webpack_require__(5);
 	var links_1 = __webpack_require__(6);
@@ -267,7 +269,6 @@
 	        scrollTop: offset.top
 	    });
 	}
-	exports.__esModule = true;
 	exports["default"] = {
 	    setTitle: setTitle,
 	    linkify: linkify,
@@ -302,6 +303,7 @@
 /***/ function(module, exports) {
 
 	"use strict";
+	exports.__esModule = true;
 	var KnownImageExtensions = {};
 	KnownImageExtensions["png"] = true;
 	KnownImageExtensions["jpg"] = true;
@@ -379,7 +381,6 @@
 	    }
 	    return res;
 	}
-	exports.__esModule = true;
 	exports["default"] = {
 	    processMediaLinks: processMediaLinks,
 	    playYoutube: playYoutube
