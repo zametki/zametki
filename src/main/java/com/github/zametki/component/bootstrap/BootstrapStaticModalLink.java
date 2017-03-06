@@ -14,7 +14,6 @@ public class BootstrapStaticModalLink extends WebMarkupContainer {
             throw new IllegalStateException("BootstrapStaticModalLink is valid only for modals with static body!");
         }
 
-        add(new StyleAppender("cursor: pointer;"));
         add(new AttributeModifier("onclick", "$('#" + modal.getDataTargetId() + "').modal();"));
         add(new AttributeModifier("href", "javascript:;"));
     }

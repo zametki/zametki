@@ -1,5 +1,6 @@
 DROP TABLE verification_record;
 DROP TABLE users;
+DROP TABLE zametka;
 
 # Пользователь сайта
 CREATE TABLE users (

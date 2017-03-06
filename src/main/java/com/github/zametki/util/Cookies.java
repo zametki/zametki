@@ -1,9 +1,8 @@
 package com.github.zametki.util;
 
 import org.apache.wicket.util.cookies.CookieDefaults;
-import org.apache.wicket.util.cookies.CookieUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.time.Duration;
 
 public class Cookies {
 
@@ -12,6 +11,6 @@ public class Cookies {
 
     static {
         NEVER_EXPIRE_COOKIE_DEFAULTS.setMaxAge(Integer.MAX_VALUE);
-        MONTH_1_COOKIE_DEFAULTS.setMaxAge(31 * DateTimeConstants.SECONDS_PER_DAY);
+        MONTH_1_COOKIE_DEFAULTS.setMaxAge((int) Duration.ofDays(31).getSeconds());
     }
 }
