@@ -11,8 +11,8 @@ import com.github.zametki.component.parsley.PasswordJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.db.dbi.UsersDbi;
 import com.github.zametki.model.User;
+import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.UserSessionUtils;
-import com.github.zametki.util.WebUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -60,18 +60,18 @@ public class LoginPanel extends Panel {
                 }
                 if (user == null) {
                     ParsleyUtils.addParsleyError(target, loginError, "Пользователь не найден!");
-                    WebUtils.focus(target, emailOrLoginField);
+                    JsUtils.focus(target, emailOrLoginField);
                     return;
                 }
                 String password = passwordField.getModelObject();
                 if (!UserSessionUtils.checkPassword(password, user.passwordHash)) {
                     ParsleyUtils.addParsleyError(target, passwordError, "Неверный пароль!");
-                    WebUtils.focus(target, passwordError);
+                    JsUtils.focus(target, passwordError);
                     return;
                 }
                 if (user.terminationDate != null) {
                     ParsleyUtils.addParsleyError(target, loginError, "Пользователь заблокирован!");
-                    WebUtils.focus(target, emailOrLoginField);
+                    JsUtils.focus(target, emailOrLoginField);
                     return;
 
                 }
@@ -81,8 +81,8 @@ public class LoginPanel extends Panel {
         };
         form.add(loginButton);
 
-        WebUtils.focusOnEnter(emailOrLoginField, passwordField);
-        WebUtils.clickOnEnter(passwordField, loginButton);
+        JsUtils.focusOnEnter(emailOrLoginField, passwordField);
+        JsUtils.clickOnEnter(passwordField, loginButton);
     }
 
 }

@@ -18,6 +18,7 @@ import com.github.zametki.db.dbi.UsersDbi;
 import com.github.zametki.model.User;
 import com.github.zametki.model.VerificationRecord;
 import com.github.zametki.model.VerificationRecordType;
+import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.MailClient;
 import com.github.zametki.util.UserSessionUtils;
 import com.github.zametki.util.WebUtils;
@@ -79,7 +80,7 @@ public class ForgotPasswordPage extends BasePage {
                 String captcha = captchaField.getUserText();
                 if (!captchaField.getOriginalText().equals(captcha)) {
                     ParsleyUtils.addParsleyError(target, captchaError, "Некорректный код!");
-                    WebUtils.focus(target, captchaField);
+                    JsUtils.focus(target, captchaField);
                     return;
                 }
 
@@ -90,7 +91,7 @@ public class ForgotPasswordPage extends BasePage {
                     user = dao.getUserByEmail(emailOrLogin);
                     if (user == null) {
                         ParsleyUtils.addParsleyError(target, loginError, "Пользователь не найден!");
-                        WebUtils.focus(target, emailOrLoginField);
+                        JsUtils.focus(target, emailOrLoginField);
                         return;
                     }
                 }
@@ -116,8 +117,8 @@ public class ForgotPasswordPage extends BasePage {
         };
         form.add(resetLink);
 
-        WebUtils.focusOnEnter(emailOrLoginField, captchaField);
-        WebUtils.clickOnEnter(captchaField, resetLink);
+        JsUtils.focusOnEnter(emailOrLoginField, captchaField);
+        JsUtils.clickOnEnter(captchaField, resetLink);
     }
 
 }

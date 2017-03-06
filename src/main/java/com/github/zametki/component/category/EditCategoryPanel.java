@@ -8,6 +8,7 @@ import com.github.zametki.event.UserCategoriesUpdatedEvent;
 import com.github.zametki.model.Category;
 import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
+import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -58,6 +59,6 @@ public class EditCategoryPanel extends Panel {
         };
         form.add(saveLink);
 
-        WebUtils.clickOnEnter(nameField, saveLink);
+        JsUtils.clickOnEnter(nameField, saveLink);
     }
 }

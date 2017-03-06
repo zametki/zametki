@@ -19,13 +19,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class EditZametkaPanel extends Panel {
 
+    @NotNull
+    public final InputArea contentField;
+
     public EditZametkaPanel(@NotNull String id, @NotNull ZametkaId zametkaId, @NotNull AjaxCallback closeCallback) {
         super(id);
 
         Form form = new Form("form");
         add(form);
 
-        InputArea contentField = new InputArea("content_field", new LoadableDetachableModel<String>() {
+        contentField = new InputArea("content_field", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 Zametka z = Context.getZametkaDbi().getById(zametkaId);
@@ -58,6 +61,5 @@ public class EditZametkaPanel extends Panel {
                 closeCallback.callback(target);
             }
         });
-
     }
 }

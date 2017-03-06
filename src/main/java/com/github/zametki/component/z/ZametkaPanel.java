@@ -10,6 +10,7 @@ import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
+import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.ZDateFormat;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -53,10 +54,14 @@ public class ZametkaPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (panel.get("edit_panel") instanceof EditZametkaPanel) {
+                    JsUtils.focus(target, ((EditZametkaPanel) panel.get("edit_panel")).contentField);
                     return;
                 }
-                panel.get("edit_panel").replaceWith(new EditZametkaPanel("edit_panel", zametkaId, (AjaxCallback) this::closeEditPanel));
+                EditZametkaPanel editPanel = new EditZametkaPanel("edit_panel", zametkaId, (AjaxCallback) this::closeEditPanel);
+                panel.get("edit_panel").replaceWith(editPanel);
                 target.add(panel);
+
+                JsUtils.focus(target, editPanel.contentField);
             }
 
             private void closeEditPanel(AjaxRequestTarget target) {

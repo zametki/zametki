@@ -12,6 +12,7 @@ import com.github.zametki.model.CategoryId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.util.CategoryUtils;
+import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.WebUtils;
 import com.github.zametki.util.WicketUtils;
@@ -30,6 +31,9 @@ public class CreateZametkaForm extends Panel {
 
     private BootstrapModal addCategoryModal;
 
+    @NotNull
+    public final InputArea contentField;
+
     public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory, @Nullable AjaxCallback doneCallback) {
         super(id);
 
@@ -42,15 +46,15 @@ public class CreateZametkaForm extends Panel {
         CategorySelector categorySelector = new CategorySelector("category_selector", userId, activeCategory);
         form.add(categorySelector);
 
-        InputArea textField = new InputArea("text");
-        form.add(textField);
+        contentField = new InputArea("text");
+        form.add(contentField);
 
 
         ValidatingJsAjaxSubmitLink createLink = new ValidatingJsAjaxSubmitLink("save_button", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
-                String content = textField.getInputString();
+                String content = contentField.getInputString();
                 if (TextUtils.isEmpty(content)) {
                     return;
                 }
@@ -68,7 +72,7 @@ public class CreateZametkaForm extends Panel {
                 //todo: check category is not null
                 Context.getZametkaDbi().create(z);
 
-                textField.clearInput();
+                contentField.clearInput();
                 target.add(form);
 
                 send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, z.id, ZametkaUpdateType.CREATED));
@@ -78,7 +82,7 @@ public class CreateZametkaForm extends Panel {
             }
         };
         form.add(createLink);
-        WebUtils.clickOnCtrlEnter(textField, createLink);
+        JsUtils.clickOnCtrlEnter(contentField, createLink);
 
         form.add(new AjaxLink<Void>("cancel_button") {
             @Override
