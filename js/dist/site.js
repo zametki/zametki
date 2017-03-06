@@ -243,31 +243,15 @@
 	        array[j] = temp;
 	    }
 	}
-	var randomSongsStack = [];
-	function scrollToRandomSong() {
-	    var $songs = $(".song-block");
-	    if ($songs.length == 0) {
-	        return;
-	    }
-	    if (randomSongsStack.length == 0) {
-	        for (var i = 0; i < $songs.length; i++) {
-	            randomSongsStack.push(i);
-	        }
-	        shuffleArray(randomSongsStack);
-	    }
-	    var idx = randomSongsStack.pop();
-	    var $song = $($songs.get(idx));
-	    var offset = $song.offset();
-	    $("html, body").animate({
-	        scrollTop: offset.top
-	    });
-	}
 	function scrollToBlock(selector) {
 	    var $block = $(selector);
 	    var offset = $block.offset();
 	    $("html, body").animate({
 	        scrollTop: offset.top
 	    });
+	}
+	function closeModal(jqSelector) {
+	    $(jqSelector).closest(".modal").modal("hide");
 	}
 	exports["default"] = {
 	    setTitle: setTitle,
@@ -280,9 +264,9 @@
 	    limitTextArea: limitTextArea,
 	    enableScrollTop: enableScrollTop,
 	    removeServerSideParsleyError: removeServerSideParsleyError,
-	    scrollToRandomSong: scrollToRandomSong,
 	    scrollToBlock: scrollToBlock,
-	    playYoutube: links_1["default"].playYoutube
+	    playYoutube: links_1["default"].playYoutube,
+	    closeModal: closeModal
 	};
 
 

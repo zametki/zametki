@@ -30,4 +30,7 @@ public interface CategorySql {
 
     @Sql("DELETE FROM category WHERE id = :id")
     void delete(@Bind("id") CategoryId id);
+
+    @Sql("UPDATE category SET title = :title WHERE id = :id")
+    void update(@NotNull @BindBean Category c);
 }

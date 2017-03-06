@@ -17,4 +17,6 @@ public interface CategoryDbi {
 
     @Nullable
     Category getById(@Nullable CategoryId id);
+
+    void update(@NotNull Category c);
 }

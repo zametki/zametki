@@ -41,3 +41,13 @@
 .sidebar .nav-link {
     border-radius: 0;
 }
+
+.category-header {
+    font-size: 1.75rem;
+    color: #292b2c;
+    text-decoration: none !important;
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: .5rem;
+    line-height: 1.1;
+}

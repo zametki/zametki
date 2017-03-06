@@ -54,4 +54,10 @@ public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
         return cc().getById(id, sql::getById);
     }
 
+    @Override
+    public void update(@NotNull Category c) {
+        sql.update(c);
+        cc().update(c);
+    }
+
 }

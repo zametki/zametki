@@ -2,7 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <h3 wicket:id="name" class="text-center font-italic"></h3>
+
+    <div wicket:id="edit_category_modal"></div>
+
+    <div wicket:id="panel" class="text-center">
+        <div class="dropdown d-inline-block">
+            <a wicket:id="name_link" href="#" data-toggle="dropdown" title="Управление">
+                <table>
+                    <tr>
+                        <td wicket:id="name"></td>
+                        <td wicket:id="angle_down_icon">
+                            <div style="padding-top: 8px;margin-left: 5px; font-size: 20px">
+                                <i class="fa fa-angle-down txt-muted"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </a>
+            <div wicket:id="menu_block" class="dropdown-menu ml50">
+                <a wicket:id="edit_link" class="dropdown-item f14px">Изменить</a>
+            </div>
+        </div>
+    </div>
+
 </wicket:panel>
 </body>
 </html>

@@ -9,3 +9,7 @@
 .dropdown-toggle-no-caret::after {
     display: none;
 }
+
+.cursor-default {
+    cursor: default;
+}

@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
+
     private BootstrapModal addCategoryModal;
 
     public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory, @Nullable AjaxCallback doneCallback) {

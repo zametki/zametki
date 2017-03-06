@@ -6,6 +6,7 @@ import com.github.zametki.ZApplication;
 import com.github.zametki.component.BasePage;
 import com.github.zametki.component.HomePage;
 import com.github.zametki.model.User;
+import com.github.zametki.model.UserId;
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -107,6 +108,10 @@ public class WebUtils {
     }
 
     @NotNull
+    public static UserId getUserIdOrRedirectHome() {
+        return getUserOrRedirectHome().id;
+    }
+
     public static User getUserOrRedirectHome() {
         return nonNullOrRedirect(UserSession.get().getUser(), HomePage.class);
     }

@@ -154,32 +154,16 @@ function shuffleArray(array: Array<any>): void {
     }
 }
 
-let randomSongsStack: Array<number> = [];
-function scrollToRandomSong() {
-    const $songs = $(".song-block");
-    if ($songs.length == 0) {
-        return;
-    }
-    if (randomSongsStack.length == 0) {
-        for (let i = 0; i < $songs.length; i++) {
-            randomSongsStack.push(i);
-        }
-        shuffleArray(randomSongsStack);
-    }
-    let idx = randomSongsStack.pop();
-    const $song = $($songs.get(idx));
-    const offset = $song.offset();
-    $("html, body").animate({
-        scrollTop: offset.top,
-    });
-}
-
 function scrollToBlock(selector: string): void {
     const $block = $(selector);
     const offset = $block.offset();
     $("html, body").animate({
         scrollTop: offset.top,
     });
+}
+
+function closeModal(jqSelector: HTMLElement | string) {
+    $(jqSelector).closest(".modal").modal("hide");
 }
 
 export default {
@@ -193,7 +177,7 @@ export default {
     limitTextArea: limitTextArea,
     enableScrollTop: enableScrollTop,
     removeServerSideParsleyError: removeServerSideParsleyError,
-    scrollToRandomSong: scrollToRandomSong,
     scrollToBlock: scrollToBlock,
     playYoutube: links.playYoutube,
+    closeModal: closeModal
 }
