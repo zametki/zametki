@@ -95,7 +95,10 @@ public class CreateZametkaForm extends Panel {
 
         addCategoryModal = new BootstrapModal("add_category_modal", "Новая категория",
                 (ComponentFactory) markupId -> new CreateCategoryForm(markupId, categorySelector.getModel(),
-                        (AjaxCallback) target -> addCategoryModal.hide(target)),
+                        (AjaxCallback) target -> {
+                            addCategoryModal.hide(target);
+                            JsUtils.focus(target, contentField);
+                        }),
                 BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);
         add(addCategoryModal);
 
