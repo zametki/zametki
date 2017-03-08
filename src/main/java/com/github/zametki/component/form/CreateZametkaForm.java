@@ -8,10 +8,10 @@ import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
-import com.github.zametki.util.CategoryUtils;
+import com.github.zametki.util.GroupsUtils;
 import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.WebUtils;
@@ -29,12 +29,12 @@ import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
 
-    private BootstrapModal addCategoryModal;
+    private BootstrapModal addGroupModal;
 
     @NotNull
     public final InputArea contentField;
 
-    public CreateZametkaForm(@NotNull String id, @NotNull IModel<CategoryId> activeCategory, @Nullable AjaxCallback doneCallback) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeCategory, @Nullable AjaxCallback doneCallback) {
         super(id);
 
         Form form = new Form("form");
@@ -42,9 +42,9 @@ public class CreateZametkaForm extends Panel {
         add(form);
 
         UserId userId = WebUtils.getUserOrRedirectHome().id;
-        //todo: save last selected category id to settings
-        CategorySelector categorySelector = new CategorySelector("category_selector", userId, activeCategory);
-        form.add(categorySelector);
+        //todo: save last selected group id to settings
+        GroupsSelector groupsSelector = new GroupsSelector("group_selector", userId, activeCategory);
+        form.add(groupsSelector);
 
         contentField = new InputArea("text");
         form.add(contentField);
@@ -62,14 +62,14 @@ public class CreateZametkaForm extends Panel {
                 z.userId = WebUtils.getUserOrRedirectHome().id;
                 z.creationDate = Instant.now();
                 z.content = content;
-                CategoryId categoryId = categorySelector.getConvertedInput();
-                if (categoryId == null) {
-                    categoryId = CategoryUtils.getDefaultCategoryForUser(userId);
+                GroupId groupId = groupsSelector.getConvertedInput();
+                if (groupId == null) {
+                    groupId = GroupsUtils.getDefaultGroupForUser(userId);
                 }
-                z.categoryId = categoryId;
-                WicketUtils.reactiveUpdate(activeCategory, z.categoryId, target);
-                //todo: check user is owner of category
-                //todo: check category is not null
+                z.groupId = groupId;
+                WicketUtils.reactiveUpdate(activeCategory, z.groupId, target);
+                //todo: check user is owner of group
+                //todo: check group is not null
                 Context.getZametkaDbi().create(z);
 
                 contentField.clearInput();
@@ -93,15 +93,18 @@ public class CreateZametkaForm extends Panel {
             }
         }.setVisible(doneCallback != null));
 
-        addCategoryModal = new BootstrapModal("add_category_modal", "Новая категория",
-                (ComponentFactory) markupId -> new CreateCategoryForm(markupId, categorySelector.getModel(),
+        addGroupModal = new BootstrapModal("add_group_modal", "Новая группа",
+                (ComponentFactory) markupId -> new CreateGroupForm(markupId, groupsSelector.getModel(),
                         (AjaxCallback) target -> {
-                            addCategoryModal.hide(target);
+                            addGroupModal.hide(target);
                             JsUtils.focus(target, contentField);
                         }),
                 BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);
-        add(addCategoryModal);
 
-        form.add(new BootstrapLazyModalLink("add_category", addCategoryModal));
+        addGroupModal.addOnCloseJs("$('#" + contentField.getMarkupId() + "').focus();");
+
+        add(addGroupModal);
+
+        form.add(new BootstrapLazyModalLink("add_group", addGroupModal));
     }
 }

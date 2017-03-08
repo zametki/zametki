@@ -1,6 +1,6 @@
 package com.github.zametki.db.dbi;
 
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
@@ -26,5 +26,5 @@ public interface ZametkaDbi {
 
     void update(@NotNull Zametka z);
 
-    int countByCategory(UserId userId, @NotNull CategoryId categoryId);
+    int countByCategory(UserId userId, @NotNull GroupId groupId);
 }

@@ -1,14 +1,14 @@
-package com.github.zametki.component.category;
+package com.github.zametki.component.group;
 
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.behavior.ClassAppender;
 import com.github.zametki.component.basic.ContainerWithId;
-import com.github.zametki.event.UserCategoriesUpdatedEvent;
+import com.github.zametki.event.UserGroupUpdatedEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.util.AbstractListProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,18 +29,18 @@ import java.util.Objects;
 
 import static com.github.zametki.util.WicketUtils.reactiveUpdate;
 
-public class CategoriesListPanel extends Panel {
+public class GroupsListPanel extends Panel {
 
     private final ContainerWithId panel = new ContainerWithId("panel");
 
-    private final CategoriesProvider provider = new CategoriesProvider();
+    private final GroupsProvider provider = new GroupsProvider();
 
     @NotNull
-    private final IModel<CategoryId> categoryModel;
+    private final IModel<GroupId> groupModel;
 
-    public CategoriesListPanel(String id, @NotNull IModel<CategoryId> categoryModel) {
+    public GroupsListPanel(String id, @NotNull IModel<GroupId> groupModel) {
         super(id);
-        this.categoryModel = categoryModel;
+        this.groupModel = groupModel;
 
         add(panel);
 
@@ -51,63 +51,63 @@ public class CategoriesListPanel extends Panel {
                 AjaxLink<Void> link = new AjaxLink<Void>("link") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        reactiveUpdate(categoryModel, o.categoryId, target);
+                        reactiveUpdate(groupModel, o.groupId, target);
                     }
                 };
-                if (Objects.equals(o.categoryId, categoryModel.getObject())) {
+                if (Objects.equals(o.groupId, groupModel.getObject())) {
                     link.add(new ClassAppender("active"));
                 }
                 item.add(link);
 
                 UserId userId = UserSession.get().getUserId();
-                int count = userId == null || o.categoryId == null ? 0 : Context.getZametkaDbi().countByCategory(userId, o.categoryId);
+                int count = userId == null || o.groupId == null ? 0 : Context.getZametkaDbi().countByCategory(userId, o.groupId);
                 link.add(new Label("count", "" + count).setVisible(count > 0));
                 link.add(new Label("title", o.title));
             }
         });
     }
 
-    @OnPayload(UserCategoriesUpdatedEvent.class)
-    public void onCategoriesUpdated(UserCategoriesUpdatedEvent e) {
+    @OnPayload(UserGroupUpdatedEvent.class)
+    public void onCategoriesUpdated(UserGroupUpdatedEvent e) {
         provider.detach();
         e.target.add(panel);
     }
 
     private static class NavbarOption implements IClusterable {
         @Nullable
-        private final CategoryId categoryId;
+        private final GroupId groupId;
         @NotNull
         private final String title;
 
-        public NavbarOption(@Nullable CategoryId categoryId, @NotNull String title) {
-            this.categoryId = categoryId;
+        public NavbarOption(@Nullable GroupId groupId, @NotNull String title) {
+            this.groupId = groupId;
             this.title = title;
         }
     }
 
     @OnModelUpdate
     public void onModelUpdateAjaxEvent(@NotNull ModelUpdateAjaxEvent e) {
-        if (e.model == categoryModel) {
+        if (e.model == groupModel) {
             provider.detach();
             e.target.add(panel);
         }
     }
 
-    @OnPayload(UserCategoriesUpdatedEvent.class)
-    public void onUserCategoriesUpdatedEvent(UserCategoriesUpdatedEvent e) {
+    @OnPayload(UserGroupUpdatedEvent.class)
+    public void onUserCategoriesUpdatedEvent(UserGroupUpdatedEvent e) {
         provider.detach();
         e.target.add(panel);
     }
 
-    private static class CategoriesProvider extends AbstractListProvider<NavbarOption> {
+    private static class GroupsProvider extends AbstractListProvider<NavbarOption> {
 
         @Override
         public List<NavbarOption> getList() {
             List<NavbarOption> list = new ArrayList<>();
             list.add(new NavbarOption(null, "Все"));
-            List<CategoryId> userCategories = Context.getCategoryDbi().getByUser(UserSession.get().getUserId());
+            List<GroupId> userCategories = Context.getGroupsDbi().getByUser(UserSession.get().getUserId());
             userCategories.stream()
-                    .map(id -> Context.getCategoryDbi().getById(id))
+                    .map(id -> Context.getGroupsDbi().getById(id))
                     .filter(Objects::nonNull)
                     .forEach(c -> list.add(new NavbarOption(c.id, c.title)));
             return list;

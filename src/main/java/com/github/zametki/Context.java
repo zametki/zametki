@@ -2,12 +2,12 @@ package com.github.zametki;
 
 import com.github.mjdbc.Binders;
 import com.github.mjdbc.Db;
-import com.github.zametki.db.cache.CategoryCache;
+import com.github.zametki.db.cache.GroupsCache;
 import com.github.zametki.db.cache.ZametkaCache;
-import com.github.zametki.db.dbi.CategoryDbi;
+import com.github.zametki.db.dbi.GroupsDbi;
 import com.github.zametki.db.dbi.UsersDbi;
 import com.github.zametki.db.dbi.ZametkaDbi;
-import com.github.zametki.db.dbi.impl.CategoryDbiImpl;
+import com.github.zametki.db.dbi.impl.GroupsDbiImpl;
 import com.github.zametki.db.dbi.impl.UsersDbiImpl;
 import com.github.zametki.db.dbi.impl.ZametkaDbiImpl;
 import com.zaxxer.hikari.HikariConfig;
@@ -28,11 +28,11 @@ public class Context {
     private static HikariDataSource ds;
     private static UsersDbi usersDbi;
     private static ZametkaDbi zametkaDbi;
-    private static CategoryDbi categoryDbi;
+    private static GroupsDbi groupsDbi;
 
     private static Properties prodConfig = new Properties();
 
-    private static final CategoryCache categoryCache = new CategoryCache();
+    private static final GroupsCache GROUPS_CACHE = new GroupsCache();
     private static final ZametkaCache zametkaCache = new ZametkaCache();
 
     public static void init() {
@@ -45,7 +45,7 @@ public class Context {
             registerBuiltInTypes(db);
             usersDbi = db.attachDbi(new UsersDbiImpl(db), UsersDbi.class);
             zametkaDbi = db.attachDbi(new ZametkaDbiImpl(db), ZametkaDbi.class);
-            categoryDbi = db.attachDbi(new CategoryDbiImpl(db), CategoryDbi.class);
+            groupsDbi = db.attachDbi(new GroupsDbiImpl(db), GroupsDbi.class);
         } catch (Exception e) {
             log.error("", e);
             shutdown();
@@ -80,12 +80,12 @@ public class Context {
         return zametkaDbi;
     }
 
-    public static CategoryDbi getCategoryDbi() {
-        return categoryDbi;
+    public static GroupsDbi getGroupsDbi() {
+        return groupsDbi;
     }
 
-    public static CategoryCache getCategoryCache() {
-        return categoryCache;
+    public static GroupsCache getGroupsCache() {
+        return GROUPS_CACHE;
     }
 
     public static ZametkaCache getZametkaCache() {

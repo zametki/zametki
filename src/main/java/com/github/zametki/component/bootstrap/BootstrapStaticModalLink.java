@@ -1,6 +1,5 @@
 package com.github.zametki.component.bootstrap;
 
-import com.github.zametki.behavior.StyleAppender;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +14,6 @@ public class BootstrapStaticModalLink extends WebMarkupContainer {
         }
 
         add(new AttributeModifier("onclick", "$('#" + modal.getDataTargetId() + "').modal();"));
-        add(new AttributeModifier("href", "javascript:;"));
+        add(new AttributeModifier("href", "javascript:"));
     }
 }

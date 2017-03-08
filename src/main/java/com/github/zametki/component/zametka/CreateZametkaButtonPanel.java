@@ -1,10 +1,10 @@
-package com.github.zametki.component.z;
+package com.github.zametki.component.zametka;
 
 import com.github.zametki.component.basic.AjaxCallback;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.basic.InvisibleBlock;
 import com.github.zametki.component.form.CreateZametkaForm;
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.util.JsUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -14,7 +14,7 @@ import org.apache.wicket.model.IModel;
 
 public class CreateZametkaButtonPanel extends Panel {
 
-    public CreateZametkaButtonPanel(String id, IModel<CategoryId> activeCategory) {
+    public CreateZametkaButtonPanel(String id, IModel<GroupId> activeCategory) {
         super(id);
 
         WebMarkupContainer panel = new ContainerWithId("panel");

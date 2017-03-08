@@ -6,7 +6,7 @@ import com.github.zametki.db.cache.ZametkaCache;
 import com.github.zametki.db.dbi.AbstractDbi;
 import com.github.zametki.db.dbi.ZametkaDbi;
 import com.github.zametki.db.sql.ZametkaSql;
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
@@ -72,10 +72,10 @@ public class ZametkaDbiImpl extends AbstractDbi implements ZametkaDbi {
     }
 
     @Override
-    public int countByCategory(@NotNull UserId userId, @NotNull CategoryId categoryId) {
+    public int countByCategory(@NotNull UserId userId, @NotNull GroupId groupId) {
         return (int) getByUser(userId).stream()
                 .map(this::getById)
-                .filter(z -> z != null && z.categoryId.equals(categoryId))
+                .filter(z -> z != null && z.groupId.equals(groupId))
                 .count();
     }
 

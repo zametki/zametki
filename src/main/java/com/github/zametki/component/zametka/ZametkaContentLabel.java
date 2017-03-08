@@ -1,4 +1,4 @@
-package com.github.zametki.component.z;
+package com.github.zametki.component.zametka;
 
 import com.github.zametki.Context;
 import com.github.zametki.event.ZametkaUpdateEvent;

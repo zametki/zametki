@@ -1,6 +1,5 @@
 package com.github.zametki.component.bootstrap;
 
-import com.github.zametki.behavior.StyleAppender;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +12,6 @@ public class BootstrapLazyModalLink extends AjaxLink<Void> {
     public BootstrapLazyModalLink(@NotNull String id, @NotNull BootstrapModal modal) {
         super(id);
         this.modal = modal;
-
-        add(new StyleAppender("cursor: pointer;"));
     }
 
     @Override

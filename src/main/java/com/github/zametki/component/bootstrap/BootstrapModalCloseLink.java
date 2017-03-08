@@ -13,7 +13,7 @@ public class BootstrapModalCloseLink extends WebMarkupContainer {
     @Override
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
-        tag.put("href", "javascript:;");
+        tag.put("href", "javascript:");
         tag.put("onclick", "$site.Utils.closeModal(this);");
     }
 }

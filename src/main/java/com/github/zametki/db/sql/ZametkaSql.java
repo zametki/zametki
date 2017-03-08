@@ -17,8 +17,8 @@ import java.util.List;
 public interface ZametkaSql {
 
     @NotNull
-    @Sql("INSERT INTO zametka (creation_date, user_id, content, category) " +
-            "VALUES (:creationDate, :userId, :content, :categoryId)")
+    @Sql("INSERT INTO zametka (creation_date, user_id, content, group_id) " +
+            "VALUES (:creationDate, :userId, :content, :groupId)")
     ZametkaId insert(@BindBean Zametka zametka);
 
     @Nullable
@@ -32,6 +32,6 @@ public interface ZametkaSql {
     @Sql("DELETE FROM zametka WHERE id = :id")
     void delete(@Bind("id") ZametkaId id);
 
-    @Sql("UPDATE zametka SET content = :content, category = :categoryId WHERE id = :id")
+    @Sql("UPDATE zametka SET content = :content, group_id = :groupId WHERE id = :id")
     void update(@NotNull @BindBean Zametka z);
 }

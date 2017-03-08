@@ -1,7 +1,3 @@
-DROP TABLE verification_record;
-DROP TABLE users;
-DROP TABLE zametka;
-
 # Пользователь сайта
 CREATE TABLE users (
   id                INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +31,7 @@ CREATE TABLE verification_record (
   DEFAULT CHARSET = utf8mb4;
 
 # Категория (логическа группа) заметок
-CREATE TABLE category (
+CREATE TABLE groups (
   id      INTEGER AUTO_INCREMENT PRIMARY KEY,
   # Владелец категории.
   user_id INTEGER     NOT NULL REFERENCES users (id),
@@ -54,8 +50,8 @@ CREATE TABLE zametka (
   creation_date DATETIME NOT NULL,
   # Соредржание заметки. Сегодня - прямо в ее теле. В будущем можно поменять.
   content       TEXT     NOT NULL,
-  # Категория заметки
-  category      INTEGER  NOT NULL REFERENCES category (id)
+  # Группа которой принадлежит заметка
+  group_id      INTEGER  NOT NULL REFERENCES groups (id)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

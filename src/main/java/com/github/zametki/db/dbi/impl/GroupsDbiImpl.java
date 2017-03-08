@@ -2,12 +2,12 @@ package com.github.zametki.db.dbi.impl;
 
 import com.github.mjdbc.Db;
 import com.github.zametki.Context;
-import com.github.zametki.db.cache.CategoryCache;
+import com.github.zametki.db.cache.GroupsCache;
 import com.github.zametki.db.dbi.AbstractDbi;
-import com.github.zametki.db.dbi.CategoryDbi;
-import com.github.zametki.db.sql.CategorySql;
-import com.github.zametki.model.Category;
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.db.dbi.GroupsDbi;
+import com.github.zametki.db.sql.GroupSql;
+import com.github.zametki.model.Group;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,22 +15,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
+public class GroupsDbiImpl extends AbstractDbi implements GroupsDbi {
 
-    private final CategorySql sql;
+    private final GroupSql sql;
 
-    public CategoryDbiImpl(@NotNull Db db) {
+    public GroupsDbiImpl(@NotNull Db db) {
         super(db);
-        sql = db.attachSql(CategorySql.class);
+        sql = db.attachSql(GroupSql.class);
     }
 
     @NotNull
-    private CategoryCache cc() {
-        return Context.getCategoryCache();
+    private GroupsCache cc() {
+        return Context.getGroupsCache();
     }
 
     @Override
-    public void create(@NotNull Category c) {
+    public void create(@NotNull Group c) {
         c.id = sql.insert(c);
         cc().remove(c.userId);
         cc().update(c);
@@ -38,7 +38,7 @@ public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
 
     @NotNull
     @Override
-    public List<CategoryId> getByUser(@Nullable UserId userId) {
+    public List<GroupId> getByUser(@Nullable UserId userId) {
         if (isInvalid(userId)) {
             return Collections.emptyList();
         }
@@ -47,7 +47,7 @@ public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
 
     @Nullable
     @Override
-    public Category getById(@Nullable CategoryId id) {
+    public Group getById(@Nullable GroupId id) {
         if (isInvalid(id)) {
             return null;
         }
@@ -55,7 +55,7 @@ public class CategoryDbiImpl extends AbstractDbi implements CategoryDbi {
     }
 
     @Override
-    public void update(@NotNull Category c) {
+    public void update(@NotNull Group c) {
         sql.update(c);
         cc().update(c);
     }

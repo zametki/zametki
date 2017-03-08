@@ -1,4 +1,4 @@
-package com.github.zametki.component.z;
+package com.github.zametki.component.zametka;
 
 import com.github.zametki.Constants;
 import com.github.zametki.Context;
@@ -39,7 +39,7 @@ public class ZametkaPanel extends Panel {
             return;
         }
         add(panel);
-        panel.add(settings.showCategory ? new ZametkaCategoryBadge("category_badge", zametkaId) : new InvisibleBlock("category_badge"));
+        panel.add(settings.showCategory ? new ZametkaGroupBadge("group_badge", zametkaId) : new InvisibleBlock("group_badge"));
         panel.add(new Label("date", DF.format(z.creationDate)));
         panel.add(new ZametkaContentLabel("content", zametkaId));
         panel.add(new AjaxLink<Void>("delete_link") {

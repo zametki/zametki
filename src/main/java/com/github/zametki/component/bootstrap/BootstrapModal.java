@@ -1,8 +1,9 @@
 package com.github.zametki.component.bootstrap;
 
 import com.github.zametki.component.basic.ComponentFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -33,6 +34,9 @@ public class BootstrapModal extends Panel {
 
     @NotNull
     public final BodyMode bodyMode;
+
+    @NotNull
+    private StringBuilder onCloseJs = new StringBuilder();
 
     public BootstrapModal(@NotNull String id, @Nullable String title, @NotNull ComponentFactory bodyFactory, @NotNull BodyMode bodyMode, @NotNull FooterMode footerMode) {
         super(id);
@@ -72,17 +76,27 @@ public class BootstrapModal extends Panel {
         target.appendJavaScript("$('#" + modal.getMarkupId() + "').modal('hide');");
     }
 
-    public static void hideParentModalJs(@NotNull AjaxRequestTarget target, @NotNull Component c) {
-        target.appendJavaScript("$site.Utils.closeModal('#" + c.getMarkupId() + "');");
-    }
-
-
     @SuppressWarnings("unused")
     public void setOnCloseJavascript(AjaxRequestTarget target, String js) {
-        target.appendJavaScript("$('#" + modal.getMarkupId() + "').on('hidden.bs.modal', function(){" + js + "})");
+        target.appendJavaScript(wrapOnCloseJs(js));
+    }
+
+    @NotNull
+    private String wrapOnCloseJs(@NotNull CharSequence js) {
+        return "$('#" + modal.getMarkupId() + "').on('hidden.bs.modal', function(){" + js + "})";
+    }
+
+    public void addOnCloseJs(@NotNull String js) {
+        onCloseJs.append(js);
     }
 
     public String getDataTargetId() {
         return modal.getMarkupId();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(OnDomReadyHeaderItem.forScript(wrapOnCloseJs(onCloseJs)));
     }
 }

@@ -1,12 +1,12 @@
-package com.github.zametki.component.category;
+package com.github.zametki.component.group;
 
 import com.github.zametki.Context;
 import com.github.zametki.component.basic.AjaxCallback;
 import com.github.zametki.component.bootstrap.BootstrapModalCloseLink;
 import com.github.zametki.component.form.InputField;
-import com.github.zametki.event.UserCategoriesUpdatedEvent;
-import com.github.zametki.model.Category;
-import com.github.zametki.model.CategoryId;
+import com.github.zametki.event.UserGroupUpdatedEvent;
+import com.github.zametki.model.Group;
+import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.TextUtils;
@@ -18,17 +18,17 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.jetbrains.annotations.NotNull;
 
-public class EditCategoryPanel extends Panel {
+public class EditGroupPanel extends Panel {
 
-    public EditCategoryPanel(@NotNull String id, @NotNull CategoryId categoryId, @NotNull AjaxCallback doneCallback) {
+    public EditGroupPanel(@NotNull String id, @NotNull GroupId groupId, @NotNull AjaxCallback doneCallback) {
         super(id);
 
-        Category category = Context.getCategoryDbi().getById(categoryId);
+        Group group = Context.getGroupsDbi().getById(groupId);
         Form form = new Form("form");
         form.setOutputMarkupId(true);
         add(form);
 
-        String title = category == null ? "" : category.title;
+        String title = group == null ? "" : group.title;
         InputField nameField = new InputField("name_field", title);
         form.add(nameField);
 
@@ -46,15 +46,15 @@ public class EditCategoryPanel extends Panel {
                 if (TextUtils.isEmpty(newName)) { // todo: validate!
                     return;
                 }
-                Category c = Context.getCategoryDbi().getById(categoryId);
+                Group c = Context.getGroupsDbi().getById(groupId);
                 if (c == null) {
                     doneCallback.callback(target);
                     return;
                 }
                 c.title = newName;
-                Context.getCategoryDbi().update(c);
+                Context.getGroupsDbi().update(c);
                 doneCallback.callback(target);
-                send(getPage(), Broadcast.BREADTH, new UserCategoriesUpdatedEvent(target, userId, categoryId));
+                send(getPage(), Broadcast.BREADTH, new UserGroupUpdatedEvent(target, userId, groupId));
             }
         };
         form.add(saveLink);
