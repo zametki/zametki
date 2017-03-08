@@ -2,6 +2,7 @@ package com.github.zametki.component.parsley;
 
 import com.github.zametki.model.User;
 import com.github.zametki.util.PL;
+import com.github.zametki.util.ValidatorUtils;
 import org.apache.wicket.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,5 +15,4 @@ public class LoginJsValidator extends RequiredFieldJsValidator {
         attributeMap.put("data-parsley-minlength-message", "Мин. длина имени пользователя: " + PL.npl(User.LOGIN_MIN_LENGTH, " символ"));
         attributeMap.put("data-parsley-maxlength-message", "Имя пользователя не может превышать " + PL.npl(User.LOGIN_MAX_LENGTH, " символ"));
     }
-
 }

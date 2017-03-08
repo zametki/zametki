@@ -63,7 +63,7 @@ public class GroupHeader extends Panel {
                 return "Все категории";
             }
             Group c = Context.getGroupsDbi().getById(id1);
-            return c == null ? "???" : c.title;
+            return c == null ? "???" : c.name;
         }));
 
         nameLabel.setOutputMarkupId(true);

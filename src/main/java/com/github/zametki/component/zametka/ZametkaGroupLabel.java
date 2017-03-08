@@ -22,7 +22,7 @@ public class ZametkaGroupLabel extends Label {
             protected String load() {
                 Zametka z = Context.getZametkaDbi().getById(zametkaId);
                 Group cat = z == null ? null : Context.getGroupsDbi().getById(z.groupId);
-                return cat == null ? "???" : cat.title;
+                return cat == null ? "???" : cat.name;
             }
         });
         this.zametkaId = zametkaId;

@@ -16,8 +16,8 @@ import com.github.zametki.model.VerificationRecordId;
 import com.github.zametki.model.VerificationRecordType;
 import com.github.zametki.util.DigestUtils;
 import com.github.zametki.util.JsUtils;
-import com.github.zametki.util.RegistrationUtils;
 import com.github.zametki.util.UserSessionUtils;
+import com.github.zametki.util.ValidatorUtils;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.PageProvider;
@@ -118,7 +118,7 @@ public class ResetPasswordPage extends BasePage {
                 }
                 String password1 = password1Field.getModelObject();
                 String password2 = password2Field.getModelObject();
-                String err = RegistrationUtils.validatePassword(password1, password2);
+                String err = ValidatorUtils.validatePassword(password1, password2);
                 if (err != null) {
                     ParsleyUtils.addParsleyError(target, password1Error, err);
                     JsUtils.focus(target, password1Field);

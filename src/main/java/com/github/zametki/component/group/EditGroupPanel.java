@@ -28,7 +28,7 @@ public class EditGroupPanel extends Panel {
         form.setOutputMarkupId(true);
         add(form);
 
-        String title = group == null ? "" : group.title;
+        String title = group == null ? "" : group.name;
         InputField nameField = new InputField("name_field", title);
         form.add(nameField);
 
@@ -51,7 +51,7 @@ public class EditGroupPanel extends Panel {
                     doneCallback.callback(target);
                     return;
                 }
-                c.title = newName;
+                c.name = newName;
                 Context.getGroupsDbi().update(c);
                 doneCallback.callback(target);
                 send(getPage(), Broadcast.BREADTH, new UserGroupUpdatedEvent(target, userId, groupId));

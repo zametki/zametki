@@ -64,7 +64,7 @@ public class ZametkaGroupBadge extends Panel {
                 };
                 item.add(link);
 
-                link.add(new Label("group_name", cat.title));
+                link.add(new Label("group_name", cat.name));
             }
         });
     }

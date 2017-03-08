@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
+
     <form wicket:id="form">
         <input wicket:id="group_name" class="form-control" type="text" autofocus/>
+        <span wicket:id="group_name_error"></span>
         <div class="mt10 float-right">
             <a wicket:id="cancel_button" class="btn btn-sm btn-secondary">Отмена</a>
             <a wicket:id="create_button" class="btn btn-sm btn-primary ml10">Создать</a>
         </div>
     </form>
+
 </wicket:panel>
 </body>
 </html>

@@ -14,8 +14,8 @@ import com.github.zametki.component.parsley.RequiredFieldJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.model.User;
 import com.github.zametki.util.JsUtils;
-import com.github.zametki.util.RegistrationUtils;
 import com.github.zametki.util.UserSessionUtils;
+import com.github.zametki.util.ValidatorUtils;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -102,7 +102,7 @@ public class UserProfileSettingsPage extends BaseUserPage {
                 }
                 String password1 = password1Field.getModelObject();
                 String password2 = password2Field.getModelObject();
-                String err = RegistrationUtils.validatePassword(password1, password2);
+                String err = ValidatorUtils.validatePassword(password1, password2);
                 if (err != null) {
                     ParsleyUtils.addParsleyError(target, password1Error, err);
                     JsUtils.focus(target, password1Field);

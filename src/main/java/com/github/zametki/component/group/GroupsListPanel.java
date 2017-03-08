@@ -109,7 +109,7 @@ public class GroupsListPanel extends Panel {
             userCategories.stream()
                     .map(id -> Context.getGroupsDbi().getById(id))
                     .filter(Objects::nonNull)
-                    .forEach(c -> list.add(new NavbarOption(c.id, c.title)));
+                    .forEach(c -> list.add(new NavbarOption(c.id, c.name)));
             return list;
         }
 

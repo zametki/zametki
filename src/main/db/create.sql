@@ -36,7 +36,7 @@ CREATE TABLE groups (
   # Владелец категории.
   user_id INTEGER     NOT NULL REFERENCES users (id),
   # Короткое название категории.
-  title   VARCHAR(48) NOT NULL
+  name    VARCHAR(48) NOT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

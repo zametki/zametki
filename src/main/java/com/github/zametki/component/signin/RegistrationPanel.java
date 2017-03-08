@@ -14,7 +14,7 @@ import com.github.zametki.component.parsley.RequiredFieldJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.model.User;
 import com.github.zametki.util.JsUtils;
-import com.github.zametki.util.RegistrationUtils;
+import com.github.zametki.util.MailUtils;
 import com.github.zametki.util.TextUtils;
 import com.github.zametki.util.UserSessionUtils;
 import com.github.zametki.util.ValidatorUtils;
@@ -106,7 +106,7 @@ public class RegistrationPanel extends Panel {
                 }
                 String password1 = password1Field.getModelObject();
                 String password2 = password2Field.getModelObject();
-                String err = RegistrationUtils.validatePassword(password1, password2);
+                String err = ValidatorUtils.validatePassword(password1, password2);
                 if (err != null) {
                     ParsleyUtils.addParsleyError(target, password1Error, err);
                     JsUtils.focus(target, password1Field);
@@ -125,7 +125,7 @@ public class RegistrationPanel extends Panel {
                 UserSession.get().setUser(user);
                 setResponsePage(HomePage.class);
                 try {
-                    RegistrationUtils.sendWelcomeEmail(user, password1);
+                    MailUtils.sendWelcomeEmail(user, password1);
                 } catch (Exception e) {
                     log.error("Error during user registration!", e);
                 }

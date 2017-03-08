@@ -2,11 +2,13 @@ package com.github.zametki.util;
 
 import com.github.zametki.model.User;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -105,4 +107,41 @@ public class ValidatorUtils {
         return true;
     }
 
+    @Nullable
+    public static String validatePassword(@Nullable String password1, @Nullable String password2) {
+        if (TextUtils.isEmpty(password1) && TextUtils.isEmpty(password2)) {
+            return "Пароли пусты!";
+        }
+        if (password1 == null || !password1.equals(password2)) {
+            return "Пароли не совпадают";
+        }
+        if (password1.length() < User.PASSWORD_MIN_LENGTH || password1.length() > User.PASSWORD_MAX_LENGTH) {
+            return password1.length() < User.PASSWORD_MIN_LENGTH ? "Пароль слишком короткий: менее " + User.PASSWORD_MIN_LENGTH + " символов." : "Пароль слишком длиный: более " + User.PASSWORD_MAX_LENGTH + " символов";
+        }
+        if (!isPrintableAsciiCharacters(password1)) {
+            return "Пароль содержит недопустимые символы";
+        }
+        return null;
+    }
+
+    private static boolean isPrintableAsciiCharacters(@NotNull String text) {
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c <= 32 || c >= 128) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Nullable
+    public static String validateRange(@Nullable String value, int minLen, int maxLen, Supplier<String> minMessage, Supplier<String> maxMessage) {
+        if (value == null || value.length() < minLen) {
+            return minMessage.get();
+        }
+        if (value.length() > maxLen) {
+            return maxMessage.get();
+        }
+        return null;
+    }
 }

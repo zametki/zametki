@@ -46,7 +46,7 @@ public class GroupsSelector extends DropDownChoice<GroupId> {
             @Override
             public Object getDisplayValue(GroupId id) {
                 Group c = Context.getGroupsDbi().getById(id);
-                return c == null ? "???" : c.title;
+                return c == null ? "???" : c.name;
             }
         });
     }
