@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    min-height: 700px;
 }
 
 .ap-container {
@@ -16,9 +15,7 @@
 }
 
 .ap-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    margin-top: -60px;
     height: 60px;
     text-align: center;
     background-color: white;
