@@ -135,6 +135,17 @@ public class ValidatorUtils {
     }
 
     @Nullable
+    public static String validateRange(@Nullable String value, int minLen, int maxLen, @NotNull String minMessage, @NotNull String maxMessage) {
+        if (value == null || value.length() < minLen) {
+            return minMessage;
+        }
+        if (value.length() > maxLen) {
+            return maxMessage;
+        }
+        return null;
+    }
+
+    @Nullable
     public static String validateRange(@Nullable String value, int minLen, int maxLen, Supplier<String> minMessage, Supplier<String> maxMessage) {
         if (value == null || value.length() < minLen) {
             return minMessage.get();

@@ -14,6 +14,9 @@ public class RequiredFieldJsValidator extends Behavior {
 
     protected final AttributeMap attributeMap = new AttributeMap();
 
+    @Nullable
+    protected Component errorContainer;
+
     public RequiredFieldJsValidator(@Nullable Component errorContainer) {
         attributeMap.put("data-parsley-trigger", "change");
         setRequired(true);
@@ -49,6 +52,7 @@ public class RequiredFieldJsValidator extends Behavior {
     public RequiredFieldJsValidator setErrorContainer(@NotNull Component c) {
         c.setOutputMarkupId(true);
         String markupId = c.getMarkupId();
+        errorContainer = null;
         attributeMap.put("data-parsley-errors-container", "#" + markupId);
         attributeMap.put("onkeydown", "$site.Utils.removeServerSideParsleyError('#" + markupId + "');");
         return this;

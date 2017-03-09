@@ -8,6 +8,9 @@ import java.time.Instant;
 
 public class Zametka extends Identifiable<ZametkaId> {
 
+    public static final int MIN_CONTENT_LEN = 1;
+    public static final int MAX_CONTENT_LEN = 50_000;
+
     @NotNull
     public UserId userId = UserId.INVALID_ID;
 

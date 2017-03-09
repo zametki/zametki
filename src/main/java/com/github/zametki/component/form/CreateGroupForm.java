@@ -33,7 +33,8 @@ public class CreateGroupForm extends Panel {
 
         WebMarkupContainer groupNameError = new WebMarkupContainer("group_name_error");
         form.add(groupNameError);
-        groupNameField.add(new GroupNameJsValidator(groupNameError));
+        GroupNameJsValidator groupNameJsValidator = new GroupNameJsValidator(groupNameError);
+        groupNameField.add(groupNameJsValidator);
 
 
         // kind of optimization: we know that this component is always used in bs modal window
@@ -43,7 +44,7 @@ public class CreateGroupForm extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 String newCategoryName = groupNameField.getInputString();
-                if (!GroupNameJsValidator.validate(newCategoryName, target, groupNameError, groupNameField)) {
+                if (!groupNameJsValidator.validate(newCategoryName, target, groupNameError, groupNameField)) {
                     return;
                 }
                 Group group = new Group();
