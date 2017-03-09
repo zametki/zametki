@@ -1,5 +1,6 @@
 package com.github.zametki.util;
 
+import com.github.mjdbc.type.DbInt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -72,5 +73,11 @@ public class JsonUtils {
             res.put(e.getKey(), e.getValue());
         }
         return res.toString();
+    }
+
+    public static void putIfNotNull(@NotNull JSONObject obj, @NotNull String name, @Nullable DbInt val) {
+        if (val != null) {
+            obj.put(name, val.getDbValue());
+        }
     }
 }
