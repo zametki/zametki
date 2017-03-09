@@ -9,6 +9,6 @@ import org.jetbrains.annotations.NotNull;
 public class LentaPageState implements IClusterable {
 
     @NotNull
-    public final IModel<GroupId> activeCategory = Model.of();
+    public final IModel<GroupId> activeGroup = Model.of();
 
 }

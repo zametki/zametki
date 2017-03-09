@@ -43,7 +43,6 @@ public class CreateZametkaForm extends Panel {
         add(form);
 
         UserId userId = WebUtils.getUserIdOrRedirectHome();
-        //todo: save last selected group id to settings
         GroupsSelector groupsSelector = new GroupsSelector("group_selector", userId, activeCategory);
         form.add(groupsSelector);
 

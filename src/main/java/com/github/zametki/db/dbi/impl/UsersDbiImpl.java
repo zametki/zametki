@@ -86,6 +86,11 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
         }
     }
 
+    @Override
+    public void updateSettings(@NotNull User user) {
+        usersSql.updateSettings(user);
+    }
+
     /**
      * Creates verification record. Assigns hash to it.
      */

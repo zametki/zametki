@@ -25,6 +25,8 @@ public interface UsersDbi {
 
     void updatePassword(@NotNull User user, @Nullable VerificationRecord r);
 
+    void updateSettings(@NotNull User user);
+
     void createVerificationRecord(@NotNull VerificationRecord r);
 
     @Nullable
