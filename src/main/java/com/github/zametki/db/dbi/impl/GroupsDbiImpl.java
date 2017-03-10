@@ -60,4 +60,17 @@ public class GroupsDbiImpl extends AbstractDbi implements GroupsDbi {
         cc().update(c);
     }
 
+    @Nullable
+    @Override
+    public Group getByName(@NotNull UserId userId, @NotNull String name) {
+        List<GroupId> groupIds = getByUser(userId);
+        for (GroupId id : groupIds) {
+            Group g = getById(id);
+            if (g != null && g.name.equals(name)) {
+                return g;
+            }
+        }
+        return null;
+    }
+
 }

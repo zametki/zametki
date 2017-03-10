@@ -19,4 +19,7 @@ public interface GroupsDbi {
     Group getById(@Nullable GroupId id);
 
     void update(@NotNull Group c);
+
+    @Nullable
+    Group getByName(@NotNull UserId userId, @NotNull String name);
 }
