@@ -10,12 +10,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GreoupsProvider extends AbstractListProvider<GroupId> {
+public class GroupsProvider extends AbstractListProvider<GroupId> {
 
     @NotNull
     private final UserId userId;
 
-    public GreoupsProvider(@NotNull UserId userId) {
+    public GroupsProvider(@NotNull UserId userId) {
         this.userId = userId;
     }
 

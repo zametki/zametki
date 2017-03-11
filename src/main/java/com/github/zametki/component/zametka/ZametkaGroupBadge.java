@@ -2,7 +2,7 @@ package com.github.zametki.component.zametka;
 
 import com.github.zametki.Context;
 import com.github.zametki.component.basic.ContainerWithId;
-import com.github.zametki.component.provider.GreoupsProvider;
+import com.github.zametki.component.provider.GroupsProvider;
 import com.github.zametki.event.UserGroupUpdatedEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
@@ -39,7 +39,7 @@ public class ZametkaGroupBadge extends Panel {
         WebMarkupContainer panel = new ContainerWithId("panel");
         add(panel);
 
-        provider = new GreoupsProvider(zametka.userId);
+        provider = new GroupsProvider(zametka.userId);
         panel.add(new ZametkaGroupLabel("group_label", zametkaId));
         panel.add(new DataView<GroupId>("group_option", provider) {
             @Override

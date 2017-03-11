@@ -28,7 +28,7 @@ public class CreateGroupForm extends Panel {
         Form form = new Form("form");
         add(form);
 
-        GroupSelector parentGroupSelector = new GroupSelector("parent_group", userId, modelToUpdate.getObject());
+        ParentGroupSelector parentGroupSelector = new ParentGroupSelector("parent_group", userId, modelToUpdate.getObject());
         form.add(parentGroupSelector);
 
         InputField groupNameField = new InputField("group_name");

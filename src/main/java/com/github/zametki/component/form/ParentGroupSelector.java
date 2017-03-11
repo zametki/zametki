@@ -9,9 +9,9 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
 
-public class GroupSelector extends DropDownChoice<GroupId> {
+public class ParentGroupSelector extends DropDownChoice<GroupId> {
 
-    public GroupSelector(@NotNull String id, @NotNull UserId userId, @NotNull GroupId selectedId) {
+    public ParentGroupSelector(@NotNull String id, @NotNull UserId userId, @NotNull GroupId selectedId) {
         super(id, Model.of(selectedId), Context.getGroupsDbi().getByUser(userId));
 
         setNullValid(false);

@@ -6,6 +6,7 @@ import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
 import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
+import com.github.zametki.component.group.GroupTreePanel;
 import com.github.zametki.component.group.GroupsListPanel;
 import com.github.zametki.component.user.BaseUserPage;
 import com.github.zametki.component.zametka.CreateZametkaButtonPanel;
@@ -26,18 +27,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Страница со списком персональных заметок.
+ * Эксперимент с Wicket Tree
  */
-@MountPath("/lenta")
-public class LentaPage extends BaseUserPage {
+@MountPath("/lenta-new")
+public class NewLentaPage extends BaseUserPage {
 
     private final WebMarkupContainer lenta = new ContainerWithId("lenta");
     public final LentaPageState state = new LentaPageState();
-
     private final LentaProvider provider = new LentaProvider(state);
     private final BootstrapModal groupsModal;
 
-    public LentaPage(PageParameters pp) {
+    public NewLentaPage(PageParameters pp) {
         super(pp);
 
         UserSettings us = UserSettings.get();
@@ -51,7 +51,7 @@ public class LentaPage extends BaseUserPage {
         add(groupsModal);
         add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
-        add(new GroupsListPanel("groups", state.activeGroupModel));
+        add(new GroupTreePanel("groups", state.activeGroupModel));
         add(new CreateZametkaButtonPanel("create_panel", state.activeGroupModel));
         add(lenta);
 
@@ -91,4 +91,5 @@ public class LentaPage extends BaseUserPage {
             UserSettings.set(us);
         }
     }
+
 }
