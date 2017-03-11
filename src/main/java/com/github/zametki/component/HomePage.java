@@ -11,15 +11,10 @@ import com.github.zametki.model.User;
 import com.github.zametki.util.UserSessionUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import java.time.LocalDateTime;
 
 import static com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import static com.github.zametki.component.bootstrap.BootstrapModal.FooterMode;
