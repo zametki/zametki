@@ -7,7 +7,7 @@ import com.github.zametki.component.form.InputField;
 import com.github.zametki.component.parsley.GroupNameJsValidator;
 import com.github.zametki.component.parsley.ParsleyUtils;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
-import com.github.zametki.event.UserGroupUpdatedEvent;
+import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
@@ -68,7 +68,7 @@ public class EditGroupPanel extends Panel {
                 c.name = newName;
                 Context.getGroupsDbi().update(c);
                 doneCallback.callback(target);
-                send(getPage(), Broadcast.BREADTH, new UserGroupUpdatedEvent(target, userId, groupId));
+                send(getPage(), Broadcast.BREADTH, new GroupUpdateEvent(target, userId, groupId));
             }
         };
         form.add(saveLink);

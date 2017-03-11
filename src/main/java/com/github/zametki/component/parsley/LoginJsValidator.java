@@ -2,7 +2,6 @@ package com.github.zametki.component.parsley;
 
 import com.github.zametki.model.User;
 import com.github.zametki.util.PL;
-import com.github.zametki.util.ValidatorUtils;
 import org.apache.wicket.Component;
 import org.jetbrains.annotations.Nullable;
 

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Feedback extends Panel {
 
-    private WebMarkupContainer feedbackBlock = new WebMarkupContainer("feedback_block");
+    private final WebMarkupContainer feedbackBlock = new WebMarkupContainer("feedback_block");
     private IModel<String> messageModel;
     private String alertClass;
 

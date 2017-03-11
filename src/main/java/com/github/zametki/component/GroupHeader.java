@@ -7,7 +7,8 @@ import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
 import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.group.EditGroupPanel;
-import com.github.zametki.event.UserGroupUpdatedEvent;
+import com.github.zametki.event.GroupTreeChangeEvent;
+import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
@@ -92,8 +93,8 @@ public class GroupHeader extends Panel {
         angleDownIcon.setVisible(hasCategory);
     }
 
-    @OnPayload(UserGroupUpdatedEvent.class)
-    public void onCategoriesUpdated(UserGroupUpdatedEvent e) {
+    @OnPayload(GroupUpdateEvent.class)
+    public void onGroupUpdated(GroupUpdateEvent e) {
         if (e.groupId.equals(activeCategory.getObject())) {
             update(e.target);
         }

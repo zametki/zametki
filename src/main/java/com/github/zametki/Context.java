@@ -30,7 +30,7 @@ public class Context {
     private static ZametkaDbi zametkaDbi;
     private static GroupsDbi groupsDbi;
 
-    private static Properties prodConfig = new Properties();
+    private static final Properties prodConfig = new Properties();
 
     private static final GroupsCache GROUPS_CACHE = new GroupsCache();
     private static final ZametkaCache zametkaCache = new ZametkaCache();

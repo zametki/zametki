@@ -1,7 +1,7 @@
 package com.github.zametki.component.form;
 
 import com.github.zametki.Context;
-import com.github.zametki.event.UserGroupUpdatedEvent;
+import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
@@ -59,8 +59,8 @@ public class GroupsSelector extends DropDownChoice<GroupId> {
         }
     }
 
-    @OnPayload(UserGroupUpdatedEvent.class)
-    public void onCategoriesUpdate(@NotNull UserGroupUpdatedEvent e) {
+    @OnPayload(GroupUpdateEvent.class)
+    public void onGroupUpdate(@NotNull GroupUpdateEvent e) {
         if (e.userId.equals(userId)) {
             detach();
             e.target.add(this);

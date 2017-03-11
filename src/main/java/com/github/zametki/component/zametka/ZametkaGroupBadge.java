@@ -3,10 +3,8 @@ package com.github.zametki.component.zametka;
 import com.github.zametki.Context;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.provider.GroupsProvider;
-import com.github.zametki.event.UserGroupUpdatedEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
-import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.Zametka;
@@ -19,27 +17,22 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.EmptyDataProvider;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class ZametkaGroupBadge extends Panel {
-
-    @NotNull
-    private final IDataProvider<GroupId> provider;
 
     public ZametkaGroupBadge(@NotNull String id, @NotNull ZametkaId zametkaId) {
         super(id);
         Zametka zametka = Context.getZametkaDbi().getById(zametkaId);
         if (zametka == null) {
             setVisible(false);
-            provider = new EmptyDataProvider<>();
             return;
         }
         WebMarkupContainer panel = new ContainerWithId("panel");
         add(panel);
 
-        provider = new GroupsProvider(zametka.userId);
+        IDataProvider<GroupId> provider = new GroupsProvider(zametka.userId);
         panel.add(new ZametkaGroupLabel("group_label", zametkaId));
         panel.add(new DataView<GroupId>("group_option", provider) {
             @Override
@@ -67,10 +60,5 @@ public class ZametkaGroupBadge extends Panel {
                 link.add(new Label("group_name", cat.name));
             }
         });
-    }
-
-    @OnPayload(UserGroupUpdatedEvent.class)
-    public void onCategoriesUpdate(@NotNull UserGroupUpdatedEvent e) {
-        assert provider != null;
     }
 }

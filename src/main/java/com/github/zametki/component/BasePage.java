@@ -29,7 +29,7 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
     public static final String DEFAULT_KEYWORDS = "Заметки, персональные заметки";
     public static final String DEFAULT_DESCRIPTION = "Персональные заметки";
 
-    protected Label title = new Label("title", "Zametki");
+    protected final Label title = new Label("title", "Zametki");
 
     private final WebMarkupContainer keysField = new WebMarkupContainer("meta_keywords");
     private final WebMarkupContainer descField = new WebMarkupContainer("meta_description");
@@ -41,7 +41,6 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
 
         checkCorrectMount();
         UserSessionUtils.initializeSession();
-        pageInitCallback();
 
         WebMarkupContainer styleCssLink = new WebMarkupContainer("style_css_link");
         styleCssLink.add(new AttributeModifier("href", getStyleCssHref()));
@@ -64,10 +63,6 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
             log.error("Page is not mounted: " + getClass());
         }
     }
-
-    protected void pageInitCallback() {
-    }
-
 
     public void setTitle(String v) {
         title.setDefaultModelObject(v);

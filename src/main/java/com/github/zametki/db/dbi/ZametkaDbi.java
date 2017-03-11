@@ -26,5 +26,5 @@ public interface ZametkaDbi {
 
     void update(@NotNull Zametka z);
 
-    int countByCategory(UserId userId, @NotNull GroupId groupId);
+    int countByGroup(UserId userId, @NotNull GroupId groupId);
 }

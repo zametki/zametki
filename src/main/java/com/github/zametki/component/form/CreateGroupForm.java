@@ -5,7 +5,8 @@ import com.github.zametki.component.basic.AjaxCallback;
 import com.github.zametki.component.bootstrap.BootstrapModalCloseLink;
 import com.github.zametki.component.parsley.GroupNameJsValidator;
 import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
-import com.github.zametki.event.UserGroupUpdatedEvent;
+import com.github.zametki.event.GroupTreeChangeEvent;
+import com.github.zametki.event.GroupTreeChangeType;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
@@ -46,13 +47,13 @@ public class CreateGroupForm extends Panel {
         ValidatingJsAjaxSubmitLink createButton = new ValidatingJsAjaxSubmitLink("create_button", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                String newCategoryName = groupNameField.getInputString();
-                if (!groupNameJsValidator.validate(newCategoryName, target, groupNameError, groupNameField)) {
+                String newName = groupNameField.getInputString();
+                if (!groupNameJsValidator.validate(newName, target, groupNameError, groupNameField)) {
                     return;
                 }
                 Group group = new Group();
                 group.parentId = parentGroupSelector.getConvertedInput();
-                group.name = newCategoryName;
+                group.name = newName;
                 group.userId = userId;
                 Context.getGroupsDbi().create(group);
 
@@ -61,7 +62,7 @@ public class CreateGroupForm extends Panel {
                 modelToUpdate.setObject(group.id);
 
                 doneCallback.callback(target);
-                send(getPage(), Broadcast.BREADTH, new UserGroupUpdatedEvent(target, userId, group.id));
+                send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, userId, group.id, GroupTreeChangeType.Created));
             }
         };
         form.add(createButton);

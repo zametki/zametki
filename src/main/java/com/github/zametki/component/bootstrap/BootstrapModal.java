@@ -36,7 +36,7 @@ public class BootstrapModal extends Panel {
     public final BodyMode bodyMode;
 
     @NotNull
-    private StringBuilder onCloseJs = new StringBuilder();
+    private final StringBuilder onCloseJs = new StringBuilder();
 
     public BootstrapModal(@NotNull String id, @Nullable String title, @NotNull ComponentFactory bodyFactory, @NotNull BodyMode bodyMode, @NotNull FooterMode footerMode) {
         super(id);

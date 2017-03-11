@@ -1,0 +1,60 @@
+.tree-junction-td {
+    width: 4px;
+    vertical-align: top;
+}
+
+.tree-junction {
+    display: block;
+    margin-left: -10px;
+}
+
+.tree-junction-collapsed:before {
+    content: "\f067";
+    /*noinspection CssNoGenericFontName*/
+    font-family: FontAwesome;
+    font-size: 12px;
+    margin-left: -10px;
+}
+
+.tree-junction-expanded:before {
+    content: "\f068";
+    /*noinspection CssNoGenericFontName*/
+    font-family: FontAwesome;
+    font-size: 12px;
+    margin-left: -10px;
+}
+
+.tree-node {
+    font-size: 16px;
+    padding: 7px 10px 7px 20px;
+    line-height: 1.5;
+}
+
+.tree-node a {
+    color: #333;
+    text-decoration: none;
+}
+
+.tree-node a:hover {
+    color: #49377a;
+}
+
+.tree-node a:active {
+    color: #7a203b;
+}
+
+.tree-node-group-link {
+    display: block;
+}
+
+.tree-node-active {
+    background-color: #999 !important;
+}
+
+.tree-node-active a {
+    color: #fff !important;
+}
+
+.tree-node-active a:hover, .tree-node-active a:active {
+    color: #fff !important;
+}

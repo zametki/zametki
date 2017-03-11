@@ -72,7 +72,7 @@ public class ZametkaDbiImpl extends AbstractDbi implements ZametkaDbi {
     }
 
     @Override
-    public int countByCategory(@NotNull UserId userId, @NotNull GroupId groupId) {
+    public int countByGroup(@NotNull UserId userId, @NotNull GroupId groupId) {
         return (int) getByUser(userId).stream()
                 .map(this::getById)
                 .filter(z -> z != null && z.groupId.equals(groupId))

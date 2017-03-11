@@ -4,7 +4,8 @@ import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.behavior.ClassAppender;
 import com.github.zametki.component.basic.ContainerWithId;
-import com.github.zametki.event.UserGroupUpdatedEvent;
+import com.github.zametki.event.GroupTreeChangeEvent;
+import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
@@ -60,15 +61,21 @@ public class GroupsListPanel extends Panel {
                 item.add(link);
 
                 UserId userId = UserSession.get().getUserId();
-                int count = userId == null || o.groupId == null ? 0 : Context.getZametkaDbi().countByCategory(userId, o.groupId);
+                int count = userId == null || o.groupId == null ? 0 : Context.getZametkaDbi().countByGroup(userId, o.groupId);
                 link.add(new Label("count", "" + count).setVisible(count > 0));
                 link.add(new Label("title", o.title));
             }
         });
     }
 
-    @OnPayload(UserGroupUpdatedEvent.class)
-    public void onCategoriesUpdated(UserGroupUpdatedEvent e) {
+    @OnPayload(GroupTreeChangeEvent.class)
+    public void onGroupTreeChanged(GroupTreeChangeEvent e) {
+        provider.detach();
+        e.target.add(panel);
+    }
+
+    @OnPayload(GroupUpdateEvent.class)
+    public void onGroupUpdated(GroupUpdateEvent e) {
         provider.detach();
         e.target.add(panel);
     }
@@ -91,12 +98,6 @@ public class GroupsListPanel extends Panel {
             provider.detach();
             e.target.add(panel);
         }
-    }
-
-    @OnPayload(UserGroupUpdatedEvent.class)
-    public void onUserCategoriesUpdatedEvent(UserGroupUpdatedEvent e) {
-        provider.detach();
-        e.target.add(panel);
     }
 
     private static class GroupsProvider extends AbstractListProvider<NavbarOption> {
