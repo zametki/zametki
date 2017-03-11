@@ -17,7 +17,7 @@ import java.util.List;
 public interface GroupSql {
 
     @NotNull
-    @Sql("INSERT INTO groups (user_id, title) VALUES (:userId, :name)")
+    @Sql("INSERT INTO groups (user_id, name) VALUES (:userId, :name)")
     GroupId insert(@BindBean Group group);
 
     @Nullable
