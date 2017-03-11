@@ -7,6 +7,7 @@ import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
+import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.TextUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -44,7 +45,7 @@ public class EditZametkaPanel extends Panel {
             }
         });
 
-        form.add(new AjaxSubmitLink("save_link") {
+        AjaxSubmitLink saveLink = new AjaxSubmitLink("save_link") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 String content = contentField.getInputString();
@@ -60,6 +61,9 @@ public class EditZametkaPanel extends Panel {
                 send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, zametkaId, ZametkaUpdateType.CONTENT_CHANGED));
                 closeCallback.callback(target);
             }
-        });
+        };
+        form.add(saveLink);
+
+        JsUtils.clickOnCtrlEnter(contentField, saveLink);
     }
 }
