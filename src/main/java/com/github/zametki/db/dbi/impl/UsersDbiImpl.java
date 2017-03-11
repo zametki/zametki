@@ -52,10 +52,13 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
         user.uid = UUID.randomUUID().toString();
         user.id = usersSql.insertUser(user);
 
-        Group c = new Group();
-        c.userId = user.id;
-        c.name = Group.WITHOUT_CATEGORY_TITLE;
-        Context.getGroupsDbi().create(c);
+        Group g = new Group();
+        g.userId = user.id;
+        g.name = Group.WITHOUT_GROUP_TITLE;
+        Context.getGroupsDbi().create(g);
+
+        user.rootGroupId = g.id;
+        usersSql.updateRootGroup(user);
     }
 
     @Override

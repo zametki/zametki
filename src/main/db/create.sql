@@ -12,7 +12,8 @@ CREATE TABLE users (
 
   last_login_date   DATETIME      NOT NULL,
 
-  settings          VARCHAR(2048) NOT NULL
+  settings          VARCHAR(2048) NOT NULL,
+  root_group_id     INTEGER       NOT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
@@ -32,14 +33,20 @@ CREATE TABLE verification_record (
 
 # Категория (логическа группа) заметок
 CREATE TABLE groups (
-  id      INTEGER AUTO_INCREMENT PRIMARY KEY,
-  # Владелец категории.
-  user_id INTEGER     NOT NULL REFERENCES users (id),
-  # Короткое название категории.
-  name    VARCHAR(48) NOT NULL
+  id        INTEGER AUTO_INCREMENT PRIMARY KEY,
+  # Родительская групп
+  parent_id INTEGER     NOT NULL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         DEFAULT 0,
+  # Владелец группы.
+  user_id   INTEGER     NOT NULL REFERENCES users (id),
+  # Короткое название группы.
+  name      VARCHAR(48) NOT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE users
+  ADD CONSTRAINT users_groups_id_fk
+FOREIGN KEY (root_group_id) REFERENCES groups (id);
 
 # Персональная заметка
 CREATE TABLE zametka (

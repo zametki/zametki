@@ -56,6 +56,9 @@ public class User extends Identifiable<UserId> {
     @NotNull
     public UserSettings settings = new UserSettings("");
 
+    @NotNull
+    public GroupId rootGroupId = GroupId.INVALID_ID;
+
     @Mapper
     public static final DbMapper<User> MAPPER = r -> {
         User res = new User();
@@ -68,6 +71,7 @@ public class User extends Identifiable<UserId> {
         res.terminationDate = optionalInstant(r.getTimestamp("termination_date"));
         res.lastLoginDate = optionalInstant(r.getTimestamp("last_login_date"));
         res.settings = new UserSettings(r.getString("settings"));
+        res.rootGroupId = new GroupId(r.getInt("root_group_id"));
         return res;
     };
 

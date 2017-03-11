@@ -17,7 +17,7 @@ import java.util.List;
 public interface GroupSql {
 
     @NotNull
-    @Sql("INSERT INTO groups (user_id, name) VALUES (:userId, :name)")
+    @Sql("INSERT INTO groups (parent_id, user_id, name) VALUES (:parentId, :userId, :name)")
     GroupId insert(@BindBean Group group);
 
     @Nullable
@@ -31,6 +31,6 @@ public interface GroupSql {
     @Sql("DELETE FROM groups WHERE id = :id")
     void delete(@Bind("id") GroupId id);
 
-    @Sql("UPDATE groups SET name = :name WHERE id = :id")
+    @Sql("UPDATE groups SET parent_id = :parentId, name = :name WHERE id = :id")
     void update(@NotNull @BindBean Group c);
 }
