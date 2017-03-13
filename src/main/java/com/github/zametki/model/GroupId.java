@@ -5,7 +5,7 @@ import com.github.mjdbc.Mapper;
 
 public class GroupId extends AbstractId {
 
-    public static final GroupId INVALID_ID = new GroupId(0);
+    public static final GroupId UNDEFINED = new GroupId(0);
 
     public GroupId(int value) {
         super(value);

@@ -3,9 +3,17 @@
 <body>
 <wicket:panel>
     <form wicket:id="form" class="form">
-        <input wicket:id="name_field" type="text" class="form-control" autofocus>
-        <span wicket:id="group_name_error"></span>
+        <div>
+            <label for="parent-group-selector">Родительская группа</label>
+            <select wicket:id="parent_group_field" id="parent-group-selector" class="form-control"></select>
+            <span wicket:id="parent_group_error"></span>
+        </div>
         <div class="mt10">
+            <label for="group-name-field">Имя группы</label>
+            <input wicket:id="name_field" type="text" id="group-name-field" class="form-control" autofocus>
+            <span wicket:id="group_name_error"></span>
+        </div>
+        <div class="mt20">
             <a wicket:id="cancel_link" class="btn btn-secondary">Отменить</a>
             <a wicket:id="save_link" class="btn btn-primary">Сохранить</a>
         </div>

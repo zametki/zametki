@@ -38,7 +38,4 @@ public interface UsersSql {
 
     @Sql("UPDATE users SET last_login_date = :lastLoginDate WHERE id = :id")
     void updateLastLoginDate(@BindBean User user);
-
-    @Sql("UPDATE users SET root_group_id = :rootGroupId WHERE id = :id")
-    void updateRootGroup(@NotNull @BindBean User user);
 }

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GroupsSelector extends DropDownChoice<GroupId> {
+public class FollowingGroupsSelector extends DropDownChoice<GroupId> {
 
     @NotNull
     private final UserId userId;
@@ -28,7 +28,7 @@ public class GroupsSelector extends DropDownChoice<GroupId> {
     @NotNull
     private final IModel<GroupId> modelToFollow;
 
-    public GroupsSelector(@NotNull String id, @NotNull UserId userId, @NotNull IModel<GroupId> modelToFollow) {
+    public FollowingGroupsSelector(@NotNull String id, @NotNull UserId userId, @NotNull IModel<GroupId> modelToFollow) {
         super(id);
         this.userId = userId;
         this.modelToFollow = modelToFollow;

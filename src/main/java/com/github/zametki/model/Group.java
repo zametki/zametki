@@ -6,12 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class Group extends Identifiable<GroupId> {
 
-    public static final String WITHOUT_GROUP_TITLE = "Без группы";
+    public static final String DEFAULT_GROUP_TITLE = "Без группы";
     public static final int MIN_NAME_LEN = 1;
     public static final int MAX_NAME_LEN = 48;
 
     @NotNull
-    public GroupId parentId = GroupId.INVALID_ID;
+    public GroupId parentId = GroupId.UNDEFINED;
 
     @NotNull
     public UserId userId = UserId.INVALID_ID;

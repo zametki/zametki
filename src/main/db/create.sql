@@ -12,8 +12,7 @@ CREATE TABLE users (
 
   last_login_date   DATETIME      NOT NULL,
 
-  settings          VARCHAR(2048) NOT NULL,
-  root_group_id     INTEGER       NOT NULL
+  settings          VARCHAR(2048) NOT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

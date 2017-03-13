@@ -15,4 +15,8 @@ public class GroupTreeNode extends DefaultMutableTreeNode {
     public GroupId getGroupId() {
         return (GroupId) getUserObject();
     }
+
+    public GroupTreeNode getParentNode() {
+        return (GroupTreeNode) getParent();
+    }
 }

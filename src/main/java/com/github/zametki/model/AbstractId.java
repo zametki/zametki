@@ -44,6 +44,9 @@ public class AbstractId implements DbInt, IClusterable, Comparable<AbstractId> {
         return value > 0;
     }
 
+    public boolean isRoot() {
+        return !isValid();
+    }
     @Override
     public int compareTo(@NotNull AbstractId o) {
         return Integer.compare(value, o.value);

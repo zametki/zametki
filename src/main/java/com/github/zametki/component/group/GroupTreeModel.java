@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +24,7 @@ public class GroupTreeModel extends DefaultTreeModel {
     private static final Logger log = LoggerFactory.getLogger(GroupTreeModel.class);
 
     @NotNull
-    public Map<GroupId, GroupTreeNode> nodeByGroup;
+    public final Map<GroupId, GroupTreeNode> nodeByGroup;
 
     public GroupTreeModel(@NotNull TreeNode root, @NotNull Map<GroupId, GroupTreeNode> nodeByGroup) {
         super(root);
@@ -36,11 +39,8 @@ public class GroupTreeModel extends DefaultTreeModel {
                 .collect(Collectors.toList());
 
         Map<GroupId, GroupTreeNode> nodeById = new HashMap<>();
-        GroupTreeNode rootNode = nodeById.computeIfAbsent(user.rootGroupId, GroupTreeNode::new);
+        GroupTreeNode rootNode = nodeById.computeIfAbsent(GroupId.UNDEFINED, GroupTreeNode::new);
         for (Group g : groups) {
-            if (g.id.equals(user.rootGroupId)) {
-                continue;
-            }
             GroupTreeNode n = nodeById.computeIfAbsent(g.id, i -> new GroupTreeNode(g.id));
             GroupTreeNode parentNode = nodeById.computeIfAbsent(g.parentId, u -> new GroupTreeNode(g.parentId));
             if (isParent(parentNode, n)) {
@@ -76,7 +76,7 @@ public class GroupTreeModel extends DefaultTreeModel {
                 onGroupCreated(e.groupId);
                 break;
             case ParentChanged:
-                //todo:
+                onParentChanged(e.groupId);
                 break;
             case Deleted:
                 //todo:
@@ -95,4 +95,54 @@ public class GroupTreeModel extends DefaultTreeModel {
         parentGroup.add(newNode);
     }
 
+    private void onParentChanged(@NotNull GroupId groupId) {
+        Group group = Context.getGroupsDbi().getById(groupId);
+        if (group == null) {
+            return;
+        }
+        GroupTreeNode node = nodeByGroup.get(groupId);
+        GroupTreeNode oldParent = node.getParentNode();
+        GroupTreeNode newParent = nodeByGroup.get(group.parentId);
+        if (oldParent == null || newParent == null) {
+            log.error("One of the parents is null: {}, {}, {}", node, oldParent, newParent);
+            return;
+        }
+        newParent.add(node);
+    }
+
+    public boolean canBeParent(@NotNull GroupId parentId, @NotNull GroupId groupId) {
+        GroupTreeNode parentNode = nodeByGroup.get(parentId);
+        GroupTreeNode node = nodeByGroup.get(groupId);
+        return !(node == null || parentNode == null || node == parentNode) && !isParent(parentNode, node);
+    }
+
+    @NotNull
+    public List<GroupTreeNode> flatList() {
+        GroupTreeNode root = (GroupTreeNode) getRoot();
+        Enumeration e = root.depthFirstEnumeration();
+
+        List<GroupTreeNode> res = new ArrayList<>();
+        while (e.hasMoreElements()) {
+            GroupTreeNode n = (GroupTreeNode) e.nextElement();
+            res.add(n);
+        }
+        Collections.reverse(res);
+        return res;
+    }
+
+    @NotNull
+    public List<GroupTreeNode> flatListWithoutBranch(@NotNull GroupTreeNode node) {
+        GroupTreeNode root = (GroupTreeNode) getRoot();
+        Enumeration e = root.depthFirstEnumeration();
+
+        List<GroupTreeNode> res = new ArrayList<>();
+        while (e.hasMoreElements()) {
+            GroupTreeNode n = (GroupTreeNode) e.nextElement();
+            if (n != node && !isParent(n, node)) {
+                res.add(n);
+            }
+        }
+        Collections.reverse(res);
+        return res;
+    }
 }

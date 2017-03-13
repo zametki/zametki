@@ -7,7 +7,6 @@ import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
 import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.group.EditGroupPanel;
-import com.github.zametki.event.GroupTreeChangeEvent;
 import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
@@ -30,54 +29,44 @@ public class GroupHeader extends Panel {
     private final WebMarkupContainer panel = new ContainerWithId("panel");
 
     @NotNull
-    private final WebMarkupContainer menuBlock = new ContainerWithId("menu_block");
-
-    @NotNull
     private final WebMarkupContainer angleDownIcon = new ContainerWithId("angle_down_icon");
 
     @NotNull
-    private final IModel<GroupId> activeCategory;
+    private final IModel<GroupId> activeCategoryModel;
 
     @NotNull
     private BootstrapModal editGroupModal;
 
-    public GroupHeader(String id, @NotNull IModel<GroupId> activeCategory) {
+    public GroupHeader(String id, @NotNull IModel<GroupId> activeGroupModel) {
         super(id);
-        this.activeCategory = activeCategory;
-        add(panel);
-
-        WebMarkupContainer nameLink = new ContainerWithId("name_link") {
-            @Override
-            protected void onComponentTag(ComponentTag tag) {
-                super.onComponentTag(tag);
-                boolean hasCategory = activeCategory.getObject() != null;
-                String cls = "group-header" + (hasCategory ? " dropdown-toggle dropdown-toggle-no-caret" : "");
-                tag.put("class", cls);
-                tag.setName(hasCategory ? "a" : "div");
-            }
-        };
-
-        panel.add(nameLink);
-        Label nameLabel = new Label("name", LambdaModel.of((SerializableSupplier<String>) () -> {
-            GroupId id1 = activeCategory.getObject();
-            if (id1 == null) {
-                return "Все категории";
-            }
-            Group c = Context.getGroupsDbi().getById(id1);
-            return c == null ? "???" : c.name;
-        }));
-
-        nameLabel.setOutputMarkupId(true);
-        nameLink.add(nameLabel);
-        nameLink.add(angleDownIcon);
-        panel.add(menuBlock);
+        this.activeCategoryModel = activeGroupModel;
 
         editGroupModal = new BootstrapModal("edit_group_modal", "Редактирование группы",
-                (ComponentFactory) markupId -> new EditGroupPanel(markupId, activeCategory.getObject(),
+                (ComponentFactory) markupId -> new EditGroupPanel(markupId, activeGroupModel.getObject(),
                         (AjaxCallback) target -> editGroupModal.hide(target)),
                 BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);
         add(editGroupModal);
-        menuBlock.add(new BootstrapLazyModalLink("edit_link", editGroupModal));
+
+        add(panel);
+        BootstrapLazyModalLink nameLink = new BootstrapLazyModalLink("name_link", editGroupModal) {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                boolean hasGroup = activeGroupModel.getObject() != null;
+                tag.setName(hasGroup ? "a" : "div");
+            }
+        };
+        panel.add(nameLink);
+
+        nameLink.add(new Label("name", LambdaModel.of((SerializableSupplier<String>) () -> {
+            GroupId id1 = activeGroupModel.getObject();
+            if (id1 == null) {
+                return "Лента заметок";
+            }
+            Group c = Context.getGroupsDbi().getById(id1);
+            return c == null ? "???" : c.name;
+        })));
+        nameLink.add(angleDownIcon);
 
         updateMenuVisibility();
     }
@@ -88,21 +77,20 @@ public class GroupHeader extends Panel {
     }
 
     private void updateMenuVisibility() {
-        boolean hasCategory = activeCategory.getObject() != null;
-        menuBlock.setVisible(hasCategory);
+        boolean hasCategory = activeCategoryModel.getObject() != null;
         angleDownIcon.setVisible(hasCategory);
     }
 
     @OnPayload(GroupUpdateEvent.class)
     public void onGroupUpdated(GroupUpdateEvent e) {
-        if (e.groupId.equals(activeCategory.getObject())) {
+        if (e.groupId.equals(activeCategoryModel.getObject())) {
             update(e.target);
         }
     }
 
     @OnModelUpdate
     public void onModelUpdate(@NotNull ModelUpdateAjaxEvent e) {
-        if (e.model == activeCategory) {
+        if (e.model == activeCategoryModel) {
             update(e.target);
         }
     }

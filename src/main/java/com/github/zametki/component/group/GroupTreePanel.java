@@ -40,7 +40,7 @@ public class GroupTreePanel extends Panel {
         treeModel = GroupTreeModel.build(user);
         provider = new GroupsProvider(treeModel);
 
-        tree = new NestedGroupsTree(provider, activeGroupModel);
+        tree = new NestedGroupsTree("tree", provider, activeGroupModel);
         panel.add(tree);
     }
 

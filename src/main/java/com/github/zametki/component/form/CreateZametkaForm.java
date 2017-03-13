@@ -10,7 +10,6 @@ import com.github.zametki.component.parsley.ZametkaTextContentJsValidator;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.model.GroupId;
-import com.github.zametki.model.User;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.util.JsUtils;
@@ -35,7 +34,7 @@ public class CreateZametkaForm extends Panel {
     @NotNull
     public final InputArea contentField;
 
-    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeCategory, @Nullable AjaxCallback doneCallback) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeGroup, @Nullable AjaxCallback doneCallback) {
         super(id);
 
         Form form = new Form("form");
@@ -43,7 +42,7 @@ public class CreateZametkaForm extends Panel {
         add(form);
 
         UserId userId = WebUtils.getUserIdOrRedirectHome();
-        GroupsSelector groupsSelector = new GroupsSelector("group_selector", userId, activeCategory);
+        FollowingGroupsSelector groupsSelector = new FollowingGroupsSelector("group_selector", userId, activeGroup);
         form.add(groupsSelector);
 
         contentField = new InputArea("text");
@@ -58,7 +57,6 @@ public class CreateZametkaForm extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
-                User user = WebUtils.getUserOrRedirectHome();
                 String content = contentField.getInputString();
                 if (!contentJsValidator.validate(content, target, contentField)) {
                     return;
@@ -67,12 +65,9 @@ public class CreateZametkaForm extends Panel {
                 z.userId = WebUtils.getUserIdOrRedirectHome();
                 z.creationDate = Instant.now();
                 z.content = content;
-                GroupId groupId = groupsSelector.getConvertedInput();
-                if (groupId == null) {
-                    groupId = user.rootGroupId;
-                }
-                z.groupId = groupId;
-                WicketUtils.reactiveUpdate(activeCategory, z.groupId, target);
+                z.groupId = groupsSelector.getConvertedInput();
+                //todo: check that group exists and not removed asynchronously
+                WicketUtils.reactiveUpdate(activeGroup, z.groupId, target);
                 Context.getZametkaDbi().create(z);
 
                 contentField.clearInput();

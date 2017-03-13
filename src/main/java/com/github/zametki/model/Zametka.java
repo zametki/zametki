@@ -21,7 +21,7 @@ public class Zametka extends Identifiable<ZametkaId> {
     public String content = "";
 
     @NotNull
-    public GroupId groupId = GroupId.INVALID_ID;
+    public GroupId groupId = GroupId.UNDEFINED;
 
     @Mapper
     public static final DbMapper<Zametka> MAPPER = r -> {

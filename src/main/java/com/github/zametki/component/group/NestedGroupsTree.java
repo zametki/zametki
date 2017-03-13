@@ -5,12 +5,15 @@ import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.util.TreeModelProvider;
 import org.apache.wicket.model.IModel;
+import org.jetbrains.annotations.NotNull;
 
 public class NestedGroupsTree extends NestedTree<GroupTreeNode> {
+
+    @NotNull
     private final IModel<GroupId> activeGroupModel;
 
-    public NestedGroupsTree(TreeModelProvider<GroupTreeNode> provider, IModel<GroupId> activeGroupModel) {
-        super("tree", provider);
+    public NestedGroupsTree(@NotNull String id, @NotNull TreeModelProvider<GroupTreeNode> provider, @NotNull IModel<GroupId> activeGroupModel) {
+        super(id, provider);
         this.activeGroupModel = activeGroupModel;
     }
 

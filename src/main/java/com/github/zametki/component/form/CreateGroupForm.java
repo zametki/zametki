@@ -29,8 +29,8 @@ public class CreateGroupForm extends Panel {
         Form form = new Form("form");
         add(form);
 
-        ParentGroupSelector parentGroupSelector = new ParentGroupSelector("parent_group", userId, modelToUpdate.getObject());
-        form.add(parentGroupSelector);
+        GroupSelector groupSelector = new GroupSelector("parent_group", userId, modelToUpdate.getObject());
+        form.add(groupSelector);
 
         InputField groupNameField = new InputField("group_name");
         form.add(groupNameField);
@@ -52,7 +52,8 @@ public class CreateGroupForm extends Panel {
                     return;
                 }
                 Group group = new Group();
-                group.parentId = parentGroupSelector.getConvertedInput();
+                GroupId parentId = groupSelector.getConvertedInput();
+                group.parentId = parentId != null ? parentId : GroupId.UNDEFINED;
                 group.name = newName;
                 group.userId = userId;
                 Context.getGroupsDbi().create(group);

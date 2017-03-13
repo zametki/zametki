@@ -51,7 +51,7 @@ public class HomePage extends BasePage {
         loggedInBlock.setVisible(user != null);
         add(loggedInBlock);
         if (loggedInBlock.isVisible()) {
-            loggedInBlock.add(new BookmarkablePageLink("lenta_link", LentaPage.class));
+            loggedInBlock.add(new BookmarkablePageLink("ws_link", WorkspacePage.class));
             loggedInBlock.add(new AjaxLink<Void>("logout_link") {
                 @Override
                 public void onClick(AjaxRequestTarget ajaxRequestTarget) {

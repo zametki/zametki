@@ -54,11 +54,8 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
 
         Group g = new Group();
         g.userId = user.id;
-        g.name = Group.WITHOUT_GROUP_TITLE;
+        g.name = Group.DEFAULT_GROUP_TITLE;
         Context.getGroupsDbi().create(g);
-
-        user.rootGroupId = g.id;
-        usersSql.updateRootGroup(user);
     }
 
     @Override
