@@ -52,7 +52,7 @@ public class ZametkaGroupBadge extends Panel {
                         }
                         z.groupId = groupId;
                         Context.getZametkaDbi().update(z);
-                        send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, zametkaId, ZametkaUpdateType.CATEGORY_CHANGED));
+                        send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, zametkaId, ZametkaUpdateType.GROUP_CHANGED));
                     }
                 };
                 item.add(link);

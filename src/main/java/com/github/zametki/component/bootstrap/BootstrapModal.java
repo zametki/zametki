@@ -1,6 +1,7 @@
 package com.github.zametki.component.bootstrap;
 
 import com.github.zametki.component.basic.ComponentFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -74,6 +75,10 @@ public class BootstrapModal extends Panel {
 
     public void hide(AjaxRequestTarget target) {
         target.appendJavaScript("$('#" + modal.getMarkupId() + "').modal('hide');");
+    }
+
+    public static String hideJs(@NotNull String innedComponentId) {
+        return "$site.Utils.closeModal('#" + innedComponentId + "');";
     }
 
     @SuppressWarnings("unused")

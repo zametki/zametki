@@ -3,8 +3,11 @@ package com.github.zametki.component.zametka;
 import com.github.zametki.Constants;
 import com.github.zametki.Context;
 import com.github.zametki.component.basic.AjaxCallback;
+import com.github.zametki.component.basic.ComponentFactory;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.basic.InvisibleBlock;
+import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
+import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.event.dispatcher.OnPayload;
@@ -69,6 +72,13 @@ public class ZametkaPanel extends Panel {
                 target.add(panel);
             }
         });
+
+        BootstrapModal movePopup = new BootstrapModal("move_popup", "Изменение группы",
+                (ComponentFactory) markupId -> new MoveZametkaPopup(markupId, zametkaId),
+                BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);
+        panel.add(movePopup);
+
+        panel.add(new BootstrapLazyModalLink("move_link", movePopup));
     }
 
     @OnPayload(ZametkaUpdateEvent.class)

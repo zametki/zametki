@@ -4,5 +4,5 @@ public enum ZametkaUpdateType {
     DELETED,
     CREATED,
     CONTENT_CHANGED,
-    CATEGORY_CHANGED,
+    GROUP_CHANGED,
 }

@@ -31,7 +31,7 @@ public class ZametkaGroupLabel extends Label {
 
     @OnPayload(ZametkaUpdateEvent.class)
     public void onZametkaUpdated(ZametkaUpdateEvent e) {
-        if (e.updateType == ZametkaUpdateType.CATEGORY_CHANGED && zametkaId.equals(e.zametkaId)) {
+        if (e.updateType == ZametkaUpdateType.GROUP_CHANGED && zametkaId.equals(e.zametkaId)) {
             detach();
             e.target.add(this);
         }
