@@ -1,20 +1,31 @@
 package com.github.zametki.component.group;
 
 import com.github.zametki.model.GroupId;
+import com.github.zametki.model.UserSettings;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
-import org.apache.wicket.extensions.markup.html.repeater.util.TreeModelProvider;
 import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 
 public class NestedGroupsTree extends NestedTree<GroupTreeNode> {
 
     @NotNull
     private final IModel<GroupId> activeGroupModel;
 
-    public NestedGroupsTree(@NotNull String id, @NotNull TreeModelProvider<GroupTreeNode> provider, @NotNull IModel<GroupId> activeGroupModel) {
+    public NestedGroupsTree(@NotNull String id, @NotNull GroupsTreeProvider provider, @NotNull IModel<GroupId> activeGroupModel) {
         super(id, provider);
         this.activeGroupModel = activeGroupModel;
+
+        JSONArray expanded = UserSettings.get().expandedGroups;
+        GroupTreeModel model = getTreeModel();
+        for (int i = 0, n = expanded.length(); i < n; i++) {
+            GroupId groupId = new GroupId(expanded.getInt(i));
+            GroupTreeNode node = model.nodeByGroup.get(groupId);
+            if (node != null) {
+                super.expand(node);
+            }
+        }
     }
 
     @Override
@@ -25,5 +36,35 @@ public class NestedGroupsTree extends NestedTree<GroupTreeNode> {
     @Override
     protected Component newContentComponent(String contentId, IModel<GroupTreeNode> m) {
         return new GroupTreeItemContentPanel(contentId, m, activeGroupModel);
+    }
+
+    @Override
+    public void expand(GroupTreeNode node) {
+        super.expand(node);
+        saveTreeStateToSettings();
+    }
+
+    @Override
+    public void collapse(GroupTreeNode node) {
+        super.collapse(node);
+        saveTreeStateToSettings();
+    }
+
+    private void saveTreeStateToSettings() {
+        JSONArray expandedGroups = new JSONArray();
+        getTreeModel().flatList().forEach(n -> {
+            if (getState(n) == State.EXPANDED) {
+                expandedGroups.put(n.getGroupId().getDbValue());
+            }
+        });
+        UserSettings us = UserSettings.get();
+        us.expandedGroups = expandedGroups;
+        UserSettings.set(us);
+
+    }
+
+    @NotNull
+    private GroupTreeModel getTreeModel() {
+        return ((GroupsTreeProvider) getProvider()).treeModel;
     }
 }

@@ -10,10 +10,8 @@ import com.github.zametki.model.GroupId;
 import com.github.zametki.model.User;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
-import org.apache.wicket.extensions.markup.html.repeater.util.TreeModelProvider;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -23,7 +21,7 @@ public class GroupTreePanel extends Panel {
     @NotNull
     private final ContainerWithId panel = new ContainerWithId("panel");
     @NotNull
-    private final GroupsProvider provider;
+    private final GroupsTreeProvider provider;
     @NotNull
     private final IModel<GroupId> activeGroupModel;
     @NotNull
@@ -38,7 +36,7 @@ public class GroupTreePanel extends Panel {
 
         User user = WebUtils.getUserOrRedirectHome();
         treeModel = GroupTreeModel.build(user);
-        provider = new GroupsProvider(treeModel);
+        provider = new GroupsTreeProvider(treeModel);
 
         tree = new NestedGroupsTree("tree", provider, activeGroupModel);
         panel.add(tree);
@@ -71,17 +69,6 @@ public class GroupTreePanel extends Panel {
             }
         }
         e.target.add(panel);
-    }
-
-    private static class GroupsProvider extends TreeModelProvider<GroupTreeNode> {
-        public GroupsProvider(@NotNull GroupTreeModel treeModel) {
-            super(treeModel, false);
-        }
-
-        @Override
-        public IModel<GroupTreeNode> model(GroupTreeNode node) {
-            return Model.of(node);
-        }
     }
 
 }
