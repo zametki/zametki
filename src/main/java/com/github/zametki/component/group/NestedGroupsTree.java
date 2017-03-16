@@ -26,6 +26,15 @@ public class NestedGroupsTree extends NestedTree<GroupTreeNode> {
                 super.expand(node);
             }
         }
+        GroupId selectedGroupId = activeGroupModel.getObject();
+        if (selectedGroupId != null) {
+            GroupTreeNode selectedNode = model.nodeByGroup.get(selectedGroupId);
+            if (selectedNode != null) {
+                for (GroupTreeNode n = selectedNode.getParentNode(); n != null; n = n.getParentNode()) {
+                    super.expand(n);
+                }
+            }
+        }
     }
 
     @Override

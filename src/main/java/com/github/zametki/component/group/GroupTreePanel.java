@@ -10,9 +10,13 @@ import com.github.zametki.model.GroupId;
 import com.github.zametki.model.User;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.visit.IVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -60,7 +64,6 @@ public class GroupTreePanel extends Panel {
         if (e.model != activeGroupModel) {
             return;
         }
-
         GroupTreeNode node = treeModel.nodeByGroup.get(activeGroupModel.getObject());
         if (node != null) {
             GroupTreeNode parent = (GroupTreeNode) node.getParent();
@@ -71,4 +74,25 @@ public class GroupTreePanel extends Panel {
         e.target.add(panel);
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        GroupId groupId = activeGroupModel.getObject();
+        if (groupId != null) {
+            GroupTreeNodePanel groupPanel = findPanelByGroupId(groupId);
+            if (groupPanel != null) {
+                response.render(OnDomReadyHeaderItem.forScript("var e = $('#" + groupPanel.getMarkupId() + "')[0]; e && e.scrollIntoView();"));
+            }
+        }
+    }
+
+    @Nullable
+    private GroupTreeNodePanel findPanelByGroupId(@NotNull GroupId groupId) {
+        return tree.visitChildren(GroupTreeNodePanel.class,
+                (IVisitor<GroupTreeNodePanel, GroupTreeNodePanel>) (node, v) -> {
+                    if (groupId.equals(node.getGroupId())) {
+                        v.stop(node);
+                    }
+                });
+    }
 }

@@ -29,7 +29,9 @@ public class GroupTreeNodePanel extends Node<GroupTreeNode> {
         this.tree = tree;
         this.model = model;
         this.activeGroupModel = activeGroupModel;
-        active = model.getObject().getGroupId().equals(activeGroupModel.getObject());
+
+        GroupId groupId = model.getObject().getGroupId();
+        active = groupId.equals(activeGroupModel.getObject());
         setOutputMarkupId(true);
 
         // bad design in wicket -> createContent called from super class
@@ -66,5 +68,10 @@ public class GroupTreeNodePanel extends Node<GroupTreeNode> {
         if (active) {
             tag.put("class", "tree-node tree-node-active");
         }
+    }
+
+    @NotNull
+    public GroupId getGroupId() {
+        return model.getObject().getGroupId();
     }
 }
