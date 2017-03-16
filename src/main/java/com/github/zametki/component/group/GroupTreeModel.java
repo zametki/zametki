@@ -124,7 +124,9 @@ public class GroupTreeModel extends DefaultTreeModel {
         List<GroupTreeNode> res = new ArrayList<>();
         while (e.hasMoreElements()) {
             GroupTreeNode n = (GroupTreeNode) e.nextElement();
-            res.add(n);
+            if (n.getParent() != null) { // root group is artificial
+                res.add(n);
+            }
         }
         Collections.reverse(res);
         return res;
@@ -138,7 +140,7 @@ public class GroupTreeModel extends DefaultTreeModel {
         List<GroupTreeNode> res = new ArrayList<>();
         while (e.hasMoreElements()) {
             GroupTreeNode n = (GroupTreeNode) e.nextElement();
-            if (n != node && !isParent(n, node)) {
+            if (n != node && !isParent(n, node) && n.getParent() != null) {
                 res.add(n);
             }
         }
