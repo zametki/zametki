@@ -1,6 +1,8 @@
 package com.github.zametki.component.form;
 
 import com.github.zametki.Context;
+import com.github.zametki.event.GroupTreeChangeEvent;
+import com.github.zametki.event.GroupTreeChangeType;
 import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
@@ -62,8 +64,17 @@ public class FollowingGroupsSelector extends DropDownChoice<GroupId> {
     @OnPayload(GroupUpdateEvent.class)
     public void onGroupUpdate(@NotNull GroupUpdateEvent e) {
         if (e.userId.equals(userId)) {
-            detach();
             e.target.add(this);
+        }
+    }
+
+    @OnPayload(GroupTreeChangeEvent.class)
+    public void onGroupTreeChangeEvent(@NotNull GroupTreeChangeEvent e) {
+        if (e.userId.equals(userId)) {
+            e.target.add(this);
+            if (e.changeType == GroupTreeChangeType.Created) {
+                setModelObject(e.groupId);
+            }
         }
     }
 }
