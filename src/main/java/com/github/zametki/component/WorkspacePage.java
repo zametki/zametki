@@ -107,7 +107,7 @@ public class WorkspacePage extends BaseUserPage {
         @Override
         protected void onComponentTag(ComponentTag tag) {
             super.onComponentTag(tag);
-            tag.put("class", activeGroupModel.getObject() == null ? "nav-link active" : "nav-link");
+            tag.put("class", activeGroupModel.getObject() == null ? "btn btn-sm active-all" : "btn btn-sm");
         }
 
         @Override

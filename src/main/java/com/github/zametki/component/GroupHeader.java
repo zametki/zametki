@@ -61,7 +61,7 @@ public class GroupHeader extends Panel {
         nameLink.add(new Label("name", LambdaModel.of((SerializableSupplier<String>) () -> {
             GroupId id1 = activeGroupModel.getObject();
             if (id1 == null) {
-                return "Лента заметок";
+                return "Все заметки";
             }
             Group c = Context.getGroupsDbi().getById(id1);
             return c == null ? "???" : c.name;
