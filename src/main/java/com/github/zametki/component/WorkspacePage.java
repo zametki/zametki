@@ -9,8 +9,9 @@ import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import com.github.zametki.component.group.GroupListPanel;
 import com.github.zametki.component.group.GroupTreePanel;
 import com.github.zametki.component.user.BaseUserPage;
-import com.github.zametki.component.zametka.CreateZametkaButtonPanel;
+import com.github.zametki.component.zametka.CreateZametkaPanel;
 import com.github.zametki.component.zametka.ZametkaPanel;
+import com.github.zametki.event.CreateZametkaFormToggleEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
@@ -56,8 +57,11 @@ public class WorkspacePage extends BaseUserPage {
         add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
         add(new GroupTreePanel("groups", state.activeGroupModel));
-        add(new CreateZametkaButtonPanel("create_panel", state.activeGroupModel));
+        CreateZametkaPanel createPanel = new CreateZametkaPanel("create_panel", state.activeGroupModel);
+        add(createPanel);
         add(lenta);
+
+        add(new AddZametkaLink("add_zametka_link", createPanel));
 
         lenta.add(new GroupHeader("group_name", state.activeGroupModel));
 
@@ -120,6 +124,31 @@ public class WorkspacePage extends BaseUserPage {
             if (e.model == activeGroupModel) {
                 e.target.add(this);
             }
+        }
+    }
+
+    public static class AddZametkaLink extends AjaxLink<Void> {
+        private final CreateZametkaPanel createPanel;
+
+        public AddZametkaLink(String id, CreateZametkaPanel createPanel) {
+            super(id);
+            this.createPanel = createPanel;
+        }
+
+        @Override
+        public void onClick(AjaxRequestTarget target) {
+            createPanel.toggle(target);
+        }
+
+        @Override
+        protected void onComponentTag(ComponentTag tag) {
+            super.onComponentTag(tag);
+            tag.put("class", createPanel.isActive() ? "btn btn-sm active-create" : "btn btn-sm");
+        }
+
+        @OnPayload(CreateZametkaFormToggleEvent.class)
+        public void onCreateZametkaFormToggleEvent(CreateZametkaFormToggleEvent e) {
+            e.target.add(this);
         }
     }
 }

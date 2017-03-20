@@ -23,18 +23,18 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 
 public class CreateZametkaForm extends Panel {
 
+    @NotNull
     private BootstrapModal addGroupModal;
 
     @NotNull
     public final InputArea contentField;
 
-    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeGroup, @Nullable AjaxCallback doneCallback) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeGroup, @NotNull AjaxCallback doneCallback) {
         super(id);
 
         Form form = new Form("form");
@@ -51,7 +51,6 @@ public class CreateZametkaForm extends Panel {
         form.add(contentError);
         ZametkaTextContentJsValidator contentJsValidator = new ZametkaTextContentJsValidator(contentError);
         contentField.add(contentJsValidator);
-
 
         ValidatingJsAjaxSubmitLink createLink = new ValidatingJsAjaxSubmitLink("save_button", form) {
             @Override
@@ -74,9 +73,7 @@ public class CreateZametkaForm extends Panel {
                 target.add(form);
 
                 send(getPage(), Broadcast.BREADTH, new ZametkaUpdateEvent(target, z.id, ZametkaUpdateType.CREATED));
-                if (doneCallback != null) {
-                    doneCallback.callback(target);
-                }
+                doneCallback.callback(target);
             }
         };
         form.add(createLink);
@@ -85,11 +82,9 @@ public class CreateZametkaForm extends Panel {
         form.add(new AjaxLink<Void>("cancel_button") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (doneCallback != null) {
-                    doneCallback.callback(target);
-                }
+                doneCallback.callback(target);
             }
-        }.setVisible(doneCallback != null));
+        });
 
         addGroupModal = new BootstrapModal("add_group_modal", "Новая группа",
                 (ComponentFactory) markupId -> new CreateGroupForm(markupId, groupsSelector.getModel(),
