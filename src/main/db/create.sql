@@ -43,10 +43,6 @@ CREATE TABLE groups (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE users
-  ADD CONSTRAINT users_groups_id_fk
-FOREIGN KEY (root_group_id) REFERENCES groups (id);
-
 # Персональная заметка
 CREATE TABLE zametka (
   id            INTEGER AUTO_INCREMENT PRIMARY KEY,

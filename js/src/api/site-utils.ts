@@ -56,6 +56,7 @@ function focusOnEnter(event: KeyboardEvent, id: string): void {
         event.preventDefault();
     }
 }
+
 function clickOnEnter(event: KeyboardEvent, id: number): void {
     let keyCode = (event.which ? event.which : event.keyCode);
     if ((keyCode === 10 || keyCode === 13) && !event.ctrlKey) {
@@ -145,15 +146,6 @@ function removeServerSideParsleyError(el: HTMLElement) {
     p.removeError("server-side-parsley-error");
 }
 
-function shuffleArray(array: Array<any>): void {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-
 function scrollToBlock(selector: string): void {
     const $block = $(selector);
     const offset = $block.offset();
@@ -179,5 +171,5 @@ export default {
     removeServerSideParsleyError: removeServerSideParsleyError,
     scrollToBlock: scrollToBlock,
     playYoutube: links.playYoutube,
-    closeModal: closeModal
+    closeModal: closeModal,
 }

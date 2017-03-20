@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
+
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
+
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/
+
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/
+
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-/******/
+
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
+
+
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-/******/
+
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
+
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
+
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-/******/
+
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,19 +55,25 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-/******/
+
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
+
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-/******/
+
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = $;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -101,7 +107,39 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var $ = __webpack_require__(0);
+function isABootstrapModalOpen() {
+    return $(".modal.show").length > 0;
+}
+function bindWorkspacePageKeys() {
+    $(document).on("keyup", function (e) {
+        if (isABootstrapModalOpen()) {
+            return;
+        }
+        if (e.which === 65 || e.which === 97) {
+            var $btn = $("#add-zametka-button");
+            if ($btn.hasClass("active-create")) {
+                return;
+            }
+            $btn.click();
+        }
+        else if (e.which === 27) {
+        }
+    });
+}
+exports["default"] = {
+    bindWorkspacePageKeys: bindWorkspacePageKeys
+};
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,20 +147,22 @@ if (window.Parsley) {
 exports.__esModule = true;
 exports["default"] = {
     /** Set of utility functions */
-    Utils: undefined
+    Utils: undefined,
+    /** Key bindings support */
+    Shortcuts: undefined
 };
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(4);
-var Autolinker = __webpack_require__(5);
-var links_1 = __webpack_require__(3);
+var $ = __webpack_require__(0);
+var Autolinker = __webpack_require__(6);
+var links_1 = __webpack_require__(5);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -250,14 +290,6 @@ function removeServerSideParsleyError(el) {
     var p = $(el).parsley();
     p.removeError("server-side-parsley-error");
 }
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
 function scrollToBlock(selector) {
     var $block = $(selector);
     var offset = $block.offset();
@@ -286,7 +318,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -376,28 +408,24 @@ exports["default"] = {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = $;
-
-/***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = window.Autolinker;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var site_def_1 = __webpack_require__(1);
-__webpack_require__(0);
-var site_utils_1 = __webpack_require__(2);
+var site_def_1 = __webpack_require__(3);
+__webpack_require__(1);
+var site_utils_1 = __webpack_require__(4);
+var shortcuts_1 = __webpack_require__(2);
 site_def_1["default"].Utils = site_utils_1["default"];
+site_def_1["default"].Shortcuts = shortcuts_1["default"];
 window.$site = site_def_1["default"];
 
 

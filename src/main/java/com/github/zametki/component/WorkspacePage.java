@@ -135,7 +135,6 @@ public class WorkspacePage extends BaseUserPage {
         public AddZametkaLink(String id, CreateZametkaPanel createPanel) {
             super(id);
             this.createPanel = createPanel;
-            setOutputMarkupId(true);
         }
 
         @Override
@@ -153,17 +152,11 @@ public class WorkspacePage extends BaseUserPage {
         public void onCreateZametkaFormToggleEvent(CreateZametkaFormToggleEvent e) {
             e.target.add(this);
         }
+    }
 
-        @Override
-        public void renderHead(IHeaderResponse response) {
-            super.renderHead(response);
-            response.render(OnDomReadyHeaderItem.forScript("" +
-                    "var f = function() {" +
-                    "   var $btn=$('#" + getMarkupId() + "'); " +
-                    "   if (!$btn.hasClass('active-create')) {$btn.click();}" +
-                    "}; " +
-                    "Mousetrap.bind('a', f);" +
-                    "Mousetrap.bind('A', f);"));
-        }
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(OnDomReadyHeaderItem.forScript("$site.Shortcuts.bindWorkspacePageKeys()"));
     }
 }
