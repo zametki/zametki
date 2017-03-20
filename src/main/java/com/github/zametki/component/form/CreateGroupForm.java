@@ -42,7 +42,8 @@ public class CreateGroupForm extends Panel {
 
 
         // kind of optimization: we know that this component is always used in bs modal window
-        form.add(new BootstrapModalCloseLink("cancel_button"));
+        BootstrapModalCloseLink cancelLink = new BootstrapModalCloseLink("cancel_button");
+        form.add(cancelLink);
 
         ValidatingJsAjaxSubmitLink createButton = new ValidatingJsAjaxSubmitLink("create_button", form) {
             @Override

@@ -25,4 +25,6 @@ public class Scripts {
 
     public static final JavaScriptUrlReferenceHeaderItem TEXTILLATE_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/textillate/0.4.0/jquery.textillate.min.js", "textillate.js");
 
+    public static final JavaScriptUrlReferenceHeaderItem MOUSETRAP_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.6.0/mousetrap.min.js", "mousetrap.js");
+
 }

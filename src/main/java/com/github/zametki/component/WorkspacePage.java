@@ -25,6 +25,8 @@ import com.github.zametki.util.WicketUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
@@ -133,6 +135,7 @@ public class WorkspacePage extends BaseUserPage {
         public AddZametkaLink(String id, CreateZametkaPanel createPanel) {
             super(id);
             this.createPanel = createPanel;
+            setOutputMarkupId(true);
         }
 
         @Override
@@ -149,6 +152,18 @@ public class WorkspacePage extends BaseUserPage {
         @OnPayload(CreateZametkaFormToggleEvent.class)
         public void onCreateZametkaFormToggleEvent(CreateZametkaFormToggleEvent e) {
             e.target.add(this);
+        }
+
+        @Override
+        public void renderHead(IHeaderResponse response) {
+            super.renderHead(response);
+            response.render(OnDomReadyHeaderItem.forScript("" +
+                    "var f = function() {" +
+                    "   var $btn=$('#" + getMarkupId() + "'); " +
+                    "   if (!$btn.hasClass('active-create')) {$btn.click();}" +
+                    "}; " +
+                    "Mousetrap.bind('a', f);" +
+                    "Mousetrap.bind('A', f);"));
         }
     }
 }

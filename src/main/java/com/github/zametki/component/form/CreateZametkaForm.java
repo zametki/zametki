@@ -20,6 +20,8 @@ import com.github.zametki.util.WicketUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -35,6 +37,9 @@ public class CreateZametkaForm extends Panel {
 
     @NotNull
     public final InputArea contentField;
+
+    @NotNull
+    private final String cancelButtonId;
 
     public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeGroup, @NotNull AjaxCallback doneCallback) {
         super(id);
@@ -84,12 +89,15 @@ public class CreateZametkaForm extends Panel {
         form.add(createLink);
         JsUtils.clickOnCtrlEnter(contentField, createLink);
 
-        form.add(new AjaxLink<Void>("cancel_button") {
+        AjaxLink<Void> cancelButton = new AjaxLink<Void>("cancel_button") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 doneCallback.callback(target);
             }
-        });
+        };
+        cancelButton.setOutputMarkupId(true);
+        form.add(cancelButton);
+        cancelButtonId = cancelButton.getMarkupId();
 
         addGroupModal = new BootstrapModal("add_group_modal", "Новая группа",
                 (ComponentFactory) markupId -> new CreateGroupForm(markupId, groupsSelector.getModel(),
@@ -103,5 +111,17 @@ public class CreateZametkaForm extends Panel {
         add(addGroupModal);
 
         form.add(new BootstrapLazyModalLink("add_group", addGroupModal));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        //noinspection JSJQueryEfficiency
+        response.render(OnDomReadyHeaderItem.forScript("" +
+                "var f = function() {" +
+                "   var $area=$('#" + contentField.getMarkupId() + "'); " +
+                "   if (true || $area.is(':focus')) {$('#" + cancelButtonId + "').click();}" +
+                "}; " +
+                "Mousetrap.bind('esc', f, 'keyup');"));
     }
 }
