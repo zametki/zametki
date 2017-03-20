@@ -9,9 +9,11 @@ import com.github.zametki.component.parsley.ValidatingJsAjaxSubmitLink;
 import com.github.zametki.component.parsley.ZametkaTextContentJsValidator;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
+import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
+import com.github.zametki.util.GroupUtils;
 import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.WebUtils;
 import com.github.zametki.util.WicketUtils;
@@ -65,7 +67,10 @@ public class CreateZametkaForm extends Panel {
                 z.creationDate = Instant.now();
                 z.content = content;
                 z.groupId = groupsSelector.getConvertedInput();
-                //todo: check that group exists and not removed asynchronously
+                Group group = Context.getGroupsDbi().getById(z.groupId);
+                if (group == null || !group.userId.equals(z.userId)) {
+                    z.groupId = GroupUtils.getDefaultUserGroup(z.userId);
+                }
                 WicketUtils.reactiveUpdate(activeGroup, z.groupId, target);
                 Context.getZametkaDbi().create(z);
 
