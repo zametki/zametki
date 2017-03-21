@@ -4,6 +4,8 @@
 
 .zametka-content {
     white-space: pre-line;
+    overflow-x: auto;
+    padding-bottom: 5px;
 }
 
 .zametka-form-panel {
@@ -15,4 +17,17 @@
     margin-top: 3px;
     background-color: #bbb;
     border-radius: 2px;
+}
+
+.zametka-content::-webkit-scrollbar {
+    width: 0.33em;
+}
+
+.zametka-content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.075);
+}
+
+.zametka-content::-webkit-scrollbar-thumb {
+    background-color: #e2e2e2;
+    border-radius: 3px;
 }
