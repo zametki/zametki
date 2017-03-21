@@ -5,7 +5,7 @@ function isABootstrapModalOpen() {
 }
 
 function bindWorkspacePageKeys() {
-    $(document).on("keyup", function (e) {
+    $(document).on("keydown", function (e) {
         if (isABootstrapModalOpen()) {
             return;
         }
@@ -16,6 +16,11 @@ function bindWorkspacePageKeys() {
             }
             $btn.click();
         } else if (e.which === 27) {
+            let clicked = e.originalEvent.srcElement.getAttribute("id");
+            console.log(clicked);
+            if (clicked === "create-zametka-text-area") {
+                $("#create-zametka-cancel-button").click();
+            }
         }
     });
 }

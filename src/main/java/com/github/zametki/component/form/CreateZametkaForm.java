@@ -48,6 +48,7 @@ public class CreateZametkaForm extends Panel {
         form.add(groupsSelector);
 
         contentField = new InputArea("text");
+        contentField.setMarkupId("create-zametka-text-area");
         form.add(contentField);
         WebMarkupContainer contentError = new WebMarkupContainer("text_error");
         form.add(contentError);
@@ -84,14 +85,12 @@ public class CreateZametkaForm extends Panel {
         form.add(createLink);
         JsUtils.clickOnCtrlEnter(contentField, createLink);
 
-        AjaxLink<Void> cancelButton = new AjaxLink<Void>("cancel_button") {
+        form.add(new AjaxLink<Void>("cancel_button") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                doneCallback.callback(target);
+            public void onClick(AjaxRequestTarget target1) {
+                doneCallback.callback(target1);
             }
-        };
-        cancelButton.setOutputMarkupId(true);
-        form.add(cancelButton);
+        });
 
         addGroupModal = new BootstrapModal("add_group_modal", "Новая группа",
                 (ComponentFactory) markupId -> new CreateGroupForm(markupId, groupsSelector.getModel(),
