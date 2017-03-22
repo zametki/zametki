@@ -9,6 +9,7 @@ import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import com.github.zametki.component.group.GroupListPanel;
 import com.github.zametki.component.group.GroupTreePanel;
 import com.github.zametki.component.user.BaseUserPage;
+import com.github.zametki.component.user.UserProfileSettingsPage;
 import com.github.zametki.component.zametka.CreateZametkaPanel;
 import com.github.zametki.component.zametka.ZametkaPanel;
 import com.github.zametki.event.CreateZametkaFormToggleEvent;
@@ -51,6 +52,7 @@ public class WorkspacePage extends BaseUserPage {
 
         add(new LogoPanel("brand_logo"));
         add(new BookmarkablePageLink("logout_link", LogoutPage.class));
+        add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
         add(new LentaLink("lenta_link", state.activeGroupModel));
 
         ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
