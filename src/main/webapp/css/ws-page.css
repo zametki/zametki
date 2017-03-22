@@ -94,6 +94,7 @@ nav::-webkit-scrollbar-thumb {
     margin-left: 10px;
     width: 40px;
     padding: 2px;
+    color: white;
 }
 
 .navbar-menu a.active-all {
@@ -106,10 +107,15 @@ nav::-webkit-scrollbar-thumb {
 
 .navbar-menu a.btn:hover {
     border-color: #67696a !important;
+    color: #eee;
 }
 
 .navbar-menu a.btn img {
     filter: invert(1);
     width: 32px;
     height: 32px;
+}
+
+.navbar-menu .dropdown-toggle::after {
+    margin-left: 0;
 }

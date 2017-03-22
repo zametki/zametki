@@ -13,3 +13,8 @@
 .cursor-default {
     cursor: default;
 }
+
+.dropdown-menu {
+    border-radius: 0;
+}
+
