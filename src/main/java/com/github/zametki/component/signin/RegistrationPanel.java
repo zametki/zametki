@@ -58,13 +58,11 @@ public class RegistrationPanel extends Panel {
         loginField.add(new LoginJsValidator(loginError));
         form.add(loginField);
 
-
         WebMarkupContainer password1Error = new WebMarkupContainer("password1_error");
         form.add(password1Error);
 
         WebMarkupContainer password2Error = new WebMarkupContainer("password2_error");
         form.add(password2Error);
-
 
         PasswordField password1Field = new PasswordField("password1_field", Model.of(""));
         password1Field.add(new PasswordJsValidator(password1Error));
@@ -101,6 +99,12 @@ public class RegistrationPanel extends Panel {
                 String login = loginField.getInputString();
                 if (!ValidatorUtils.isValidLogin(login)) {
                     ParsleyUtils.addParsleyError(target, loginError, "Недопустимый псевдоним");
+                    JsUtils.focus(target, loginField);
+                    return;
+                }
+                user = Context.getUsersDbi().getUserByLogin(login);
+                if (user != null) {
+                    ParsleyUtils.addParsleyError(target, loginError, "Пользователь с таким именем уже зарегистрирован");
                     JsUtils.focus(target, loginField);
                     return;
                 }

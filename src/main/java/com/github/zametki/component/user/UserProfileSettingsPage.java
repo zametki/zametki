@@ -3,6 +3,9 @@ package com.github.zametki.component.user;
 import com.github.zametki.Context;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.HomePage;
+import com.github.zametki.component.LogoPanel;
+import com.github.zametki.component.LogoutPage;
+import com.github.zametki.component.WorkspacePage;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.form.CaptchaField;
 import com.github.zametki.component.form.Feedback;
@@ -33,6 +36,11 @@ public class UserProfileSettingsPage extends BaseUserPage {
         super(pp);
 
         setTitleAndDesc("Профиль пользователя", "Редактирование персонального профиля пользователя");
+
+        add(new LogoPanel("brand_logo"));
+        add(new BookmarkablePageLink("ws_link", WorkspacePage.class));
+        add(new BookmarkablePageLink("logout_link", LogoutPage.class));
+
         WebMarkupContainer panel = new ContainerWithId("panel");
         add(panel);
 
@@ -78,6 +86,8 @@ public class UserProfileSettingsPage extends BaseUserPage {
         captchaImage.setOutputMarkupId(true);
         form.add(captchaImage);
         form.add(new RefreshCaptchaLink("change_captcha", captchaField, captchaImage));
+
+        form.add(new BookmarkablePageLink<>("ws_link2", WorkspacePage.class));
 
         form.add(new ValidatingJsAjaxSubmitLink("update_link", form) {
             @Override
