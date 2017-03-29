@@ -9,15 +9,15 @@
     "url": "https://github.com/zametki/zametki.git"
   },
   "devDependencies": {
-    "typescript": "2.2.1"
+    "typescript": "2.2.2"
   },
   "dependencies": {
     "autolinker": "1.4.2",
     "bootstrap": "4.0.0-alpha.6",
-    "jquery": "1.12.4",
+    "jquery": "v=1.12.4",
     "loglevel": "1.4.1",
     "parsleyjs": "2.7.0",
-    "ts-loader": "2.0.2"
+    "ts-loader": "2.0.3"
   },
   "scripts": {
     "build": "webpack"
