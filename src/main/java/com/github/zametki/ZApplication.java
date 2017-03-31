@@ -17,6 +17,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.ApplicationSettings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -38,6 +39,13 @@ public class ZApplication extends WebApplication {
         log.error("----------======== Startup ========----------");
 
         Context.init();
+
+        getJavaScriptLibrarySettings().setJQueryReference(new JQueryResourceReference() {
+            @Override
+            public String getName() {
+                return "jquery/jquery-3.2.1.js";
+            }
+        });
 
         getMarkupSettings().setStripComments(true);
         getMarkupSettings().setCompressWhitespace(true);

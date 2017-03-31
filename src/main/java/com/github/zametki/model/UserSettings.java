@@ -1,13 +1,13 @@
 package com.github.zametki.model;
 
 import com.github.mjdbc.type.DbString;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
 import com.github.zametki.util.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * Set of user settings serializable to JSON

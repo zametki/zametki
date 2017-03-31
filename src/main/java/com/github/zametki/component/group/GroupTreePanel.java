@@ -18,8 +18,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public class GroupTreePanel extends Panel {
 
     @NotNull
@@ -56,7 +54,7 @@ public class GroupTreePanel extends Panel {
     @OnPayload(GroupUpdateEvent.class)
     public void onGroupUpdated(GroupUpdateEvent e) {
         GroupTreeNode node = treeModel.nodeByGroup.get(e.groupId);
-        tree.updateNode(node, Optional.of(e.target));
+        tree.updateNode(node, e.target);
     }
 
     @OnModelUpdate

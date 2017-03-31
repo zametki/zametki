@@ -1,12 +1,12 @@
 package com.github.zametki.component.group;
 
+import com.github.openjson.JSONArray;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserSettings;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 
 public class NestedGroupsTree extends NestedTree<GroupTreeNode> {
 

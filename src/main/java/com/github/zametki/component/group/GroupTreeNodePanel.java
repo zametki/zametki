@@ -6,12 +6,10 @@ import com.github.zametki.model.GroupId;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.jetbrains.annotations.NotNull;
 
-//TODO: do not use wicket not at all
 public class GroupTreeNodePanel extends Node<GroupTreeNode> {
 
     @NotNull
@@ -33,17 +31,16 @@ public class GroupTreeNodePanel extends Node<GroupTreeNode> {
         GroupId groupId = model.getObject().getGroupId();
         active = groupId.equals(activeGroupModel.getObject());
         setOutputMarkupId(true);
+    }
 
-        // bad design in wicket -> createContent called from super class
-        get(CONTENT_ID).replaceWith(createContent(CONTENT_ID, model));
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
         get("junction").setDefaultModel(Model.of(""));
     }
 
     protected Component createContent(String contentId, IModel<GroupTreeNode> model) {
-        //noinspection ConstantConditions
-        if (tree == null) {
-            return new WebMarkupContainer(contentId);
-        }
         return tree.newContentComponent(contentId, model);
     }
 

@@ -41,9 +41,9 @@ function replaceWithYoutubeEmbed(url: string, fallback: string) {
 function getLinkReplacement(link: string): string {
     const lcLink = link.toLocaleLowerCase();
     let url = link;
-    if (lcLink.indexOf("http://") == 0) {
+    if (lcLink.indexOf("http://") === 0) {
         url = link.substr(7);
-    } else if (lcLink.indexOf("https://") == 0) {
+    } else if (lcLink.indexOf("https://") === 0) {
         url = link.substr(8);
     }
     const lcUrl = url.toLocaleLowerCase();
@@ -54,7 +54,7 @@ function getLinkReplacement(link: string): string {
     if (ext in KnownAudioExtensions) {
         return `<audio controls><source src='${link}'></audio>`
     }
-    if (getYoutubeVideoId(url) != null) {
+    if (getYoutubeVideoId(url) !== null) {
         return replaceWithYoutubeEmbed(url, null);
     }
     return null;

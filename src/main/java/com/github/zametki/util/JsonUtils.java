@@ -1,11 +1,10 @@
 package com.github.zametki.util;
 
 import com.github.mjdbc.type.DbInt;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,37 +12,37 @@ import java.util.Map;
 
 public class JsonUtils {
 
-    public static void putOpt(JSONObject obj, boolean condition, String property, int value) throws JSONException {
+    public static void putOpt(JSONObject obj, boolean condition, String property, int value) {
         if (condition) {
             obj.put(property, value);
         }
     }
 
-    public static void putOpt(JSONObject obj, boolean condition, String property, double value) throws JSONException {
+    public static void putOpt(JSONObject obj, boolean condition, String property, double value) {
         if (condition) {
             obj.put(property, value);
         }
     }
 
-    public static void putOpt(JSONObject obj, boolean condition, String property, String value) throws JSONException {
+    public static void putOpt(JSONObject obj, boolean condition, String property, String value) {
         if (condition) {
             obj.put(property, value);
         }
     }
 
-    public static void putOpt(JSONObject obj, boolean condition, String property, JSONArray value) throws JSONException {
+    public static void putOpt(JSONObject obj, boolean condition, String property, JSONArray value) {
         if (condition) {
             obj.put(property, value);
         }
     }
 
-    public static void putOpt(JSONObject obj, boolean condition, String property, JSONObject value) throws JSONException {
+    public static void putOpt(JSONObject obj, boolean condition, String property, JSONObject value) {
         if (condition) {
             obj.put(property, value);
         }
     }
 
-    public static JSONArray concatArrays(JSONArray... arrs) throws JSONException {
+    public static JSONArray concatArrays(JSONArray... arrs) {
         JSONArray result = new JSONArray();
         for (JSONArray arr : arrs) {
             for (int i = 0; i < arr.length(); i++) {
