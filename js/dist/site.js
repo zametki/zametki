@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -117,9 +117,13 @@ var $ = __webpack_require__(0);
 function isABootstrapModalOpen() {
     return $(".modal.show").length > 0;
 }
+function isInInput(e) {
+    var el = $(e.target);
+    return (el.is("input") || el.is("textarea"));
+}
 function bindWorkspacePageKeys() {
     $(document).on("keydown", function (e) {
-        if (isABootstrapModalOpen()) {
+        if (isABootstrapModalOpen() || isInInput(e)) {
             return;
         }
         if (e.which === 65 || e.which === 97) {
@@ -379,7 +383,7 @@ function getLinkReplacement(link) {
     if (ext in KnownAudioExtensions) {
         return "<audio controls><source src='" + link + "'></audio>";
     }
-    if (getYoutubeVideoId(url) != null) {
+    if (getYoutubeVideoId(url) !== null) {
         return replaceWithYoutubeEmbed(url, null);
     }
     return null;

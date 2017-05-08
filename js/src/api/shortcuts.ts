@@ -1,12 +1,17 @@
 import * as $ from "jquery";
 
-function isABootstrapModalOpen() {
+function isABootstrapModalOpen(): boolean {
     return $(".modal.show").length > 0;
+}
+
+function isInInput(e: JQueryEventObject): boolean {
+    let el = $(e.target);
+    return (el.is("input") || el.is("textarea"));
 }
 
 function bindWorkspacePageKeys() {
     $(document).on("keydown", function (e) {
-        if (isABootstrapModalOpen()) {
+        if (isABootstrapModalOpen() || isInInput(e)) {
             return;
         }
         if (e.which === 65 || e.which === 97) {
