@@ -25,7 +25,7 @@ public class GroupEntriesCountBadge extends Label {
 
     @OnPayload(ZametkaUpdateEvent.class)
     public void onZametkaUpdated(ZametkaUpdateEvent e) {
-        if (e.updateType == ZametkaUpdateType.GROUP_CHANGED) {
+        if (e.updateType == ZametkaUpdateType.GROUP_CHANGED || e.updateType == ZametkaUpdateType.CREATED || e.updateType == ZametkaUpdateType.DELETED) {
             detach();
             e.target.add(this);
         }
