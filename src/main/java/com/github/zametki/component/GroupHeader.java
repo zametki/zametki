@@ -41,9 +41,13 @@ public class GroupHeader extends Panel {
         super(id);
         this.activeCategoryModel = activeGroupModel;
 
-        editGroupModal = new BootstrapModal("edit_group_modal", "Редактирование группы",
-                (ComponentFactory) markupId -> new EditGroupPanel(markupId, activeGroupModel.getObject(),
-                        (AjaxCallback) target -> editGroupModal.hide(target)),
+        editGroupModal = new BootstrapModal("edit_group_modal", "Редактирование группы", (ComponentFactory) markupId -> {
+            Group group = Context.getGroupsDbi().getById(activeGroupModel.getObject());
+            if (group == null) {
+                return new Label(markupId, "Нет выбранной группы");
+            }
+            return new EditGroupPanel(markupId, group, (AjaxCallback) target -> editGroupModal.hide(target));
+        },
                 BootstrapModal.BodyMode.Lazy, BootstrapModal.FooterMode.Hide);
         add(editGroupModal);
 
@@ -54,6 +58,13 @@ public class GroupHeader extends Panel {
                 super.onComponentTag(tag);
                 boolean hasGroup = activeGroupModel.getObject() != null;
                 tag.setName(hasGroup ? "a" : "div");
+            }
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (activeGroupModel.getObject() != null) {
+                    super.onClick(target);
+                }
             }
         };
         panel.add(nameLink);

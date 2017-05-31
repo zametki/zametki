@@ -26,13 +26,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class EditGroupPanel extends Panel {
 
-    public EditGroupPanel(@NotNull String id, @NotNull GroupId groupId, @NotNull AjaxCallback doneCallback) {
+    public EditGroupPanel(@NotNull String id, @NotNull Group group, @NotNull AjaxCallback doneCallback) {
         super(id);
 
+        GroupId groupId = group.id;
         User user = WebUtils.getUserOrRedirectHome();
-
-        Group group = Context.getGroupsDbi().getById(groupId);
-        assert group != null;
 
         Form form = new Form("form");
         form.setOutputMarkupId(true);
