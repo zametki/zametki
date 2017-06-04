@@ -106,14 +106,19 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
 
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
+
         response.render(new PriorityHeaderItem(Scripts.TETHER_JS));
         response.render(new PriorityHeaderItem(Scripts.BOOTSTRAP_JS));
         response.render(new PriorityHeaderItem(Scripts.PARSLEY_JS));
-        response.render(new PriorityHeaderItem(Scripts.AUTOLINKER_JS));
         response.render(new PriorityHeaderItem(Scripts.LETTERING_JS));
         response.render(new PriorityHeaderItem(Scripts.FIT_TEXT_JS));
         response.render(new PriorityHeaderItem(Scripts.TEXTILLATE_JS));
+
+        response.render(new PriorityHeaderItem(Scripts.REACT_JS));
+        response.render(new PriorityHeaderItem(Scripts.REACT_DOM_JS));
+
         response.render(new PriorityHeaderItem(Scripts.SITE_JS));
     }
 

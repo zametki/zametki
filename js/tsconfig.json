@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs"
+    "module": "commonjs",
+    "jsx": "react"
   },
   "files": [
-    "src/site.ts",
-    "typings/tsd.d.ts"
+    "src/types/tsd.d.ts",
+    "src/site.ts"
   ]
 }

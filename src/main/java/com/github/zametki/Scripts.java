@@ -15,8 +15,6 @@ public class Scripts {
 
     public static final HeaderItem PARSLEY_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.7.1/parsley.min.js", "parsley.js");
 
-    public static final JavaScriptUrlReferenceHeaderItem AUTOLINKER_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/autolinker/1.4.3/Autolinker.js", "autolinker.js");
-
     public static final JavaScriptUrlReferenceHeaderItem AUTOSIZE_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.17/autosize.min.js", "autosize.js");
 
     public static final JavaScriptUrlReferenceHeaderItem LETTERING_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/lettering.js/0.7.0/jquery.lettering.min.js", "lettering.js");
@@ -24,4 +22,8 @@ public class Scripts {
     public static final JavaScriptUrlReferenceHeaderItem FIT_TEXT_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/FitText.js/1.2.0/jquery.fittext.min.js", "fittext.js");
 
     public static final JavaScriptUrlReferenceHeaderItem TEXTILLATE_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/textillate/0.4.0/jquery.textillate.min.js", "textillate.js");
+
+    public static final JavaScriptUrlReferenceHeaderItem REACT_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js", "react.js");
+
+    public static final JavaScriptUrlReferenceHeaderItem REACT_DOM_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js", "react-dom.js");
 }

@@ -1,20 +1,21 @@
 // Only methods used by us
 
 interface ParsleyStatic {
-    addMessages(lang:string, options:any):void;
-    setLocale(lang:string):void;
+    addMessages(lang: string, options: any): void;
+
+    setLocale(lang: string): void;
 }
 
 interface Window {
-    Parsley:ParsleyStatic;
+    Parsley: ParsleyStatic;
 }
 
 interface Parsley {
-    removeError(error:string):void;
+    removeError(error: string): void;
 }
 
 interface JQuery {
-    parsley():Parsley;
+    parsley(): Parsley;
 }
 
 declare module "parsleyjs" {
@@ -22,4 +23,4 @@ declare module "parsleyjs" {
 }
 
 //noinspection JSUnusedGlobalSymbols
-declare var Parsley: Parsley;
+declare const Parsley: Parsley;

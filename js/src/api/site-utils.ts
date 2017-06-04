@@ -1,7 +1,5 @@
 import * as $ from "jquery";
-import * as Autolinker from "autolinker";
 import * as Parsley from "parsleyjs";
-import links from "./links";
 
 function setTitle(selector: string, title: string, root?: HTMLElement): void {
     root = root ? root : window.document.body;
@@ -10,44 +8,6 @@ function setTitle(selector: string, title: string, root?: HTMLElement): void {
             $(this).attr("title", title);
         }
     });
-}
-
-interface LinkifyOptions {
-    skipMediaLinks: boolean;
-}
-
-function linkify(text: string, options: LinkifyOptions): string {
-    const autolinker = new Autolinker({
-        urls: {
-            schemeMatches: true,
-            wwwMatches: true,
-            tldMatches: true
-        },
-        email: true,
-        phone: true,
-        hashtag: false,
-
-        stripPrefix: true,
-        newWindow: true,
-
-        truncate: {
-            length: 60,
-            location: "end"
-        },
-
-        className: ""
-    });
-
-    const res = autolinker.link(text);
-    if (options && options.skipMediaLinks) {
-        return res;
-    }
-    try {
-        return links.processMediaLinks(res);
-    } catch (err) {
-        log.error(err);
-        return res;
-    }
 }
 
 function focusOnEnter(event: KeyboardEvent, id: string): void {
@@ -160,7 +120,6 @@ function closeModal(jqSelector: HTMLElement | string) {
 
 export default {
     setTitle: setTitle,
-    linkify: linkify,
     focusOnEnter: focusOnEnter,
     clickOnEnter: clickOnEnter,
     clickOnCtrlEnter: clickOnCtrlEnter,
@@ -170,6 +129,5 @@ export default {
     enableScrollTop: enableScrollTop,
     removeServerSideParsleyError: removeServerSideParsleyError,
     scrollToBlock: scrollToBlock,
-    playYoutube: links.playYoutube,
     closeModal: closeModal,
 }

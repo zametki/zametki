@@ -8,6 +8,7 @@ import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import com.github.zametki.component.group.GroupListPanel;
 import com.github.zametki.component.group.GroupTreePanel;
+import com.github.zametki.component.react.ReactGroupTreePanel;
 import com.github.zametki.component.user.BaseUserPage;
 import com.github.zametki.component.user.UserProfileSettingsPage;
 import com.github.zametki.component.zametka.CreateZametkaPanel;
@@ -60,7 +61,11 @@ public class WorkspacePage extends BaseUserPage {
         add(groupsModal);
         add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
-        add(new GroupTreePanel("groups", state.activeGroupModel));
+        if (!pp.get("react").isEmpty()) {
+            add(new ReactGroupTreePanel("groups"));
+        } else {
+            add(new GroupTreePanel("groups", state.activeGroupModel));
+        }
         CreateZametkaPanel createPanel = new CreateZametkaPanel("create_panel", state.activeGroupModel);
         add(createPanel);
         add(lenta);

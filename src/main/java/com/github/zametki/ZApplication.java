@@ -40,12 +40,7 @@ public class ZApplication extends WebApplication {
 
         Context.init();
 
-        getJavaScriptLibrarySettings().setJQueryReference(new JQueryResourceReference() {
-            @Override
-            public String getName() {
-                return "jquery/jquery-3.2.1.js";
-            }
-        });
+        getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.INSTANCE_3);
 
         getMarkupSettings().setStripComments(true);
         getMarkupSettings().setCompressWhitespace(true);

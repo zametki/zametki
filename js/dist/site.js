@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74,6 +74,12 @@ module.exports = $;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+module.exports = React;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -107,7 +113,25 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var React = __webpack_require__(1);
+var ReactDOM = __webpack_require__(9);
+var GroupTree_1 = __webpack_require__(7);
+function renderGroupTree(id) {
+    ReactDOM.render(React.createElement(GroupTree_1.GroupTree), document.getElementById(id));
+}
+exports["default"] = {
+    renderGroupTree: renderGroupTree
+};
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -148,13 +172,15 @@ exports["default"] = {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
 exports["default"] = {
+    /** React helpers */
+    ReactUtils: undefined,
     /** Set of utility functions */
     Utils: undefined,
     /** Key bindings support */
@@ -163,15 +189,13 @@ exports["default"] = {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
 var $ = __webpack_require__(0);
-var Autolinker = __webpack_require__(7);
-var links_1 = __webpack_require__(5);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -179,36 +203,6 @@ function setTitle(selector, title, root) {
             $(this).attr("title", title);
         }
     });
-}
-function linkify(text, options) {
-    var autolinker = new Autolinker({
-        urls: {
-            schemeMatches: true,
-            wwwMatches: true,
-            tldMatches: true
-        },
-        email: true,
-        phone: true,
-        hashtag: false,
-        stripPrefix: true,
-        newWindow: true,
-        truncate: {
-            length: 60,
-            location: "end"
-        },
-        className: ""
-    });
-    var res = autolinker.link(text);
-    if (options && options.skipMediaLinks) {
-        return res;
-    }
-    try {
-        return links_1["default"].processMediaLinks(res);
-    }
-    catch (err) {
-        log.error(err);
-        return res;
-    }
 }
 function focusOnEnter(event, id) {
     if (event.which === 13) {
@@ -311,7 +305,6 @@ function closeModal(jqSelector) {
 }
 exports["default"] = {
     setTitle: setTitle,
-    linkify: linkify,
     focusOnEnter: focusOnEnter,
     clickOnEnter: clickOnEnter,
     clickOnCtrlEnter: clickOnCtrlEnter,
@@ -321,122 +314,64 @@ exports["default"] = {
     enableScrollTop: enableScrollTop,
     removeServerSideParsleyError: removeServerSideParsleyError,
     scrollToBlock: scrollToBlock,
-    playYoutube: links_1["default"].playYoutube,
     closeModal: closeModal
 };
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
-var KnownImageExtensions = {};
-KnownImageExtensions["png"] = true;
-KnownImageExtensions["jpg"] = true;
-KnownImageExtensions["gif"] = true;
-var KnownAudioExtensions = {};
-KnownAudioExtensions["mp3"] = true;
-KnownAudioExtensions["wav"] = true;
-KnownAudioExtensions["ogg"] = true;
-function playYoutube(el) {
-    // Create an iFrame with autoplay set to true
-    var iframeUrl = "https://www.youtube.com/embed/" + el.id + "?autoplay=1&autohide=1";
-    if ($(el).data('params')) {
-        iframeUrl += '&' + $(this).data('params');
+var React = __webpack_require__(1);
+var GroupTree = (function (_super) {
+    __extends(GroupTree, _super);
+    function GroupTree() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    // The height and width of the iFrame should be the same as parent
-    var iframe = $('<iframe/>', { 'frameborder': '0', 'src': iframeUrl, 'width': $(el).width(), 'height': $(el).height() });
-    iframe.attr("allowfullscreen", "allowfullscreen");
-    // Replace the YouTube thumbnail with YouTube HTML5 Player
-    $(el).parent().css("paddingTop", 0);
-    $(el).replaceWith(iframe);
-}
-function getYoutubeVideoId(url) {
-    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    return (url.match(p)) ? RegExp.$1 : null;
-}
-function replaceWithYoutubeEmbed(url, fallback) {
-    var videoId = getYoutubeVideoId(url);
-    if (!videoId) {
-        return fallback;
-    }
-    var style = "background-image: url(https://img.youtube.com/vi/" + videoId + "/mqdefault.jpg);";
-    return "<div class=\"youtube-aspect-ratio\"><div id='" + videoId + "' class='youtube' style='" + style + "' onclick='$site.Utils.playYoutube(this);'><div class='play'></div></div></div>";
-}
-function getLinkReplacement(link) {
-    var lcLink = link.toLocaleLowerCase();
-    var url = link;
-    if (lcLink.indexOf("http://") === 0) {
-        url = link.substr(7);
-    }
-    else if (lcLink.indexOf("https://") === 0) {
-        url = link.substr(8);
-    }
-    var lcUrl = url.toLocaleLowerCase();
-    var ext = lcUrl.split('.').pop();
-    if (ext in KnownImageExtensions) {
-        return "<a href='" + link + "' target='_blank'><img src='" + link + "' style='max-width: 400px; max-height: 300px;'></a>";
-    }
-    if (ext in KnownAudioExtensions) {
-        return "<audio controls><source src='" + link + "'></audio>";
-    }
-    if (getYoutubeVideoId(url) !== null) {
-        return replaceWithYoutubeEmbed(url, null);
-    }
-    return null;
-}
-function processMediaLinks(text) {
-    var res = text;
-    var startIdx = res.indexOf("<a href=");
-    while (startIdx >= 0) {
-        var endIdx = res.indexOf("</a>", startIdx);
-        if (endIdx < 0) {
-            break;
-        }
-        var hrefStartIdx = startIdx + 9;
-        var hrefEndIdx = res.indexOf('"', hrefStartIdx + 1);
-        if (hrefEndIdx > 0) {
-            var link = res.substring(hrefStartIdx, hrefEndIdx);
-            var replacement = getLinkReplacement(link);
-            if (replacement != null) {
-                res = res.substring(0, startIdx) + replacement + res.substring(endIdx + 4);
-                endIdx = startIdx + replacement.length;
-            }
-        }
-        startIdx = res.indexOf("<a href=", endIdx);
-    }
-    return res;
-}
-exports["default"] = {
-    processMediaLinks: processMediaLinks,
-    playYoutube: playYoutube
-};
+    GroupTree.prototype.render = function () {
+        return React.createElement("div", null, "Hello from React");
+    };
+    return GroupTree;
+}(React.Component));
+exports.GroupTree = GroupTree;
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var site_def_1 = __webpack_require__(3);
-__webpack_require__(1);
-var site_utils_1 = __webpack_require__(4);
-var shortcuts_1 = __webpack_require__(2);
+var site_def_1 = __webpack_require__(5);
+__webpack_require__(2);
+var react_utils_1 = __webpack_require__(3);
+var site_utils_1 = __webpack_require__(6);
+var shortcuts_1 = __webpack_require__(4);
+site_def_1["default"].ReactUtils = react_utils_1["default"];
 site_def_1["default"].Utils = site_utils_1["default"];
 site_def_1["default"].Shortcuts = shortcuts_1["default"];
 window.$site = site_def_1["default"];
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
-module.exports = window.Autolinker;
+module.exports = ReactDOM;
 
 /***/ })
 /******/ ]);
