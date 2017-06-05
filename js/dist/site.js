@@ -332,39 +332,47 @@ var ReactDOM = __webpack_require__(9);
 var Redux = __webpack_require__(11);
 var ReactRedux = __webpack_require__(10);
 var initialState = { value: 0 };
-exports.incrementCounter = function (delta) { return ({
-    type: "INCREMENT_COUNTER",
-    delta: delta
+function isAction(action, actionName) {
+    return action && action.type && action.type == actionName;
+}
+exports.isAction = isAction;
+var ActionType_Increment = "IncrementAction";
+var ActionType_Reset = "ResetAction";
+exports.createIncrementCounterAction = function (delta) { return ({
+    type: ActionType_Increment,
+    payload: { delta: delta }
 }); };
-exports.resetCounter = function () { return ({
-    type: "RESET_COUNTER"
+exports.createResetCounterAction = function () { return ({
+    type: ActionType_Reset,
+    payload: {}
 }); };
-function counter(state, action) {
+function handleActions(state, action) {
     if (state === void 0) { state = initialState; }
-    switch (action.type) {
-        case "INCREMENT_COUNTER":
-            return { value: state.value + action.delta };
-        case "RESET_COUNTER":
-            return { value: 0 };
-        default:
-            return state;
+    if (isAction(action, ActionType_Increment)) {
+        return { value: state.value + action.payload.delta };
     }
+    else if (isAction(action, ActionType_Reset)) {
+        return initialState;
+    }
+    return state;
 }
 exports.reducers = Redux.combineReducers({
-    counter: counter
+    counterData: handleActions
 });
 var mapStateToProps = function (state, ownProps) { return ({
-    counter: state.counter
+    counter: state.counterData
 }); };
 //noinspection TypeScriptValidateTypes
 var mapDispatchToProps = function (dispatch) { return ({
-    increment: function (n) { return dispatch(exports.incrementCounter(n)); },
-    reset: function () { return dispatch(exports.resetCounter()); }
+    increment: function (n) { return dispatch(exports.createIncrementCounterAction(n)); },
+    reset: function () { return dispatch(exports.createResetCounterAction()); }
 }); };
 var GroupTree = (function (_super) {
     __extends(GroupTree, _super);
     function GroupTree(props, context) {
-        var _this = _super.call(this, props, context) || this;
+        var _this = 
+        //noinspection TypeScriptValidateTypes
+        _super.call(this, props, context) || this;
         _this.onClickIncrement = _this.onClickIncrement.bind(_this);
         _this.onClickReset = _this.onClickReset.bind(_this);
         return _this;

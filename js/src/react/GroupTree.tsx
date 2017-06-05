@@ -5,7 +5,7 @@ import * as ReactRedux from "react-redux";
 
 export namespace Store {
     export type Counter = { value: number }
-    export type All = { counter: Counter }
+    export type All = { counterData: Counter }
 }
 
 const initialState: Store.Counter = {value: 0}
@@ -21,51 +21,61 @@ type ConnectedDispatch = {
     reset: () => void
 }
 
-export type Action =
-    { type: "INCREMENT_COUNTER", delta: number } |
-    { type: "RESET_COUNTER" }
+export interface Action<T> {
+    type: string;
+    payload: T
+}
 
+export function isAction<T>(action: Action<any>, actionName: string): action is Action<T> {
+    return action && action.type && action.type == actionName;
+}
 
-export const incrementCounter = (delta: number): Action => ({
-    type: "INCREMENT_COUNTER",
-    delta,
+const ActionType_Increment = "IncrementAction";
+type IncrementActionPayload = { delta: number; }
+
+const ActionType_Reset = "ResetAction";
+type ResetActionPayload = {}
+
+export const createIncrementCounterAction = (delta: number): Action<IncrementActionPayload> => ({
+    type: ActionType_Increment,
+    payload: {delta: delta},
 })
 
-export const resetCounter = (): Action => ({
-    type: "RESET_COUNTER"
+export const createResetCounterAction = (): Action<ResetActionPayload> => ({
+    type: ActionType_Reset,
+    payload: {}
 })
 
 
-function counter(state: Store.Counter = initialState, action: Action): Store.Counter {
-    switch (action.type) {
-        case "INCREMENT_COUNTER":
-            return {value: state.value + action.delta}
-        case "RESET_COUNTER":
-            return {value: 0}
-        default:
-            return state
+function handleActions(state: Store.Counter = initialState, action: Action<any>): Store.Counter {
+    if (isAction<IncrementActionPayload>(action, ActionType_Increment)) {
+        return {value: state.value + action.payload.delta}
+    } else if (isAction<ResetActionPayload>(action, ActionType_Reset)) {
+        return initialState
     }
+    return state;
 }
 
 export const reducers = Redux.combineReducers<Store.All>({
-    counter
+    counterData: handleActions
 })
 
 
 const mapStateToProps = (state: Store.All, ownProps: OwnProps): ConnectedState => ({
-    counter: state.counter
+    counter: state.counterData
 })
 
 //noinspection TypeScriptValidateTypes
 const mapDispatchToProps = (dispatch: Redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    increment: (n: number) => dispatch(incrementCounter(n)),
-    reset: () => dispatch(resetCounter()),
+    increment: (n: number) => dispatch(createIncrementCounterAction(n)),
+    reset: () => dispatch(createResetCounterAction()),
 
 })
 
 export class GroupTree extends React.Component<ConnectedState & ConnectedDispatch & OwnProps, {}> {
 
     constructor(props: ConnectedState & ConnectedDispatch & OwnProps, context: any) {
+        //noinspection TypeScriptValidateTypes
         super(props, context);
         this.onClickIncrement = this.onClickIncrement.bind(this)
         this.onClickReset = this.onClickReset.bind(this)
@@ -95,7 +105,7 @@ export class GroupTree extends React.Component<ConnectedState & ConnectedDispatc
     }
 
     static wrap(id: string) {
-        let store: Redux.Store<Store.All> = Redux.createStore(
+        const store: Redux.Store<Store.All> = Redux.createStore(
             reducers,
             {} as Store.All,
             // Redux.applyMiddleware(thunk),
