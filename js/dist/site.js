@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74,12 +74,6 @@ module.exports = $;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-module.exports = React;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -113,17 +107,15 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var React = __webpack_require__(1);
-var ReactDOM = __webpack_require__(9);
-var GroupTree_1 = __webpack_require__(7);
+var GroupTree_1 = __webpack_require__(6);
 function renderGroupTree(id) {
-    ReactDOM.render(React.createElement(GroupTree_1.GroupTree), document.getElementById(id));
+    GroupTree_1.GroupTree.wrap(id);
 }
 exports["default"] = {
     renderGroupTree: renderGroupTree
@@ -131,7 +123,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -172,7 +164,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -189,7 +181,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -319,7 +311,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -335,32 +327,89 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var React = __webpack_require__(1);
+var React = __webpack_require__(8);
+var ReactDOM = __webpack_require__(9);
+var Redux = __webpack_require__(11);
+var ReactRedux = __webpack_require__(10);
+var initialState = { value: 0 };
+exports.incrementCounter = function (delta) { return ({
+    type: "INCREMENT_COUNTER",
+    delta: delta
+}); };
+exports.resetCounter = function () { return ({
+    type: "RESET_COUNTER"
+}); };
+function counter(state, action) {
+    if (state === void 0) { state = initialState; }
+    switch (action.type) {
+        case "INCREMENT_COUNTER":
+            return { value: state.value + action.delta };
+        case "RESET_COUNTER":
+            return { value: 0 };
+        default:
+            return state;
+    }
+}
+exports.reducers = Redux.combineReducers({
+    counter: counter
+});
+var mapStateToProps = function (state, ownProps) { return ({
+    counter: state.counter
+}); };
+//noinspection TypeScriptValidateTypes
+var mapDispatchToProps = function (dispatch) { return ({
+    increment: function (n) { return dispatch(exports.incrementCounter(n)); },
+    reset: function () { return dispatch(exports.resetCounter()); }
+}); };
 var GroupTree = (function (_super) {
     __extends(GroupTree, _super);
-    function GroupTree() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function GroupTree(props, context) {
+        var _this = _super.call(this, props, context) || this;
+        _this.onClickIncrement = _this.onClickIncrement.bind(_this);
+        _this.onClickReset = _this.onClickReset.bind(_this);
+        return _this;
     }
     GroupTree.prototype.render = function () {
-        return React.createElement("div", null, "Hello from React");
+        var props = this.props;
+        return (React.createElement("div", null,
+            React.createElement("strong", null, props.counter.value),
+            React.createElement("button", { ref: 'increment', onClick: this.onClickIncrement }, "increment"),
+            React.createElement("button", { ref: 'increment', onClick: this.onClickReset }, "reset")));
+    };
+    GroupTree.prototype.onClickIncrement = function (e) {
+        var props = this.props;
+        e.preventDefault();
+        props.increment(1);
+    };
+    GroupTree.prototype.onClickReset = function (e) {
+        var props = this.props;
+        e.preventDefault();
+        props.reset();
+    };
+    GroupTree.wrap = function (id) {
+        var store = Redux.createStore(exports.reducers, {});
+        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: store },
+            React.createElement(exports.GT, null)), document.getElementById(id));
     };
     return GroupTree;
 }(React.Component));
 exports.GroupTree = GroupTree;
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+exports.GT = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTree);
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var site_def_1 = __webpack_require__(5);
-__webpack_require__(2);
-var react_utils_1 = __webpack_require__(3);
-var site_utils_1 = __webpack_require__(6);
-var shortcuts_1 = __webpack_require__(4);
+var site_def_1 = __webpack_require__(4);
+__webpack_require__(1);
+var react_utils_1 = __webpack_require__(2);
+var site_utils_1 = __webpack_require__(5);
+var shortcuts_1 = __webpack_require__(3);
 site_def_1["default"].ReactUtils = react_utils_1["default"];
 site_def_1["default"].Utils = site_utils_1["default"];
 site_def_1["default"].Shortcuts = shortcuts_1["default"];
@@ -368,10 +417,28 @@ window.$site = site_def_1["default"];
 
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = React;
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
 module.exports = ReactDOM;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = ReactRedux;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = Redux;
 
 /***/ })
 /******/ ]);

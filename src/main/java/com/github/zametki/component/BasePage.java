@@ -118,6 +118,8 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
 
         response.render(new PriorityHeaderItem(Scripts.REACT_JS));
         response.render(new PriorityHeaderItem(Scripts.REACT_DOM_JS));
+        response.render(new PriorityHeaderItem(Scripts.REDUX));
+        response.render(new PriorityHeaderItem(Scripts.REACT_REDUX));
 
         response.render(new PriorityHeaderItem(Scripts.SITE_JS));
     }
