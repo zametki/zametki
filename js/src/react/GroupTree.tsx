@@ -2,27 +2,45 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as Redux from "redux";
 import * as ReactRedux from "react-redux";
+import GroupTreeNode = Store.GroupTreeNode;
 
 export namespace Store {
+
+    export type GroupTreeNode = {
+        name: string,
+        children?: Array<GroupTreeNode>
+    }
+
     export type Counter = { value: number }
-    export type All = { counterData: Counter }
+
+    export type Root = {
+        counterData: Counter
+        groupTreeRoot?: GroupTreeNode
+    }
 }
 
-const initialState: Store.Counter = {value: 0}
+const initialCounterState: Store.Counter = {value: 0}
+const initialGroupTreeState: Store.GroupTreeNode = null
+
+const initialRootState: Store.Root = {
+    counterData: initialCounterState,
+    groupTreeRoot: initialGroupTreeState
+}
 
 type OwnProps = {}
 
 type ConnectedState = {
-    counter: { value: number }
+    counter: Store.Counter,
+    groupTreeRoot: Store.GroupTreeNode
 }
 
 type ConnectedDispatch = {
-    increment: (n: number) => void
-    reset: () => void
+    increment: (n: number) => void,
+    reset: () => void,
+    updateTree: (groupTreeRoot: Store.GroupTreeNode) => void
 }
 
-export interface Action<T> {
-    type: string;
+export interface Action<T> extends Redux.Action {
     payload: T
 }
 
@@ -34,43 +52,54 @@ const ActionType_Increment = "IncrementAction";
 type IncrementActionPayload = { delta: number; }
 
 const ActionType_Reset = "ResetAction";
-type ResetActionPayload = {}
+const ActionType_UpdateTree = "UpdateTreeAction";
+type UpdateTreeActionPayload = { groupTreeRoot: Store.GroupTreeNode; }
 
-export const createIncrementCounterAction = (delta: number): Action<IncrementActionPayload> => ({
-    type: ActionType_Increment,
-    payload: {delta: delta},
-})
+export const createIncrementCounterAction = (delta: number): Action<IncrementActionPayload> => ({type: ActionType_Increment, payload: {delta},})
+export const createResetCounterAction = (): Action<object> => ({type: ActionType_Reset, payload: {}});
+export const createUpdateTreeAction = (groupTreeRoot: GroupTreeNode): Action<UpdateTreeActionPayload> => ({type: ActionType_UpdateTree, payload: {groupTreeRoot}});
 
-export const createResetCounterAction = (): Action<ResetActionPayload> => ({
-    type: ActionType_Reset,
-    payload: {}
-})
-
-
-function handleActions(state: Store.Counter = initialState, action: Action<any>): Store.Counter {
+function handleCounterActions(state: Store.Counter = initialCounterState, action: Action<any>): Store.Counter {
     if (isAction<IncrementActionPayload>(action, ActionType_Increment)) {
         return {value: state.value + action.payload.delta}
-    } else if (isAction<ResetActionPayload>(action, ActionType_Reset)) {
-        return initialState
+    } else if (isAction<void>(action, ActionType_Reset)) {
+        return initialCounterState
     }
     return state;
 }
 
-export const reducers = Redux.combineReducers<Store.All>({
-    counterData: handleActions
+function handleGroupActions(state: Store.GroupTreeNode = initialGroupTreeState, action: Action<any>): Store.GroupTreeNode {
+    if (isAction<UpdateTreeActionPayload>(action, ActionType_UpdateTree)) {
+        return action.payload.groupTreeRoot
+    }
+    return state;
+}
+
+export const reducers = Redux.combineReducers<Store.Root>({
+    counterData: handleCounterActions,
+    groupTreeRoot: handleGroupActions
 })
 
 
-const mapStateToProps = (state: Store.All, ownProps: OwnProps): ConnectedState => ({
-    counter: state.counterData
+const mapStateToProps = (storeState: Store.Root, ownProps: OwnProps): ConnectedState => ({
+    counter: storeState.counterData,
+    groupTreeRoot: storeState.groupTreeRoot,
 })
 
-//noinspection TypeScriptValidateTypes
-const mapDispatchToProps = (dispatch: Redux.Dispatch<Store.All>): ConnectedDispatch => ({
-    increment: (n: number) => dispatch(createIncrementCounterAction(n)),
-    reset: () => dispatch(createResetCounterAction()),
+function mapDispatchToProps(dispatch): ConnectedDispatch {
+    return {
+        increment: n => dispatch(createIncrementCounterAction(n)),
+        reset: () => dispatch(createResetCounterAction()),
+        updateTree: groupTreeRoot => dispatch(createUpdateTreeAction(groupTreeRoot))
+    }
+}
 
-})
+export const storeInstance: Redux.Store<Store.Root> = Redux.createStore(
+    reducers,
+    {} as Store.Root,
+    window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
+    // Redux.applyMiddleware(thunk),
+)
 
 export class GroupTree extends React.Component<ConnectedState & ConnectedDispatch & OwnProps, {}> {
 
@@ -82,12 +111,14 @@ export class GroupTree extends React.Component<ConnectedState & ConnectedDispatc
     }
 
     render() {
+        console.log("RENDER!");
         const props = this.props as ConnectedState & ConnectedDispatch & OwnProps;
         return (
             <div>
                 <strong>{props.counter.value}</strong>
-                <button ref='increment' onClick={this.onClickIncrement}>increment</button>
-                <button ref='increment' onClick={this.onClickReset}>reset</button>
+                <button onClick={this.onClickIncrement}>increment</button>
+                <button onClick={this.onClickReset}>reset</button>
+                <div>Child count: {props.groupTreeRoot && props.groupTreeRoot.children ? props.groupTreeRoot.children.length : "?"}</div>
             </div>
         )
     }
@@ -105,14 +136,8 @@ export class GroupTree extends React.Component<ConnectedState & ConnectedDispatc
     }
 
     static wrap(id: string) {
-        const store: Redux.Store<Store.All> = Redux.createStore(
-            reducers,
-            {} as Store.All,
-            // Redux.applyMiddleware(thunk),
-        )
-
         ReactDOM.render(
-            <ReactRedux.Provider store={store}>
+            <ReactRedux.Provider store={storeInstance}>
                 <GT />
             </ReactRedux.Provider>,
             document.getElementById(id)

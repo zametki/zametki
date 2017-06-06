@@ -117,7 +117,17 @@ var GroupTree_1 = __webpack_require__(6);
 function renderGroupTree(id) {
     GroupTree_1.GroupTree.wrap(id);
 }
+function onGroupTreeChanged(groupTreeRoot) {
+    console.log(groupTreeRoot);
+    var updateTreeAction = GroupTree_1.createUpdateTreeAction(groupTreeRoot);
+    //noinspection TypeScriptValidateTypes
+    GroupTree_1.storeInstance.dispatch(updateTreeAction);
+    var incrementCounterAction = GroupTree_1.createIncrementCounterAction(1);
+    //noinspection TypeScriptValidateTypes
+    GroupTree_1.storeInstance.dispatch(incrementCounterAction);
+}
 exports["default"] = {
+    onGroupTreeChanged: onGroupTreeChanged,
     renderGroupTree: renderGroupTree
 };
 
@@ -331,42 +341,57 @@ var React = __webpack_require__(8);
 var ReactDOM = __webpack_require__(9);
 var Redux = __webpack_require__(11);
 var ReactRedux = __webpack_require__(10);
-var initialState = { value: 0 };
+var initialCounterState = { value: 0 };
+var initialGroupTreeState = null;
+var initialRootState = {
+    counterData: initialCounterState,
+    groupTreeRoot: initialGroupTreeState
+};
 function isAction(action, actionName) {
     return action && action.type && action.type == actionName;
 }
 exports.isAction = isAction;
 var ActionType_Increment = "IncrementAction";
 var ActionType_Reset = "ResetAction";
-exports.createIncrementCounterAction = function (delta) { return ({
-    type: ActionType_Increment,
-    payload: { delta: delta }
-}); };
-exports.createResetCounterAction = function () { return ({
-    type: ActionType_Reset,
-    payload: {}
-}); };
-function handleActions(state, action) {
-    if (state === void 0) { state = initialState; }
+var ActionType_UpdateTree = "UpdateTreeAction";
+exports.createIncrementCounterAction = function (delta) { return ({ type: ActionType_Increment, payload: { delta: delta } }); };
+exports.createResetCounterAction = function () { return ({ type: ActionType_Reset, payload: {} }); };
+exports.createUpdateTreeAction = function (groupTreeRoot) { return ({ type: ActionType_UpdateTree, payload: { groupTreeRoot: groupTreeRoot } }); };
+function handleCounterActions(state, action) {
+    if (state === void 0) { state = initialCounterState; }
     if (isAction(action, ActionType_Increment)) {
         return { value: state.value + action.payload.delta };
     }
     else if (isAction(action, ActionType_Reset)) {
-        return initialState;
+        return initialCounterState;
+    }
+    return state;
+}
+function handleGroupActions(state, action) {
+    if (state === void 0) { state = initialGroupTreeState; }
+    if (isAction(action, ActionType_UpdateTree)) {
+        return action.payload.groupTreeRoot;
     }
     return state;
 }
 exports.reducers = Redux.combineReducers({
-    counterData: handleActions
+    counterData: handleCounterActions,
+    groupTreeRoot: handleGroupActions
 });
-var mapStateToProps = function (state, ownProps) { return ({
-    counter: state.counterData
+var mapStateToProps = function (storeState, ownProps) { return ({
+    counter: storeState.counterData,
+    groupTreeRoot: storeState.groupTreeRoot
 }); };
-//noinspection TypeScriptValidateTypes
-var mapDispatchToProps = function (dispatch) { return ({
-    increment: function (n) { return dispatch(exports.createIncrementCounterAction(n)); },
-    reset: function () { return dispatch(exports.createResetCounterAction()); }
-}); };
+function mapDispatchToProps(dispatch) {
+    return {
+        increment: function (n) { return dispatch(exports.createIncrementCounterAction(n)); },
+        reset: function () { return dispatch(exports.createResetCounterAction()); },
+        updateTree: function (groupTreeRoot) { return dispatch(exports.createUpdateTreeAction(groupTreeRoot)); }
+    };
+}
+exports.storeInstance = Redux.createStore(exports.reducers, {}, window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
+// Redux.applyMiddleware(thunk),
+);
 var GroupTree = (function (_super) {
     __extends(GroupTree, _super);
     function GroupTree(props, context) {
@@ -378,11 +403,15 @@ var GroupTree = (function (_super) {
         return _this;
     }
     GroupTree.prototype.render = function () {
+        console.log("RENDER!");
         var props = this.props;
         return (React.createElement("div", null,
             React.createElement("strong", null, props.counter.value),
-            React.createElement("button", { ref: 'increment', onClick: this.onClickIncrement }, "increment"),
-            React.createElement("button", { ref: 'increment', onClick: this.onClickReset }, "reset")));
+            React.createElement("button", { onClick: this.onClickIncrement }, "increment"),
+            React.createElement("button", { onClick: this.onClickReset }, "reset"),
+            React.createElement("div", null,
+                "Child count: ",
+                props.groupTreeRoot && props.groupTreeRoot.children ? props.groupTreeRoot.children.length : "?")));
     };
     GroupTree.prototype.onClickIncrement = function (e) {
         var props = this.props;
@@ -395,8 +424,7 @@ var GroupTree = (function (_super) {
         props.reset();
     };
     GroupTree.wrap = function (id) {
-        var store = Redux.createStore(exports.reducers, {});
-        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: store },
+        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: exports.storeInstance },
             React.createElement(exports.GT, null)), document.getElementById(id));
     };
     return GroupTree;
