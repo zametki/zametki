@@ -63,17 +63,57 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+function isAction(action, actionName) {
+    return action && action.type && action.type == actionName;
+}
+exports.isAction = isAction;
+exports.ActionType_UpdateTree = "UpdateTreeAction";
+exports.createUpdateTreeAction = function (rootNode) { return ({ type: exports.ActionType_UpdateTree, payload: { rootNode: rootNode } }); };
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var Redux = __webpack_require__(3);
+var Reducers_1 = __webpack_require__(10);
+exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
+    groupTree: {
+        rootNodeId: null,
+        nodeById: {}
+    }
+}, window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
+// Redux.applyMiddleware(thunk),
+);
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = $;
 
 /***/ }),
-/* 1 */
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = Redux;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -107,24 +147,24 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var GroupTree_1 = __webpack_require__(6);
+var Store_1 = __webpack_require__(1);
+var GroupTreeView_1 = __webpack_require__(9);
+var Actions_1 = __webpack_require__(0);
 function renderGroupTree(id) {
-    GroupTree_1.GroupTree.wrap(id);
+    console.log("renderGroupTree: " + id);
+    GroupTreeView_1.GroupTreeView.wrap(id);
 }
-function onGroupTreeChanged(groupTreeRoot) {
-    console.log(groupTreeRoot);
-    var updateTreeAction = GroupTree_1.createUpdateTreeAction(groupTreeRoot);
+function onGroupTreeChanged(rootNode) {
+    console.log("onGroupTreeChanged: " + rootNode);
+    var updateTreeAction = Actions_1.createUpdateTreeAction(rootNode);
     //noinspection TypeScriptValidateTypes
-    GroupTree_1.storeInstance.dispatch(updateTreeAction);
-    var incrementCounterAction = GroupTree_1.createIncrementCounterAction(1);
-    //noinspection TypeScriptValidateTypes
-    GroupTree_1.storeInstance.dispatch(incrementCounterAction);
+    Store_1.appStore.dispatch(updateTreeAction);
 }
 exports["default"] = {
     onGroupTreeChanged: onGroupTreeChanged,
@@ -133,13 +173,13 @@ exports["default"] = {
 
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(0);
+var $ = __webpack_require__(2);
 function isABootstrapModalOpen() {
     return $(".modal.show").length > 0;
 }
@@ -174,7 +214,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -191,13 +231,13 @@ exports["default"] = {
 
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(0);
+var $ = __webpack_require__(2);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -321,7 +361,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -337,115 +377,97 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var React = __webpack_require__(8);
-var ReactDOM = __webpack_require__(9);
-var Redux = __webpack_require__(11);
-var ReactRedux = __webpack_require__(10);
-var initialCounterState = { value: 0 };
-var initialGroupTreeState = null;
-var initialRootState = {
-    counterData: initialCounterState,
-    groupTreeRoot: initialGroupTreeState
-};
-function isAction(action, actionName) {
-    return action && action.type && action.type == actionName;
-}
-exports.isAction = isAction;
-var ActionType_Increment = "IncrementAction";
-var ActionType_Reset = "ResetAction";
-var ActionType_UpdateTree = "UpdateTreeAction";
-exports.createIncrementCounterAction = function (delta) { return ({ type: ActionType_Increment, payload: { delta: delta } }); };
-exports.createResetCounterAction = function () { return ({ type: ActionType_Reset, payload: {} }); };
-exports.createUpdateTreeAction = function (groupTreeRoot) { return ({ type: ActionType_UpdateTree, payload: { groupTreeRoot: groupTreeRoot } }); };
-function handleCounterActions(state, action) {
-    if (state === void 0) { state = initialCounterState; }
-    if (isAction(action, ActionType_Increment)) {
-        return { value: state.value + action.payload.delta };
-    }
-    else if (isAction(action, ActionType_Reset)) {
-        return initialCounterState;
-    }
-    return state;
-}
-function handleGroupActions(state, action) {
-    if (state === void 0) { state = initialGroupTreeState; }
-    if (isAction(action, ActionType_UpdateTree)) {
-        return action.payload.groupTreeRoot;
-    }
-    return state;
-}
-exports.reducers = Redux.combineReducers({
-    counterData: handleCounterActions,
-    groupTreeRoot: handleGroupActions
-});
-var mapStateToProps = function (storeState, ownProps) { return ({
-    counter: storeState.counterData,
-    groupTreeRoot: storeState.groupTreeRoot
-}); };
-function mapDispatchToProps(dispatch) {
+var React = __webpack_require__(12);
+var ReactDOM = __webpack_require__(13);
+var ReactRedux = __webpack_require__(14);
+var Store_1 = __webpack_require__(1);
+/** Maps Store state to component props */
+var mapStateToProps = function (groupTree, ownProps) {
     return {
-        increment: function (n) { return dispatch(exports.createIncrementCounterAction(n)); },
-        reset: function () { return dispatch(exports.createResetCounterAction()); },
-        updateTree: function (groupTreeRoot) { return dispatch(exports.createUpdateTreeAction(groupTreeRoot)); }
+        node: groupTree && groupTree.nodeById ? groupTree.nodeById[ownProps.nodeId] : null
     };
+};
+function mapDispatchToProps(dispatch) {
+    return {};
 }
-exports.storeInstance = Redux.createStore(exports.reducers, {}, window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
-// Redux.applyMiddleware(thunk),
-);
-var GroupTree = (function (_super) {
-    __extends(GroupTree, _super);
-    function GroupTree(props, context) {
+var GroupTreeView = (function (_super) {
+    __extends(GroupTreeView, _super);
+    function GroupTreeView(props, context) {
         var _this = 
         //noinspection TypeScriptValidateTypes
         _super.call(this, props, context) || this;
-        _this.onClickIncrement = _this.onClickIncrement.bind(_this);
-        _this.onClickReset = _this.onClickReset.bind(_this);
+        if (!props.nodeId) {
+            throw new Error("no node id");
+        }
         return _this;
     }
-    GroupTree.prototype.render = function () {
-        console.log("RENDER!");
-        var props = this.props;
-        return (React.createElement("div", null,
-            React.createElement("strong", null, props.counter.value),
-            React.createElement("button", { onClick: this.onClickIncrement }, "increment"),
-            React.createElement("button", { onClick: this.onClickReset }, "reset"),
-            React.createElement("div", null,
-                "Child count: ",
-                props.groupTreeRoot && props.groupTreeRoot.children ? props.groupTreeRoot.children.length : "?")));
+    GroupTreeView.prototype.render = function () {
+        if (!this.props.node) {
+            return null;
+        }
+        var children = this.props.node.children;
+        var subTree = children && children.length > 0 ? children.map(function (child) { return React.createElement(exports.GTV, { nodeId: child.id }); }) : undefined;
+        return (React.createElement("div", { className: "pl10" },
+            React.createElement("div", null, this.props.node.name),
+            subTree));
     };
-    GroupTree.prototype.onClickIncrement = function (e) {
-        var props = this.props;
-        e.preventDefault();
-        props.increment(1);
+    GroupTreeView.wrap = function (id) {
+        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
+            React.createElement(exports.GTV, { nodeId: Store_1.appStore.getState().groupTree.rootNodeId })), document.getElementById(id));
     };
-    GroupTree.prototype.onClickReset = function (e) {
-        var props = this.props;
-        e.preventDefault();
-        props.reset();
-    };
-    GroupTree.wrap = function (id) {
-        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: exports.storeInstance },
-            React.createElement(exports.GT, null)), document.getElementById(id));
-    };
-    return GroupTree;
+    return GroupTreeView;
 }(React.Component));
-exports.GroupTree = GroupTree;
+exports.GroupTreeView = GroupTreeView;
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-exports.GT = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTree);
+exports.GTV = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView);
 
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var site_def_1 = __webpack_require__(4);
-__webpack_require__(1);
-var react_utils_1 = __webpack_require__(2);
-var site_utils_1 = __webpack_require__(5);
-var shortcuts_1 = __webpack_require__(3);
+var Redux = __webpack_require__(3);
+var Actions_1 = __webpack_require__(0);
+function flattenTree(node, nodeById) {
+    nodeById[node.id] = node;
+    if (node.children) {
+        for (var i = 0, n = node.children.length; i < node.children.length; i++) {
+            flattenTree(node.children[i], nodeById);
+        }
+    }
+    return nodeById;
+}
+//todo: initial state
+function handleGroupActions(state, action) {
+    if (state === void 0) { state = null; }
+    if (Actions_1.isAction(action, Actions_1.ActionType_UpdateTree)) {
+        return {
+            rootNodeId: action.payload.rootNode.id,
+            nodeById: flattenTree(action.payload.rootNode, {})
+        };
+    }
+    return state;
+}
+exports.AppReducers = Redux.combineReducers({
+    groupTree: handleGroupActions
+});
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var site_def_1 = __webpack_require__(7);
+__webpack_require__(4);
+var react_utils_1 = __webpack_require__(5);
+var site_utils_1 = __webpack_require__(8);
+var shortcuts_1 = __webpack_require__(6);
 site_def_1["default"].ReactUtils = react_utils_1["default"];
 site_def_1["default"].Utils = site_utils_1["default"];
 site_def_1["default"].Shortcuts = shortcuts_1["default"];
@@ -453,28 +475,22 @@ window.$site = site_def_1["default"];
 
 
 /***/ }),
-/* 8 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = React;
 
 /***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = ReactDOM;
 
 /***/ }),
-/* 10 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = ReactRedux;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = Redux;
 
 /***/ })
 /******/ ]);

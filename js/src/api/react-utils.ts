@@ -1,20 +1,18 @@
-import {createIncrementCounterAction, createUpdateTreeAction, GroupTree, Store, storeInstance} from "../react/GroupTree";
-import GroupTreeNode = Store.GroupTreeNode;
+import {appStore, GroupTreeNode} from "../react/Store";
+import {GroupTreeView} from "../react/GroupTreeView";
+import {createUpdateTreeAction} from "../react/Actions";
 
 function renderGroupTree(id: string): void {
-    GroupTree.wrap(id);
+    console.log(`renderGroupTree: ${id}`);
+    GroupTreeView.wrap(id);
 }
 
-function onGroupTreeChanged(groupTreeRoot: Store.GroupTreeNode) {
-    console.log(groupTreeRoot);
+function onGroupTreeChanged(rootNode: GroupTreeNode) {
+    console.log(`onGroupTreeChanged: ${rootNode}`);
 
-    const updateTreeAction = createUpdateTreeAction(groupTreeRoot);
+    const updateTreeAction = createUpdateTreeAction(rootNode);
     //noinspection TypeScriptValidateTypes
-    storeInstance.dispatch(updateTreeAction);
-
-    const incrementCounterAction = createIncrementCounterAction(1);
-    //noinspection TypeScriptValidateTypes
-    storeInstance.dispatch(incrementCounterAction);
+    appStore.dispatch(updateTreeAction);
 }
 
 export default {
