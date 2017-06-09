@@ -5,25 +5,22 @@ import {Action, ActionType_UpdateTree, isAction, UpdateTreeActionPayload} from "
 function flattenTree(node: GroupTreeNode, nodeById: { [nodeId: string]: GroupTreeNode }) {
     nodeById[node.id] = node;
     if (node.children) {
-        for (let i = 0, n = node.children.length; i < node.children.length; i++) {
-            flattenTree(node.children[i], nodeById);
+        for (const child of node.children) {
+            flattenTree(child, nodeById);
         }
     }
     return nodeById;
 }
 
-//todo: initial state
-function handleGroupActions(state: GroupTree = null, action: Action<any>): GroupTree {
+/** Group Tree reducer */
+function groupTree(state: GroupTree = {nodeById: {}}, action: Action<any>): GroupTree {
     if (isAction<UpdateTreeActionPayload>(action, ActionType_UpdateTree)) {
         return {
-            rootNodeId: action.payload.rootNode.id,
             nodeById: flattenTree(action.payload.rootNode, {})
         }
     }
     return state;
 }
 
-export const AppReducers = Redux.combineReducers<AppStore>({
-    groupTree: handleGroupActions
-})
+export const AppReducers = Redux.combineReducers<AppStore>({groupTree})
 

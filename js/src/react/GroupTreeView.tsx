@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as ReactRedux from "react-redux";
-import {appStore, GroupTree, GroupTreeNode} from "./Store";
+import {appStore, AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTreeNode} from "./Store";
 
 
 type OwnProps = {
-    nodeId: string
+    nodeId: number
 }
 
 type ConnectedState = {
@@ -17,12 +17,13 @@ type ConnectedDispatch = {
 }
 
 /** Maps Store state to component props */
-const mapStateToProps = (groupTree: GroupTree, ownProps: OwnProps): ConnectedState => {
+const mapStateToProps = (store: AppStore, ownProps: OwnProps): ConnectedState => {
     return {
-        node: groupTree && groupTree.nodeById ? groupTree.nodeById[ownProps.nodeId] : null
+        node: store.groupTree.nodeById[ownProps.nodeId]
     }
 }
 
+// noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch): ConnectedDispatch {
     return {
         // updateTree: groupTreeRoot => dispatch(createUpdateTreeAction(groupTreeRoot))
@@ -36,12 +37,13 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
     constructor(props: GroupTreeViewProps, context: any) {
         //noinspection TypeScriptValidateTypes
         super(props, context);
-        if (!props.nodeId) {
+        if (typeof props.nodeId === "undefined") {
             throw new Error("no node id");
         }
     }
 
     render() {
+        console.log("render node-id:" + this.props.nodeId + " -> " + this.props.node);
         if (!this.props.node) {
             return null;
         }
@@ -58,7 +60,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
     static wrap(id: string) {
         ReactDOM.render(
             <ReactRedux.Provider store={appStore}>
-                <GTV nodeId={appStore.getState().groupTree.rootNodeId}/>
+                <GTV nodeId={GROUP_TREE_ROOT_NODE_ID}/>
             </ReactRedux.Provider>,
             document.getElementById(id)
         );

@@ -90,11 +90,9 @@ exports.createUpdateTreeAction = function (rootNode) { return ({ type: exports.A
 exports.__esModule = true;
 var Redux = __webpack_require__(3);
 var Reducers_1 = __webpack_require__(10);
+exports.GROUP_TREE_ROOT_NODE_ID = 0;
 exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
-    groupTree: {
-        rootNodeId: null,
-        nodeById: {}
-    }
+    groupTree: { nodeById: {} }
 }, window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
 // Redux.applyMiddleware(thunk),
 );
@@ -382,11 +380,12 @@ var ReactDOM = __webpack_require__(13);
 var ReactRedux = __webpack_require__(14);
 var Store_1 = __webpack_require__(1);
 /** Maps Store state to component props */
-var mapStateToProps = function (groupTree, ownProps) {
+var mapStateToProps = function (store, ownProps) {
     return {
-        node: groupTree && groupTree.nodeById ? groupTree.nodeById[ownProps.nodeId] : null
+        node: store.groupTree.nodeById[ownProps.nodeId]
     };
 };
+// noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch) {
     return {};
 }
@@ -396,12 +395,13 @@ var GroupTreeView = (function (_super) {
         var _this = 
         //noinspection TypeScriptValidateTypes
         _super.call(this, props, context) || this;
-        if (!props.nodeId) {
+        if (typeof props.nodeId === "undefined") {
             throw new Error("no node id");
         }
         return _this;
     }
     GroupTreeView.prototype.render = function () {
+        console.log("render node-id:" + this.props.nodeId + " -> " + this.props.node);
         if (!this.props.node) {
             return null;
         }
@@ -413,7 +413,7 @@ var GroupTreeView = (function (_super) {
     };
     GroupTreeView.wrap = function (id) {
         ReactDOM.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
-            React.createElement(exports.GTV, { nodeId: Store_1.appStore.getState().groupTree.rootNodeId })), document.getElementById(id));
+            React.createElement(exports.GTV, { nodeId: Store_1.GROUP_TREE_ROOT_NODE_ID })), document.getElementById(id));
     };
     return GroupTreeView;
 }(React.Component));
@@ -434,26 +434,24 @@ var Actions_1 = __webpack_require__(0);
 function flattenTree(node, nodeById) {
     nodeById[node.id] = node;
     if (node.children) {
-        for (var i = 0, n = node.children.length; i < node.children.length; i++) {
-            flattenTree(node.children[i], nodeById);
+        for (var _i = 0, _a = node.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            flattenTree(child, nodeById);
         }
     }
     return nodeById;
 }
-//todo: initial state
-function handleGroupActions(state, action) {
-    if (state === void 0) { state = null; }
+/** Group Tree reducer */
+function groupTree(state, action) {
+    if (state === void 0) { state = { nodeById: {} }; }
     if (Actions_1.isAction(action, Actions_1.ActionType_UpdateTree)) {
         return {
-            rootNodeId: action.payload.rootNode.id,
             nodeById: flattenTree(action.payload.rootNode, {})
         };
     }
     return state;
 }
-exports.AppReducers = Redux.combineReducers({
-    groupTree: handleGroupActions
-});
+exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
 
 
 /***/ }),
