@@ -76,6 +76,8 @@ public class ReactGroupTreePanel extends Panel {
         }
         json.put("id", g.id == null ? 0 : g.id.getDbValue());
         json.put("name", g.name);
+        json.put("parent", g.parentId.intValue);
+        json.put("level", node.getLevel());
         int childCount = node.getChildCount();
         if (childCount > 0) {
             JSONArray children = new JSONArray();

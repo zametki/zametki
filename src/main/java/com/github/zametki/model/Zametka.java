@@ -36,7 +36,7 @@ public class Zametka extends Identifiable<ZametkaId> {
 
     @Override
     public String toString() {
-        return "Z[" + (id == null ? "?" : "" + id.value) + "]";
+        return "Z[" + (id == null ? "?" : "" + id.intValue) + "]";
     }
 
 }

@@ -43,18 +43,40 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
     }
 
     render() {
-        console.log("render node-id:" + this.props.nodeId + " -> " + this.props.node);
         if (!this.props.node) {
             return null;
         }
         const children = this.props.node.children;
         const subTree = children && children.length > 0 ? children.map(child => <GTV nodeId={child.id}/>) : undefined;
+        let nodeComponent;
+        if (this.props.node.id != 0) {
+            nodeComponent = (
+                <div>
+                    <div style={{paddingLeft: this.props.node.level * 16}} className="tree-node">
+                        <table className="w100">
+                            <tr>
+                                <td className="tree-junction-td">
+                                    <a className="tree-junction"></a>
+                                </td>
+                                <td>
+                                    <div className="tree-content">
+                                        <a className="tree-node-group-link">
+                                            <span className="badge zametka-count-badge float-right ml-1">?</span>
+                                            <span>{this.props.node.name}</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>);
+        }
         return (
-            <div className="pl10">
-                <div>{this.props.node.name}</div>
+            <div>
+                {nodeComponent}
                 {subTree}
             </div>
-        )
+        );
     }
 
     static wrap(id: string) {
@@ -68,4 +90,4 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
 }
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const GTV: React.ComponentClass<OwnProps> = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView) as React.ComponentClass<OwnProps>;
+export const GTV: React.ComponentClass<OwnProps > = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView) as React.ComponentClass<OwnProps>;

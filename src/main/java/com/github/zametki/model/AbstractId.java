@@ -8,20 +8,20 @@ import org.jetbrains.annotations.NotNull;
  * Base class for all Ids. Serializable DB value.
  */
 public class AbstractId implements DbInt, IClusterable, Comparable<AbstractId> {
-    protected final int value;
+    public final int intValue;
 
-    public AbstractId(int value) {
-        this.value = value;
+    public AbstractId(int intValue) {
+        this.intValue = intValue;
     }
 
     @Override
     public int getDbValue() {
-        return value;
+        return intValue;
     }
 
 
     public int hashCode() {
-        return value;
+        return intValue;
     }
 
     @Override
@@ -33,15 +33,15 @@ public class AbstractId implements DbInt, IClusterable, Comparable<AbstractId> {
             return false;
         }
         AbstractId that = (AbstractId) o;
-        return value == that.value;
+        return intValue == that.intValue;
     }
 
     public String toString() {
-        return getClass().getSimpleName() + "[" + value + "]";
+        return getClass().getSimpleName() + "[" + intValue + "]";
     }
 
     public boolean isValid() {
-        return value > 0;
+        return intValue > 0;
     }
 
     public boolean isRoot() {
@@ -49,6 +49,6 @@ public class AbstractId implements DbInt, IClusterable, Comparable<AbstractId> {
     }
     @Override
     public int compareTo(@NotNull AbstractId o) {
-        return Integer.compare(value, o.value);
+        return Integer.compare(intValue, o.intValue);
     }
 }

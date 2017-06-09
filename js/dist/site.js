@@ -401,14 +401,27 @@ var GroupTreeView = (function (_super) {
         return _this;
     }
     GroupTreeView.prototype.render = function () {
-        console.log("render node-id:" + this.props.nodeId + " -> " + this.props.node);
         if (!this.props.node) {
             return null;
         }
         var children = this.props.node.children;
         var subTree = children && children.length > 0 ? children.map(function (child) { return React.createElement(exports.GTV, { nodeId: child.id }); }) : undefined;
-        return (React.createElement("div", { className: "pl10" },
-            React.createElement("div", null, this.props.node.name),
+        var nodeComponent;
+        if (this.props.node.id != 0) {
+            nodeComponent = (React.createElement("div", null,
+                React.createElement("div", { style: { paddingLeft: this.props.node.level * 16 }, className: "tree-node" },
+                    React.createElement("table", { className: "w100" },
+                        React.createElement("tr", null,
+                            React.createElement("td", { className: "tree-junction-td" },
+                                React.createElement("a", { className: "tree-junction" })),
+                            React.createElement("td", null,
+                                React.createElement("div", { className: "tree-content" },
+                                    React.createElement("a", { className: "tree-node-group-link" },
+                                        React.createElement("span", { className: "badge zametka-count-badge float-right ml-1" }, "?"),
+                                        React.createElement("span", null, this.props.node.name)))))))));
+        }
+        return (React.createElement("div", null,
+            nodeComponent,
             subTree));
     };
     GroupTreeView.wrap = function (id) {

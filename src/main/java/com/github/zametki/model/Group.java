@@ -32,7 +32,7 @@ public class Group extends Identifiable<GroupId> {
 
     @Override
     public String toString() {
-        return "Group[" + (id == null ? "?" : "" + id.value) + "|" + name + "]";
+        return "Group[" + (id == null ? "?" : "" + id.intValue) + "|" + name + "]";
     }
 
 }

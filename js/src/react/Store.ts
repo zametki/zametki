@@ -4,6 +4,8 @@ import {AppReducers} from "./Reducers";
 export type GroupTreeNode = {
     id: number,
     name: string,
+    parentId: number,
+    level: number,
     children?: Array<GroupTreeNode>
 }
 
