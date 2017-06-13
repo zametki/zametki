@@ -17,15 +17,21 @@ import com.github.zametki.util.WebUtils;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ReactGroupTreePanel extends Panel {
 
+    @NotNull
     private final ContainerWithId tree = new ContainerWithId("tree");
 
-    public ReactGroupTreePanel(String id) {
+    @NotNull
+    private final IModel<GroupId> activeCategoryModel;
+
+    public ReactGroupTreePanel(String id, @NotNull IModel<GroupId> activeCategoryModel) {
         super(id);
+        this.activeCategoryModel = activeCategoryModel;
         add(tree);
     }
 
@@ -57,7 +63,7 @@ public class ReactGroupTreePanel extends Panel {
     }
 
     @NotNull
-    public static String getUpdateScript() {
+    public String getUpdateScript() {
         GroupTreeModel treeModel = GroupTreeModel.build(WebUtils.getUserOrRedirectHome());
         JSONObject jsonTree = toJSON((GroupTreeNode) treeModel.getRoot());
         if (jsonTree == null) {
@@ -67,7 +73,7 @@ public class ReactGroupTreePanel extends Panel {
     }
 
     @Nullable
-    private static JSONObject toJSON(@NotNull GroupTreeNode node) {
+    private JSONObject toJSON(@NotNull GroupTreeNode node) {
         JSONObject json = new JSONObject();
         GroupId groupId = node.getGroupId();
         Group g = groupId.isRoot() ? ROOT_GROUP : Context.getGroupsDbi().getById(groupId);
@@ -78,6 +84,9 @@ public class ReactGroupTreePanel extends Panel {
         json.put("name", g.name);
         json.put("parent", g.parentId.intValue);
         json.put("level", node.getLevel());
+        if (g.id != null && g.id.equals(activeCategoryModel.getObject())) {
+            json.put("active", true);
+        }
         int childCount = node.getChildCount();
         if (childCount > 0) {
             JSONArray children = new JSONArray();

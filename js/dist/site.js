@@ -407,9 +407,10 @@ var GroupTreeView = (function (_super) {
         var children = this.props.node.children;
         var subTree = children && children.length > 0 ? children.map(function (child) { return React.createElement(exports.GTV, { nodeId: child.id }); }) : undefined;
         var nodeComponent;
+        var treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
         if (this.props.node.id != 0) {
-            nodeComponent = (React.createElement("div", null,
-                React.createElement("div", { style: { paddingLeft: this.props.node.level * 16 }, className: "tree-node" },
+            nodeComponent = (React.createElement("div", { className: treeNodeClass },
+                React.createElement("div", { style: { paddingLeft: this.props.node.level * 16 } },
                     React.createElement("table", { className: "w100" },
                         React.createElement("tr", null,
                             React.createElement("td", { className: "tree-junction-td" },

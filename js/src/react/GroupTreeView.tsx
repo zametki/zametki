@@ -49,10 +49,11 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
         const children = this.props.node.children;
         const subTree = children && children.length > 0 ? children.map(child => <GTV nodeId={child.id}/>) : undefined;
         let nodeComponent;
+        let treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
         if (this.props.node.id != 0) {
             nodeComponent = (
-                <div>
-                    <div style={{paddingLeft: this.props.node.level * 16}} className="tree-node">
+                <div className={treeNodeClass}>
+                    <div style={{paddingLeft: this.props.node.level * 16}}>
                         <table className="w100">
                             <tr>
                                 <td className="tree-junction-td">
@@ -90,4 +91,4 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
 }
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const GTV: React.ComponentClass<OwnProps > = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView) as React.ComponentClass<OwnProps>;
+export const GTV: React.ComponentClass<OwnProps> = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView) as React.ComponentClass<OwnProps>;

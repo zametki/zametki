@@ -62,7 +62,7 @@ public class WorkspacePage extends BaseUserPage {
         add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
         if (!pp.get("react").isEmpty()) {
-            add(new ReactGroupTreePanel("groups"));
+            add(new ReactGroupTreePanel("groups", state.activeGroupModel));
         } else {
             add(new GroupTreePanel("groups", state.activeGroupModel));
         }
