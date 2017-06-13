@@ -8,6 +8,7 @@ export type GroupTreeNode = {
     level: number,
     children?: Array<GroupTreeNode>
     active?: boolean
+    expanded?: boolean
 }
 
 export type GroupTree = {

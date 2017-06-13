@@ -13,6 +13,7 @@ import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
+import com.github.zametki.model.UserSettings;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -20,6 +21,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
 
 public class ReactGroupTreePanel extends Panel {
 
@@ -74,6 +77,7 @@ public class ReactGroupTreePanel extends Panel {
 
     @Nullable
     private JSONObject toJSON(@NotNull GroupTreeNode node) {
+        Set<GroupId> expandedGroups = UserSettings.get().getExpandedGroups();
         JSONObject json = new JSONObject();
         GroupId groupId = node.getGroupId();
         Group g = groupId.isRoot() ? ROOT_GROUP : Context.getGroupsDbi().getById(groupId);
@@ -86,6 +90,9 @@ public class ReactGroupTreePanel extends Panel {
         json.put("level", node.getLevel());
         if (g.id != null && g.id.equals(activeCategoryModel.getObject())) {
             json.put("active", true);
+        }
+        if (expandedGroups.contains(g.id)) {
+            json.put("expanded", true);
         }
         int childCount = node.getChildCount();
         if (childCount > 0) {

@@ -9,6 +9,9 @@ import com.github.zametki.util.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Set of user settings serializable to JSON
  */
@@ -56,5 +59,14 @@ public class UserSettings implements DbString {
         }
         user.settings = us;
         Context.getUsersDbi().updateSettings(user);
+    }
+
+    @NotNull
+    public Set<GroupId> getExpandedGroups() {
+        Set<GroupId> results = new HashSet<>();
+        for (int i = 0; i < expandedGroups.length(); i++) {
+            results.add(new GroupId(expandedGroups.getInt(i)));
+        }
+        return results;
     }
 }

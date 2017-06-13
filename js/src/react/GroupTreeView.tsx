@@ -47,9 +47,12 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
             return null;
         }
         const children = this.props.node.children;
-        const subTree = children && children.length > 0 ? children.map(child => <GTV nodeId={child.id}/>) : undefined;
+        const isRoot = this.props.nodeId === GROUP_TREE_ROOT_NODE_ID;
+        const renderSubtree = children && children.length > 0 && (isRoot || this.props.node.expanded);
+        const subTree = renderSubtree ? children.map(child => <GTV nodeId={child.id}/>) : undefined;
         let nodeComponent;
-        let treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
+        const treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
+        const treeJunctionClass = "tree-junction" + (children && children.length > 0 ? (this.props.node.expanded ? " tree-junction-expanded" : " tree-junction-collapsed") : "");
         if (this.props.node.id != 0) {
             nodeComponent = (
                 <div className={treeNodeClass}>
@@ -57,7 +60,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
                         <table className="w100">
                             <tr>
                                 <td className="tree-junction-td">
-                                    <a className="tree-junction"></a>
+                                    <a className={treeJunctionClass}></a>
                                 </td>
                                 <td>
                                     <div className="tree-content">

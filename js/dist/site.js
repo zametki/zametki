@@ -405,16 +405,19 @@ var GroupTreeView = (function (_super) {
             return null;
         }
         var children = this.props.node.children;
-        var subTree = children && children.length > 0 ? children.map(function (child) { return React.createElement(exports.GTV, { nodeId: child.id }); }) : undefined;
+        var isRoot = this.props.nodeId === Store_1.GROUP_TREE_ROOT_NODE_ID;
+        var renderSubtree = children && children.length > 0 && (isRoot || this.props.node.expanded);
+        var subTree = renderSubtree ? children.map(function (child) { return React.createElement(exports.GTV, { nodeId: child.id }); }) : undefined;
         var nodeComponent;
         var treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
+        var treeJunctionClass = "tree-junction" + (children && children.length > 0 ? (this.props.node.expanded ? " tree-junction-expanded" : " tree-junction-collapsed") : "");
         if (this.props.node.id != 0) {
             nodeComponent = (React.createElement("div", { className: treeNodeClass },
                 React.createElement("div", { style: { paddingLeft: this.props.node.level * 16 } },
                     React.createElement("table", { className: "w100" },
                         React.createElement("tr", null,
                             React.createElement("td", { className: "tree-junction-td" },
-                                React.createElement("a", { className: "tree-junction" })),
+                                React.createElement("a", { className: treeJunctionClass })),
                             React.createElement("td", null,
                                 React.createElement("div", { className: "tree-content" },
                                     React.createElement("a", { className: "tree-node-group-link" },
