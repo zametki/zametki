@@ -1,6 +1,7 @@
 package com.github.zametki.component;
 
 import com.github.zametki.annotation.MountPath;
+import com.github.zametki.behavior.ajax.ExpandCollapseGroupAjaxCallback;
 import com.github.zametki.component.basic.ComponentFactory;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
@@ -41,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 public class WorkspacePage extends BaseUserPage {
 
     private final WebMarkupContainer lenta = new ContainerWithId("lenta");
-    public final LentaPageState state = new LentaPageState();
+    public final WorkspacePageState state = new WorkspacePageState();
     private final LentaProvider provider = new LentaProvider(state);
     private final BootstrapModal groupsModal;
 
@@ -55,6 +56,7 @@ public class WorkspacePage extends BaseUserPage {
         add(new BookmarkablePageLink("logout_link", LogoutPage.class));
         add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
         add(new LentaLink("lenta_link", state.activeGroupModel));
+        add(new ExpandCollapseGroupAjaxCallback());
 
         ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
         groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);

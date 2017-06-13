@@ -63,11 +63,30 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var callbacks = {
+    toggleGroupExpandedState: undefined
+};
+function toggleGroupExpandedState(groupId, expanded) {
+    callbacks.toggleGroupExpandedState(groupId, expanded);
+}
+exports.toggleGroupExpandedState = toggleGroupExpandedState;
+exports["default"] = {
+    callbacks: callbacks
+};
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -82,14 +101,14 @@ exports.createUpdateTreeAction = function (rootNode) { return ({ type: exports.A
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var Redux = __webpack_require__(3);
-var Reducers_1 = __webpack_require__(10);
+var Redux = __webpack_require__(4);
+var Reducers_1 = __webpack_require__(11);
 exports.GROUP_TREE_ROOT_NODE_ID = 0;
 exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
     groupTree: { nodeById: {} }
@@ -99,19 +118,19 @@ exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
 module.exports = $;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = Redux;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -145,15 +164,15 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var Store_1 = __webpack_require__(1);
-var GroupTreeView_1 = __webpack_require__(9);
-var Actions_1 = __webpack_require__(0);
+var Store_1 = __webpack_require__(2);
+var GroupTreeView_1 = __webpack_require__(10);
+var Actions_1 = __webpack_require__(1);
 function renderGroupTree(id) {
     console.log("renderGroupTree: " + id);
     GroupTreeView_1.GroupTreeView.wrap(id);
@@ -171,13 +190,13 @@ exports["default"] = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(2);
+var $ = __webpack_require__(3);
 function isABootstrapModalOpen() {
     return $(".modal.show").length > 0;
 }
@@ -212,7 +231,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -224,18 +243,20 @@ exports["default"] = {
     /** Set of utility functions */
     Utils: undefined,
     /** Key bindings support */
-    Shortcuts: undefined
+    Shortcuts: undefined,
+    /** Ajax calls to Wicket backend */
+    Ajax: undefined
 };
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(2);
+var $ = __webpack_require__(3);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -359,7 +380,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -375,10 +396,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var React = __webpack_require__(12);
-var ReactDOM = __webpack_require__(13);
-var ReactRedux = __webpack_require__(14);
-var Store_1 = __webpack_require__(1);
+var React = __webpack_require__(13);
+var ReactDOM = __webpack_require__(14);
+var ReactRedux = __webpack_require__(15);
+var Store_1 = __webpack_require__(2);
+var ajax_1 = __webpack_require__(0);
 /** Maps Store state to component props */
 var mapStateToProps = function (store, ownProps) {
     return {
@@ -398,6 +420,7 @@ var GroupTreeView = (function (_super) {
         if (typeof props.nodeId === "undefined") {
             throw new Error("no node id");
         }
+        _this.onToggleExpandedState = _this.onToggleExpandedState.bind(_this);
         return _this;
     }
     GroupTreeView.prototype.render = function () {
@@ -417,7 +440,7 @@ var GroupTreeView = (function (_super) {
                     React.createElement("table", { className: "w100" },
                         React.createElement("tr", null,
                             React.createElement("td", { className: "tree-junction-td" },
-                                React.createElement("a", { className: treeJunctionClass })),
+                                React.createElement("a", { className: treeJunctionClass, onClick: this.onToggleExpandedState })),
                             React.createElement("td", null,
                                 React.createElement("div", { className: "tree-content" },
                                     React.createElement("a", { className: "tree-node-group-link" },
@@ -432,6 +455,9 @@ var GroupTreeView = (function (_super) {
         ReactDOM.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
             React.createElement(exports.GTV, { nodeId: Store_1.GROUP_TREE_ROOT_NODE_ID })), document.getElementById(id));
     };
+    GroupTreeView.prototype.onToggleExpandedState = function () {
+        ajax_1.toggleGroupExpandedState(this.props.nodeId, !this.props.node.expanded);
+    };
     return GroupTreeView;
 }(React.Component));
 exports.GroupTreeView = GroupTreeView;
@@ -440,14 +466,14 @@ exports.GTV = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeV
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var Redux = __webpack_require__(3);
-var Actions_1 = __webpack_require__(0);
+var Redux = __webpack_require__(4);
+var Actions_1 = __webpack_require__(1);
 function flattenTree(node, nodeById) {
     nodeById[node.id] = node;
     if (node.children) {
@@ -472,37 +498,39 @@ exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var site_def_1 = __webpack_require__(7);
-__webpack_require__(4);
-var react_utils_1 = __webpack_require__(5);
-var site_utils_1 = __webpack_require__(8);
-var shortcuts_1 = __webpack_require__(6);
+var site_def_1 = __webpack_require__(8);
+__webpack_require__(5);
+var react_utils_1 = __webpack_require__(6);
+var site_utils_1 = __webpack_require__(9);
+var shortcuts_1 = __webpack_require__(7);
+var ajax_1 = __webpack_require__(0);
 site_def_1["default"].ReactUtils = react_utils_1["default"];
 site_def_1["default"].Utils = site_utils_1["default"];
 site_def_1["default"].Shortcuts = shortcuts_1["default"];
+site_def_1["default"].Ajax = ajax_1["default"];
 window.$site = site_def_1["default"];
 
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = React;
 
 /***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = ReactDOM;
+module.exports = React;
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports) {
+
+module.exports = ReactDOM;
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = ReactRedux;

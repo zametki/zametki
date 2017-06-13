@@ -6,6 +6,7 @@
 .tree-junction {
     display: block;
     margin-left: -10px;
+    cursor: pointer;
 }
 
 .tree-junction-collapsed:before {

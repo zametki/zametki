@@ -2,7 +2,7 @@ package com.github.zametki.provider;
 
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
-import com.github.zametki.component.LentaPageState;
+import com.github.zametki.component.WorkspacePageState;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.util.AbstractListProvider;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 public class LentaProvider extends AbstractListProvider<ZametkaId> {
 
     @NotNull
-    private final LentaPageState state;
+    private final WorkspacePageState state;
 
-    public LentaProvider(@NotNull LentaPageState state) {
+    public LentaProvider(@NotNull WorkspacePageState state) {
         this.state = state;
     }
 

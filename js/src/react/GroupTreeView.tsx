@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as ReactRedux from "react-redux";
 import {appStore, AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTreeNode} from "./Store";
+import {toggleGroupExpandedState} from "../api/ajax";
 
 
 type OwnProps = {
@@ -40,6 +41,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
         if (typeof props.nodeId === "undefined") {
             throw new Error("no node id");
         }
+        this.onToggleExpandedState = this.onToggleExpandedState.bind(this);
     }
 
     render() {
@@ -60,7 +62,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
                         <table className="w100">
                             <tr>
                                 <td className="tree-junction-td">
-                                    <a className={treeJunctionClass}></a>
+                                    <a className={treeJunctionClass} onClick={this.onToggleExpandedState}></a>
                                 </td>
                                 <td>
                                     <div className="tree-content">
@@ -90,6 +92,10 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
             </ReactRedux.Provider>,
             document.getElementById(id)
         );
+    }
+
+    onToggleExpandedState() {
+        toggleGroupExpandedState(this.props.nodeId, !this.props.node.expanded);
     }
 }
 

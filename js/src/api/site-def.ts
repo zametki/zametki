@@ -7,5 +7,8 @@ export default {
     Utils: undefined,
 
     /** Key bindings support */
-    Shortcuts: undefined
+    Shortcuts: undefined,
+
+    /** Ajax calls to Wicket backend */
+    Ajax: undefined
 }

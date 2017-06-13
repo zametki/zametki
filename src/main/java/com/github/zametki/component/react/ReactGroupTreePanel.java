@@ -7,6 +7,7 @@ import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.group.GroupTreeModel;
 import com.github.zametki.component.group.GroupTreeNode;
 import com.github.zametki.event.GroupTreeChangeEvent;
+import com.github.zametki.event.GroupTreeExpandedStateChangeEvent;
 import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
 import com.github.zametki.event.dispatcher.OnModelUpdate;
@@ -45,6 +46,11 @@ public class ReactGroupTreePanel extends Panel {
 
     @OnPayload(GroupUpdateEvent.class)
     public void onGroupUpdated(GroupUpdateEvent e) {
+        e.target.appendJavaScript(getUpdateScript());
+    }
+
+    @OnPayload(GroupTreeExpandedStateChangeEvent.class)
+    public void onGroupUpdated(GroupTreeExpandedStateChangeEvent e) {
         e.target.appendJavaScript(getUpdateScript());
     }
 
