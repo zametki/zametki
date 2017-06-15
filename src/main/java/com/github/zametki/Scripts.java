@@ -23,9 +23,9 @@ public class Scripts {
 
     public static final JavaScriptUrlReferenceHeaderItem TEXTILLATE_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/textillate/0.4.0/jquery.textillate.min.js", "textillate.js");
 
-    public static final JavaScriptUrlReferenceHeaderItem REACT_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react.min.js", "react.js");
+    public static final JavaScriptUrlReferenceHeaderItem REACT_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js", "react.js");
 
-    public static final JavaScriptUrlReferenceHeaderItem REACT_DOM_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react-dom.min.js", "react-dom.js");
+    public static final JavaScriptUrlReferenceHeaderItem REACT_DOM_JS = forUrl("https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js", "react-dom.js");
 
     public static final JavaScriptUrlReferenceHeaderItem REDUX = forUrl("https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js", "redux.js");
 

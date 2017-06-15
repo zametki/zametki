@@ -1,13 +1,13 @@
 type CallbacksMap = {
-    toggleGroupExpandedState(groupId: number, expanded: boolean)
+    activateGroup(groupId: number)
 }
 
 const callbacks: CallbacksMap = {
-    toggleGroupExpandedState: undefined
+    activateGroup: undefined
 }
 
-export function toggleGroupExpandedState(groupId: number, expanded: boolean) {
-    callbacks.toggleGroupExpandedState(groupId, expanded);
+export function activateGroup(groupId: number) {
+    callbacks.activateGroup(groupId);
 }
 
 export default {

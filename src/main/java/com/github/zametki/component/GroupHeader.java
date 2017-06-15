@@ -32,14 +32,14 @@ public class GroupHeader extends Panel {
     private final WebMarkupContainer angleDownIcon = new ContainerWithId("angle_down_icon");
 
     @NotNull
-    private final IModel<GroupId> activeCategoryModel;
+    private final IModel<GroupId> activeGroupModel;
 
     @NotNull
     private BootstrapModal editGroupModal;
 
     public GroupHeader(String id, @NotNull IModel<GroupId> activeGroupModel) {
         super(id);
-        this.activeCategoryModel = activeGroupModel;
+        this.activeGroupModel = activeGroupModel;
 
         editGroupModal = new BootstrapModal("edit_group_modal", "Редактирование группы", (ComponentFactory) markupId -> {
             Group group = Context.getGroupsDbi().getById(activeGroupModel.getObject());
@@ -88,20 +88,20 @@ public class GroupHeader extends Panel {
     }
 
     private void updateMenuVisibility() {
-        boolean hasCategory = activeCategoryModel.getObject() != null;
-        angleDownIcon.setVisible(hasCategory);
+        boolean hasGroup = activeGroupModel.getObject() != null;
+        angleDownIcon.setVisible(hasGroup);
     }
 
     @OnPayload(GroupUpdateEvent.class)
     public void onGroupUpdated(GroupUpdateEvent e) {
-        if (e.groupId.equals(activeCategoryModel.getObject())) {
+        if (e.groupId.equals(activeGroupModel.getObject())) {
             update(e.target);
         }
     }
 
     @OnModelUpdate
     public void onModelUpdate(@NotNull ModelUpdateAjaxEvent e) {
-        if (e.model == activeCategoryModel) {
+        if (e.model == activeGroupModel) {
             update(e.target);
         }
     }

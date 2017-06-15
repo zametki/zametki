@@ -46,6 +46,7 @@
 
 .tree-node-group-link {
     display: block;
+    cursor: pointer;
 }
 
 .tree-node-active {

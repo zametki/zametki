@@ -1,7 +1,7 @@
 package com.github.zametki.component;
 
 import com.github.zametki.annotation.MountPath;
-import com.github.zametki.behavior.ajax.ExpandCollapseGroupAjaxCallback;
+import com.github.zametki.behavior.ajax.ActivateGroupAjaxCallback;
 import com.github.zametki.component.basic.ComponentFactory;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
@@ -56,7 +56,7 @@ public class WorkspacePage extends BaseUserPage {
         add(new BookmarkablePageLink("logout_link", LogoutPage.class));
         add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
         add(new LentaLink("lenta_link", state.activeGroupModel));
-        add(new ExpandCollapseGroupAjaxCallback());
+        add(new ActivateGroupAjaxCallback(state.activeGroupModel));
 
         ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
         groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
@@ -64,7 +64,7 @@ public class WorkspacePage extends BaseUserPage {
         add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
         if (!pp.get("react").isEmpty()) {
-            add(new ReactGroupTreePanel("groups", state.activeGroupModel));
+            add(new ReactGroupTreePanel("groups"));
         } else {
             add(new GroupTreePanel("groups", state.activeGroupModel));
         }

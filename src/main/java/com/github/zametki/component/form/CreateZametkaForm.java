@@ -36,7 +36,7 @@ public class CreateZametkaForm extends Panel {
     @NotNull
     public final InputArea contentField;
 
-    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeGroup, @NotNull AjaxCallback doneCallback) {
+    public CreateZametkaForm(@NotNull String id, @NotNull IModel<GroupId> activeGroupModel, @NotNull AjaxCallback doneCallback) {
         super(id);
 
         Form form = new Form("form");
@@ -44,7 +44,7 @@ public class CreateZametkaForm extends Panel {
         add(form);
 
         UserId userId = WebUtils.getUserIdOrRedirectHome();
-        FollowingGroupsSelector groupsSelector = new FollowingGroupsSelector("group_selector", userId, activeGroup);
+        FollowingGroupsSelector groupsSelector = new FollowingGroupsSelector("group_selector", userId, activeGroupModel);
         form.add(groupsSelector);
 
         contentField = new InputArea("text");
@@ -72,7 +72,7 @@ public class CreateZametkaForm extends Panel {
                 if (group == null || !group.userId.equals(z.userId)) {
                     z.groupId = GroupUtils.getDefaultUserGroup(z.userId);
                 }
-                WicketUtils.reactiveUpdate(activeGroup, z.groupId, target);
+                WicketUtils.reactiveUpdate(activeGroupModel, z.groupId, target);
                 Context.getZametkaDbi().create(z);
 
                 contentField.clearInput();

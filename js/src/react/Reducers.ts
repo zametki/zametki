@@ -1,6 +1,6 @@
 import * as Redux from "redux";
 import {AppStore, GroupTree, GroupTreeNode} from "./Store";
-import {Action, ActionType_UpdateTree, isAction, UpdateTreeActionPayload} from "./Actions";
+import {Action, ActionType_ToggleTreeNode, ActionType_UpdateTree, isAction, ToggleTreeNodeActionPayload, UpdateTreeActionPayload} from "./Actions";
 
 function flattenTree(node: GroupTreeNode, nodeById: { [nodeId: string]: GroupTreeNode }) {
     nodeById[node.id] = node;
@@ -18,6 +18,14 @@ function groupTree(state: GroupTree = {nodeById: {}}, action: Action<any>): Grou
         return {
             nodeById: flattenTree(action.payload.rootNode, {})
         }
+    } else if (isAction<ToggleTreeNodeActionPayload>(action, ActionType_ToggleTreeNode)) {
+        console.log("expanded: " + action.payload.nodeId + "->" + action.payload.expanded);
+        const nodeById = state.nodeById;
+        const node = nodeById[action.payload.nodeId];
+        if (node) {
+            node.expanded = action.payload.expanded;
+        }
+        return {nodeById: nodeById}
     }
     return state;
 }
