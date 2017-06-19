@@ -7,13 +7,14 @@ export type GroupTreeNode = {
     parentId: number,
     level: number,
     entriesCount: number
-    children?: Array<GroupTreeNode>
+    children?: Array<number>
     active?: boolean
     expanded?: boolean
 }
 
 export type GroupTree = {
     nodeById: { [nodeId: number]: GroupTreeNode }
+    nodeIds: Array<number>
 }
 
 export type AppStore = {

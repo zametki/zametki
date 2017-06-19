@@ -74,11 +74,9 @@ public class ReactGroupTreePanel extends Panel {
     @NotNull
     public String getUpdateScript() {
         GroupTreeModel treeModel = GroupTreeModel.build(WebUtils.getUserOrRedirectHome());
-        JSONObject jsonTree = toJSON((GroupTreeNode) treeModel.getRoot());
-        if (jsonTree == null) {
-            jsonTree = new JSONObject();
-        }
-        return "$site.ReactUtils.onGroupTreeChanged(" + jsonTree.toString() + ");";
+        JSONArray nodes = new JSONArray();
+        treeModel.flatList().forEach(n -> nodes.put(toJSON(n)));
+        return "$site.ReactUtils.onGroupTreeChanged(" + nodes.toString() + ");";
     }
 
     @Nullable
@@ -91,7 +89,7 @@ public class ReactGroupTreePanel extends Panel {
         }
         json.put("id", g.id == null ? 0 : g.id.getDbValue());
         json.put("name", g.name);
-        json.put("parent", g.parentId.intValue);
+        json.put("parentId", g.parentId.intValue);
         json.put("level", node.getLevel());
         json.put("entriesCount", Context.getZametkaDbi().countByGroup(g.userId, groupId));
         int childCount = node.getChildCount();
@@ -99,10 +97,7 @@ public class ReactGroupTreePanel extends Panel {
             JSONArray children = new JSONArray();
             for (int i = 0; i < childCount; i++) {
                 GroupTreeNode childNode = (GroupTreeNode) node.getChildAt(i);
-                JSONObject childJson = toJSON(childNode);
-                if (childJson != null) {
-                    children.put(childJson);
-                }
+                children.put(childNode.getGroupId().intValue);
             }
             if (children.length() > 0) {
                 json.put("children", children);

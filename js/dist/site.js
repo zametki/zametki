@@ -33,9 +33,6 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -63,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -79,12 +76,35 @@ function isAction(action, actionName) {
 exports.isAction = isAction;
 exports.ActionType_UpdateTree = "UpdateTreeAction";
 exports.ActionType_ToggleTreeNode = "ToggleTreeNode";
-exports.createUpdateTreeAction = function (rootNode) { return ({ type: exports.ActionType_UpdateTree, payload: { rootNode: rootNode } }); };
+exports.createUpdateTreeAction = function (nodes) { return ({ type: exports.ActionType_UpdateTree, payload: { nodes: nodes } }); };
 exports.createToggleTreeNodeAction = function (nodeId, expanded) { return ({ type: exports.ActionType_ToggleTreeNode, payload: { nodeId: nodeId, expanded: expanded } }); };
 
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var Redux = __webpack_require__(2);
+var Reducers_1 = __webpack_require__(9);
+exports.GROUP_TREE_ROOT_NODE_ID = 0;
+exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
+    groupTree: { nodeById: {} }
+}, window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
+// Redux.applyMiddleware(thunk),
+);
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = Redux;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -103,36 +123,52 @@ exports["default"] = {
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var Redux = __webpack_require__(4);
-var Reducers_1 = __webpack_require__(11);
-exports.GROUP_TREE_ROOT_NODE_ID = 0;
-exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
-    groupTree: { nodeById: {} }
-}, window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
-// Redux.applyMiddleware(thunk),
-);
-
-
-/***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = $;
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = Redux;
+"use strict";
+
+exports.__esModule = true;
+var site_def_1 = __webpack_require__(6);
+__webpack_require__(7);
+var react_utils_1 = __webpack_require__(8);
+var site_utils_1 = __webpack_require__(14);
+var shortcuts_1 = __webpack_require__(15);
+var ajax_1 = __webpack_require__(3);
+site_def_1["default"].ReactUtils = react_utils_1["default"];
+site_def_1["default"].Utils = site_utils_1["default"];
+site_def_1["default"].Shortcuts = shortcuts_1["default"];
+site_def_1["default"].Ajax = ajax_1["default"];
+window.$site = site_def_1["default"];
+
 
 /***/ }),
-/* 5 */
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = {
+    /** React helpers */
+    ReactUtils: undefined,
+    /** Set of utility functions */
+    Utils: undefined,
+    /** Key bindings support */
+    Shortcuts: undefined,
+    /** Ajax calls to Wicket backend */
+    Ajax: undefined
+};
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -166,21 +202,19 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var Store_1 = __webpack_require__(2);
+var Store_1 = __webpack_require__(1);
 var GroupTreeView_1 = __webpack_require__(10);
 var Actions_1 = __webpack_require__(0);
-function renderGroupTree(id) {
-    console.log("renderGroupTree: " + id);
-    GroupTreeView_1.GroupTreeView.wrap(id);
+function renderGroupTree(elementId) {
+    GroupTreeView_1.GroupTreeView.wrap(elementId);
 }
 function onGroupTreeChanged(rootNode) {
-    console.log("onGroupTreeChanged: " + rootNode);
     var updateTreeAction = Actions_1.createUpdateTreeAction(rootNode);
     //noinspection TypeScriptValidateTypes
     Store_1.appStore.dispatch(updateTreeAction);
@@ -192,73 +226,185 @@ exports["default"] = {
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var $ = __webpack_require__(3);
-function isABootstrapModalOpen() {
-    return $(".modal.show").length > 0;
-}
-function isInInput(e) {
-    var el = $(e.target);
-    return (el.is("input") || el.is("textarea"));
-}
-function bindWorkspacePageKeys() {
-    $(document).on("keydown", function (e) {
-        if (isABootstrapModalOpen() || isInInput(e)) {
-            return;
-        }
-        if (e.which === 65 || e.which === 97) {
-            var $btn = $("#add-zametka-button");
-            if ($btn.hasClass("active-create")) {
-                return;
-            }
-            $btn.click();
-        }
-        else if (e.which === 27) {
-            var clicked = e.originalEvent.srcElement.getAttribute("id");
-            console.log(clicked);
-            if (clicked === "create-zametka-text-area") {
-                $("#create-zametka-cancel-button").click();
-            }
-        }
-    });
-}
-exports["default"] = {
-    bindWorkspacePageKeys: bindWorkspacePageKeys
-};
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-exports["default"] = {
-    /** React helpers */
-    ReactUtils: undefined,
-    /** Set of utility functions */
-    Utils: undefined,
-    /** Key bindings support */
-    Shortcuts: undefined,
-    /** Ajax calls to Wicket backend */
-    Ajax: undefined
-};
-
-
-/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 exports.__esModule = true;
-var $ = __webpack_require__(3);
+var Redux = __webpack_require__(2);
+var Actions_1 = __webpack_require__(0);
+/** Group Tree reducer */
+function groupTree(state, action) {
+    if (state === void 0) { state = { nodeById: {}, nodeIds: [] }; }
+    if (Actions_1.isAction(action, Actions_1.ActionType_UpdateTree)) {
+        var nodeById_1 = {};
+        var nodeIds_1 = [];
+        action.payload.nodes.map(function (n) {
+            nodeById_1[n.id] = n;
+            nodeIds_1.push(n.id);
+        });
+        return { nodeById: nodeById_1, nodeIds: nodeIds_1 };
+    }
+    else if (Actions_1.isAction(action, Actions_1.ActionType_ToggleTreeNode)) {
+        var nodeById = state.nodeById;
+        var node = nodeById[action.payload.nodeId];
+        if (node) {
+            node.expanded = action.payload.expanded;
+        }
+        return __assign({}, state, { nodeById: nodeById });
+    }
+    return state;
+}
+exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+exports.__esModule = true;
+var React = __webpack_require__(11);
+var ReactDOM = __webpack_require__(12);
+var ReactRedux = __webpack_require__(13);
+var Store_1 = __webpack_require__(1);
+var ajax_1 = __webpack_require__(3);
+var Actions_1 = __webpack_require__(0);
+/** Maps Store state to component props */
+var mapStateToProps = function (store, ownProps) {
+    return {
+        node: __assign({}, store.groupTree.nodeById[ownProps.node.id])
+    };
+};
+// noinspection JSUnusedLocalSymbols
+function mapDispatchToProps(dispatch) {
+    return {
+        expandNode: function (nodeId, expanded) { return dispatch(Actions_1.createToggleTreeNodeAction(nodeId, expanded)); }
+    };
+}
+var GroupTreeView = (function (_super) {
+    __extends(GroupTreeView, _super);
+    function GroupTreeView(props, context) {
+        var _this = 
+        //noinspection TypeScriptValidateTypes
+        _super.call(this, props, context) || this;
+        if (typeof props.node === "undefined") {
+            throw new Error("no node id");
+        }
+        _this.onToggleExpandedState = _this.onToggleExpandedState.bind(_this);
+        _this.activateGroup = _this.activateGroup.bind(_this);
+        return _this;
+    }
+    GroupTreeView.prototype.render = function () {
+        if (!this.props.node) {
+            console.log("Node not found: " + this.props);
+            return null;
+        }
+        var groupTree = Store_1.appStore.getState().groupTree;
+        var children = this.props.node.children;
+        var renderSubtree = children && children.length > 0 && (this.props.node.expanded);
+        var subTree = renderSubtree ? children.map(function (childId) { return React.createElement(exports.GTV, { node: groupTree.nodeById[childId], key: "node-" + childId }); }) : undefined;
+        var nodeComponent;
+        var treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
+        var treeJunctionClass = "tree-junction" + (children && children.length > 0 ? (this.props.node.expanded ? " tree-junction-expanded" : " tree-junction-collapsed") : "");
+        var countLabel = null;
+        if (this.props.node.entriesCount > 0) {
+            countLabel = React.createElement("span", { className: "badge zametka-count-badge float-right ml-1" }, this.props.node.entriesCount);
+        }
+        if (this.props.node.id != 0) {
+            nodeComponent = (React.createElement("div", { className: treeNodeClass },
+                React.createElement("div", { style: { paddingLeft: this.props.node.level * 16 } },
+                    React.createElement("table", { className: "w100" },
+                        React.createElement("tbody", null,
+                            React.createElement("tr", null,
+                                React.createElement("td", { className: "tree-junction-td" },
+                                    React.createElement("a", { className: treeJunctionClass, onClick: this.onToggleExpandedState })),
+                                React.createElement("td", null,
+                                    React.createElement("div", { className: "tree-content" },
+                                        React.createElement("a", { className: "tree-node-group-link", onClick: this.activateGroup },
+                                            countLabel,
+                                            React.createElement("span", null, this.props.node.name))))))))));
+        }
+        return (React.createElement("div", null,
+            nodeComponent,
+            subTree));
+    };
+    GroupTreeView.wrap = function (elementId) {
+        var groupTree = Store_1.appStore.getState().groupTree;
+        var nodeById = groupTree.nodeById;
+        var treeNodes = groupTree.nodeIds
+            .filter(function (id) { return nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID; })
+            .map(function (id) { return React.createElement(exports.GTV, { node: nodeById[id], key: "node-" + id }); });
+        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
+            React.createElement("div", null, treeNodes)), document.getElementById(elementId));
+    };
+    GroupTreeView.prototype.onToggleExpandedState = function () {
+        this.props.expandNode(this.props.node.id, !this.props.node.expanded);
+    };
+    GroupTreeView.prototype.activateGroup = function () {
+        ajax_1.activateGroup(this.props.node.id);
+    };
+    return GroupTreeView;
+}(React.Component));
+exports.GroupTreeView = GroupTreeView;
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+exports.GTV = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView);
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = React;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = ReactDOM;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = ReactRedux;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var $ = __webpack_require__(4);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -382,180 +528,45 @@ exports["default"] = {
 
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = __webpack_require__(13);
-var ReactDOM = __webpack_require__(14);
-var ReactRedux = __webpack_require__(15);
-var Store_1 = __webpack_require__(2);
-var ajax_1 = __webpack_require__(1);
-var Actions_1 = __webpack_require__(0);
-/** Maps Store state to component props */
-var mapStateToProps = function (store, ownProps) {
-    return {
-        node: store.groupTree.nodeById[ownProps.nodeId]
-    };
-};
-// noinspection JSUnusedLocalSymbols
-function mapDispatchToProps(dispatch) {
-    return {
-        expandNode: function (nodeId, expanded) { return dispatch(Actions_1.createToggleTreeNodeAction(nodeId, expanded)); }
-    };
-}
-var GroupTreeView = (function (_super) {
-    __extends(GroupTreeView, _super);
-    function GroupTreeView(props, context) {
-        var _this = 
-        //noinspection TypeScriptValidateTypes
-        _super.call(this, props, context) || this;
-        if (typeof props.nodeId === "undefined") {
-            throw new Error("no node id");
-        }
-        _this.onToggleExpandedState = _this.onToggleExpandedState.bind(_this);
-        _this.activateGroup = _this.activateGroup.bind(_this);
-        return _this;
-    }
-    GroupTreeView.prototype.render = function () {
-        if (!this.props.node) {
-            return null;
-        }
-        var children = this.props.node.children;
-        var isRoot = this.props.nodeId === Store_1.GROUP_TREE_ROOT_NODE_ID;
-        var renderSubtree = children && children.length > 0 && (isRoot || this.props.node.expanded);
-        var subTree = renderSubtree ? children.map(function (child) { return React.createElement(exports.GTV, { nodeId: child.id }); }) : undefined;
-        var nodeComponent;
-        var treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
-        var treeJunctionClass = "tree-junction" + (children && children.length > 0 ? (this.props.node.expanded ? " tree-junction-expanded" : " tree-junction-collapsed") : "");
-        var countLabel = null;
-        if (this.props.node.entriesCount > 0) {
-            countLabel = React.createElement("span", { className: "badge zametka-count-badge float-right ml-1" }, this.props.node.entriesCount);
-        }
-        if (this.props.node.id != 0) {
-            nodeComponent = (React.createElement("div", { className: treeNodeClass },
-                React.createElement("div", { style: { paddingLeft: this.props.node.level * 16 } },
-                    React.createElement("table", { className: "w100" },
-                        React.createElement("tr", null,
-                            React.createElement("td", { className: "tree-junction-td" },
-                                React.createElement("a", { className: treeJunctionClass, onClick: this.onToggleExpandedState })),
-                            React.createElement("td", null,
-                                React.createElement("div", { className: "tree-content" },
-                                    React.createElement("a", { className: "tree-node-group-link", onClick: this.activateGroup },
-                                        countLabel,
-                                        React.createElement("span", null, this.props.node.name)))))))));
-        }
-        return (React.createElement("div", null,
-            nodeComponent,
-            subTree));
-    };
-    GroupTreeView.wrap = function (id) {
-        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
-            React.createElement(exports.GTV, { nodeId: Store_1.GROUP_TREE_ROOT_NODE_ID })), document.getElementById(id));
-    };
-    GroupTreeView.prototype.onToggleExpandedState = function () {
-        this.props.expandNode(this.props.node.id, !this.props.node.expanded);
-    };
-    GroupTreeView.prototype.activateGroup = function () {
-        ajax_1.activateGroup(this.props.node.id);
-    };
-    return GroupTreeView;
-}(React.Component));
-exports.GroupTreeView = GroupTreeView;
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-exports.GTV = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView);
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var Redux = __webpack_require__(4);
-var Actions_1 = __webpack_require__(0);
-function flattenTree(node, nodeById) {
-    nodeById[node.id] = node;
-    if (node.children) {
-        for (var _i = 0, _a = node.children; _i < _a.length; _i++) {
-            var child = _a[_i];
-            flattenTree(child, nodeById);
-        }
-    }
-    return nodeById;
-}
-/** Group Tree reducer */
-function groupTree(state, action) {
-    if (state === void 0) { state = { nodeById: {} }; }
-    if (Actions_1.isAction(action, Actions_1.ActionType_UpdateTree)) {
-        return {
-            nodeById: flattenTree(action.payload.rootNode, {})
-        };
-    }
-    else if (Actions_1.isAction(action, Actions_1.ActionType_ToggleTreeNode)) {
-        console.log("expanded: " + action.payload.nodeId + "->" + action.payload.expanded);
-        var nodeById = state.nodeById;
-        var node = nodeById[action.payload.nodeId];
-        if (node) {
-            node.expanded = action.payload.expanded;
-        }
-        return { nodeById: nodeById };
-    }
-    return state;
-}
-exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var site_def_1 = __webpack_require__(8);
-__webpack_require__(5);
-var react_utils_1 = __webpack_require__(6);
-var site_utils_1 = __webpack_require__(9);
-var shortcuts_1 = __webpack_require__(7);
-var ajax_1 = __webpack_require__(1);
-site_def_1["default"].ReactUtils = react_utils_1["default"];
-site_def_1["default"].Utils = site_utils_1["default"];
-site_def_1["default"].Shortcuts = shortcuts_1["default"];
-site_def_1["default"].Ajax = ajax_1["default"];
-window.$site = site_def_1["default"];
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = React;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-module.exports = ReactDOM;
-
-/***/ }),
 /* 15 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = ReactRedux;
+"use strict";
+
+exports.__esModule = true;
+var $ = __webpack_require__(4);
+function isABootstrapModalOpen() {
+    return $(".modal.show").length > 0;
+}
+function isInInput(e) {
+    var el = $(e.target);
+    return (el.is("input") || el.is("textarea"));
+}
+function bindWorkspacePageKeys() {
+    $(document).on("keydown", function (e) {
+        if (isABootstrapModalOpen() || isInInput(e)) {
+            return;
+        }
+        if (e.which === 65 || e.which === 97) {
+            var $btn = $("#add-zametka-button");
+            if ($btn.hasClass("active-create")) {
+                return;
+            }
+            $btn.click();
+        }
+        else if (e.which === 27) {
+            var clicked = e.originalEvent.srcElement.getAttribute("id");
+            console.log(clicked);
+            if (clicked === "create-zametka-text-area") {
+                $("#create-zametka-cancel-button").click();
+            }
+        }
+    });
+}
+exports["default"] = {
+    bindWorkspacePageKeys: bindWorkspacePageKeys
+};
+
 
 /***/ })
 /******/ ]);

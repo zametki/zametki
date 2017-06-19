@@ -7,7 +7,7 @@ import {createToggleTreeNodeAction} from "./Actions";
 
 
 type OwnProps = {
-    nodeId: number
+    node: GroupTreeNode
 }
 
 type ConnectedState = {
@@ -21,7 +21,7 @@ type ConnectedDispatch = {
 /** Maps Store state to component props */
 const mapStateToProps = (store: AppStore, ownProps: OwnProps): ConnectedState => {
     return {
-        node: store.groupTree.nodeById[ownProps.nodeId]
+        node: {... store.groupTree.nodeById[ownProps.node.id]}
     }
 }
 
@@ -39,7 +39,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
     constructor(props: GroupTreeViewProps, context: any) {
         //noinspection TypeScriptValidateTypes
         super(props, context);
-        if (typeof props.nodeId === "undefined") {
+        if (typeof props.node === "undefined") {
             throw new Error("no node id");
         }
         this.onToggleExpandedState = this.onToggleExpandedState.bind(this);
@@ -48,12 +48,13 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
 
     render() {
         if (!this.props.node) {
+            console.log("Node not found: " + this.props)
             return null;
         }
+        let groupTree = appStore.getState().groupTree;
         const children = this.props.node.children;
-        const isRoot = this.props.nodeId === GROUP_TREE_ROOT_NODE_ID;
-        const renderSubtree = children && children.length > 0 && (isRoot || this.props.node.expanded);
-        const subTree = renderSubtree ? children.map(child => <GTV nodeId={child.id}/>) : undefined;
+        const renderSubtree = children && children.length > 0 && (this.props.node.expanded);
+        const subTree = renderSubtree ? children.map(childId => <GTV node={groupTree.nodeById[childId]} key={"node-" + childId}/>) : undefined;
         let nodeComponent;
         const treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
         const treeJunctionClass = "tree-junction" + (children && children.length > 0 ? (this.props.node.expanded ? " tree-junction-expanded" : " tree-junction-collapsed") : "");
@@ -66,6 +67,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
                 <div className={treeNodeClass}>
                     <div style={{paddingLeft: this.props.node.level * 16}}>
                         <table className="w100">
+                            <tbody>
                             <tr>
                                 <td className="tree-junction-td">
                                     <a className={treeJunctionClass} onClick={this.onToggleExpandedState}></a>
@@ -79,6 +81,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
                                     </div>
                                 </td>
                             </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>);
@@ -91,12 +94,19 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
         );
     }
 
-    static wrap(id: string) {
+    static wrap(elementId: string) {
+        let groupTree = appStore.getState().groupTree;
+        let nodeById = groupTree.nodeById;
+        const treeNodes = groupTree.nodeIds
+            .filter(id => nodeById[id].parentId === GROUP_TREE_ROOT_NODE_ID)
+            .map(id => <GTV node={nodeById[id]} key={"node-" + id}/>)
         ReactDOM.render(
             <ReactRedux.Provider store={appStore}>
-                <GTV nodeId={GROUP_TREE_ROOT_NODE_ID}/>
+                <div>
+                    {treeNodes}
+                </div>
             </ReactRedux.Provider>,
-            document.getElementById(id)
+            document.getElementById(elementId)
         );
     }
 

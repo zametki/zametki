@@ -2,14 +2,11 @@ import {appStore, GroupTreeNode} from "../react/Store";
 import {GroupTreeView} from "../react/GroupTreeView";
 import {createUpdateTreeAction} from "../react/Actions";
 
-function renderGroupTree(id: string): void {
-    console.log(`renderGroupTree: ${id}`);
-    GroupTreeView.wrap(id);
+function renderGroupTree(elementId: string): void {
+    GroupTreeView.wrap(elementId);
 }
 
-function onGroupTreeChanged(rootNode: GroupTreeNode) {
-    console.log(`onGroupTreeChanged: ${rootNode}`);
-
+function onGroupTreeChanged(rootNode: Array<GroupTreeNode>) {
     const updateTreeAction = createUpdateTreeAction(rootNode);
     //noinspection TypeScriptValidateTypes
     appStore.dispatch(updateTreeAction);
