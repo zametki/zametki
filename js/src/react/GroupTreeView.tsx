@@ -4,6 +4,7 @@ import * as ReactRedux from "react-redux";
 import {appStore, AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTreeNode} from "./Store";
 import {activateGroup} from "../api/ajax";
 import {createToggleTreeNodeAction} from "./Actions";
+import GroupTreeCountsBadge from "./GroupTreeCountsBadge";
 
 
 type OwnProps = {
@@ -58,10 +59,6 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
         let nodeComponent;
         const treeNodeClass = "tree-node" + (this.props.node.active ? " tree-node-active" : "");
         const treeJunctionClass = "tree-junction" + (children && children.length > 0 ? (this.props.node.expanded ? " tree-junction-expanded" : " tree-junction-collapsed") : "");
-        let countLabel = null;
-        if (this.props.node.entriesCount > 0) {
-            countLabel = <span className="badge zametka-count-badge float-right ml-1">{this.props.node.entriesCount}</span>;
-        }
         if (this.props.node.id != 0) {
             nodeComponent = (
                 <div className={treeNodeClass}>
@@ -75,7 +72,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
                                 <td>
                                     <div className="tree-content">
                                         <a className="tree-node-group-link" onClick={this.activateGroup}>
-                                            {countLabel}
+                                            <GroupTreeCountsBadge node={this.props.node} />
                                             <span>{this.props.node.name}</span>
                                         </a>
                                     </div>

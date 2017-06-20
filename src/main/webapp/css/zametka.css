@@ -17,6 +17,7 @@
     margin-top: 3px;
     background-color: #bbb;
     border-radius: 2px;
+    display: inline-block;
 }
 
 .zametka-content::-webkit-scrollbar {
