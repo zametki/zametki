@@ -37,5 +37,4 @@ class GroupTreeCountsBadge extends React.Component<Props, {}> {
   }
 }
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const GTVB: React.ComponentClass<OwnProps> = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge) as React.ComponentClass<OwnProps>
+export default ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge) as React.ComponentClass<OwnProps>

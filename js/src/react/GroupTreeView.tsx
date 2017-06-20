@@ -4,7 +4,7 @@ import * as ReactRedux from 'react-redux'
 import {appStore, AppStore, GROUP_TREE_ROOT_NODE_ID} from './Store'
 import {activateGroup} from '../api/ajax'
 import {createToggleTreeNodeAction} from './Actions'
-import {GTVB} from './GroupTreeCountsBadge'
+import GroupTreeCountsBadge from './GroupTreeCountsBadge'
 
 type OwnProps = {
   nodeId: number
@@ -88,7 +88,7 @@ export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
                 <td>
                   <div className='tree-content'>
                     <a className='tree-node-group-link' onClick={this.activateGroup}>
-                      <GTVB nodeId={nodeId} />
+                      <GroupTreeCountsBadge nodeId={nodeId} />
                       <span>{name}</span>
                     </a>
                   </div>

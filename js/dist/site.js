@@ -351,7 +351,6 @@ var GroupTreeView = (function (_super) {
             console.error("Node not found: " + this.props);
             return null;
         }
-        console.log("render: " + name);
         return (React.createElement("div", null,
             React.createElement("div", { className: 'tree-node' + (active ? ' tree-node-active' : '') },
                 React.createElement("div", { style: { paddingLeft: level * 16 } },
@@ -363,7 +362,7 @@ var GroupTreeView = (function (_super) {
                                 React.createElement("td", null,
                                     React.createElement("div", { className: 'tree-content' },
                                         React.createElement("a", { className: 'tree-node-group-link', onClick: this.activateGroup },
-                                            React.createElement(GroupTreeCountsBadge_1.GTVB, { nodeId: nodeId }),
+                                            React.createElement(GroupTreeCountsBadge_1["default"], { nodeId: nodeId }),
                                             React.createElement("span", null, name))))))))),
             expanded && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GTV, { nodeId: childId, key: 'node-' + childId }); })));
     };
@@ -429,8 +428,7 @@ var GroupTreeCountsBadge = (function (_super) {
     };
     return GroupTreeCountsBadge;
 }(React.Component));
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-exports.GTVB = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge);
+exports["default"] = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge);
 
 
 /***/ }),
