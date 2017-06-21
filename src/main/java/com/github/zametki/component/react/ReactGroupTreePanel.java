@@ -20,6 +20,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,8 +29,12 @@ public class ReactGroupTreePanel extends Panel {
     @NotNull
     private final ContainerWithId tree = new ContainerWithId("tree");
 
-    public ReactGroupTreePanel(String id) {
+    @NotNull
+    private IModel<GroupId> activeGroupModel;
+
+    public ReactGroupTreePanel(@Nullable String id, @NotNull IModel<GroupId> activeGroupModel) {
         super(id);
+        this.activeGroupModel = activeGroupModel;
         add(tree);
     }
 
@@ -91,6 +96,7 @@ public class ReactGroupTreePanel extends Panel {
         json.put("name", g.name);
         json.put("parentId", g.parentId.intValue);
         json.put("level", node.getLevel());
+        json.put("active", node.getGroupId().equals(activeGroupModel.getObject()));
         json.put("entriesCount", Context.getZametkaDbi().countByGroup(g.userId, groupId));
         int childCount = node.getChildCount();
         if (childCount > 0) {
