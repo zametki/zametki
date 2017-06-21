@@ -156,8 +156,8 @@ exports.__esModule = true;
 var site_def_1 = __webpack_require__(8);
 __webpack_require__(9);
 var react_utils_1 = __webpack_require__(10);
-var site_utils_1 = __webpack_require__(16);
-var shortcuts_1 = __webpack_require__(17);
+var site_utils_1 = __webpack_require__(18);
+var shortcuts_1 = __webpack_require__(19);
 var ajax_1 = __webpack_require__(5);
 site_def_1["default"].ReactUtils = react_utils_1["default"];
 site_def_1["default"].Utils = site_utils_1["default"];
@@ -227,7 +227,7 @@ if (window.Parsley) {
 
 exports.__esModule = true;
 var Store_1 = __webpack_require__(3);
-var GroupTreeView_1 = __webpack_require__(12);
+var GroupTreeView_1 = __webpack_require__(14);
 var Actions_1 = __webpack_require__(0);
 function renderGroupTree(elementId) {
     GroupTreeView_1.GroupTreeView.wrap(elementId);
@@ -260,6 +260,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 exports.__esModule = true;
 var Redux = __webpack_require__(4);
 var Actions_1 = __webpack_require__(0);
+var ClientStorage_1 = __webpack_require__(12);
 /** Group Tree reducer */
 function groupTree(state, action) {
     if (state === void 0) { state = { nodeById: {}, nodeIds: [] }; }
@@ -268,17 +269,18 @@ function groupTree(state, action) {
         var nodeIds_1 = [];
         action.payload.nodes.map(function (n) {
             var old = state.nodeById[n.id];
+            n.expanded = !!old ? old.expanded : ClientStorage_1.ClientStorage.isNodeExpanded(n.id);
             nodeById_1[n.id] = n;
-            nodeById_1[n.id].expanded = old && old.expanded;
             nodeIds_1.push(n.id);
         });
         return { nodeById: nodeById_1, nodeIds: nodeIds_1 };
     }
     else if (Actions_1.isAction(action, Actions_1.ActionType.ToggleTreeNode)) {
         var nodeById = state.nodeById;
-        var node = nodeById[action.payload.nodeId];
-        if (node) {
-            node.expanded = action.payload.expanded;
+        var n = nodeById[action.payload.nodeId];
+        if (n) {
+            n.expanded = action.payload.expanded;
+            ClientStorage_1.ClientStorage.setNodeExpanded(n.id, n.expanded);
         }
         return __assign({}, state, { nodeById: nodeById });
     }
@@ -294,11 +296,45 @@ exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
 "use strict";
 
 exports.__esModule = true;
+var store = __webpack_require__(13);
+var APP = 'Z';
+function getNodeExpandedKey(nodeId) {
+    return APP + "-GT-n-" + nodeId + ".expanded";
+}
+/** Wrapper over localStorage */
+var ClientStorage = (function () {
+    function ClientStorage() {
+    }
+    ClientStorage.isNodeExpanded = function (nodeId) {
+        return !!nodeId && store.get(getNodeExpandedKey(nodeId)) === true;
+    };
+    ClientStorage.setNodeExpanded = function (nodeId, v) {
+        var key = getNodeExpandedKey(nodeId);
+        v ? store.set(key, true) : store.remove(key);
+    };
+    return ClientStorage;
+}());
+exports.ClientStorage = ClientStorage;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = store;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
 var React = __webpack_require__(1);
-var react_dom_1 = __webpack_require__(13);
+var react_dom_1 = __webpack_require__(15);
 var react_redux_1 = __webpack_require__(2);
 var Store_1 = __webpack_require__(3);
-var GroupTreeNodePanel_1 = __webpack_require__(14);
+var GroupTreeNodePanel_1 = __webpack_require__(16);
 var GroupTreeView = (function () {
     function GroupTreeView() {
     }
@@ -317,13 +353,13 @@ exports.GroupTreeView = GroupTreeView;
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = ReactDOM;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -343,7 +379,7 @@ var React = __webpack_require__(1);
 var ReactRedux = __webpack_require__(2);
 var ajax_1 = __webpack_require__(5);
 var Actions_1 = __webpack_require__(0);
-var GroupTreeCountsBadge_1 = __webpack_require__(15);
+var GroupTreeCountsBadge_1 = __webpack_require__(17);
 /** Maps Store state to component props */
 var mapStateToProps = function (store, ownProps) {
     var node = store.groupTree.nodeById[ownProps.nodeId];
@@ -405,7 +441,7 @@ exports.GroupTreeNodePanel = ReactRedux.connect(mapStateToProps, mapDispatchToPr
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -452,7 +488,7 @@ exports.GroupTreeCountsBadge = ReactRedux.connect(mapStateToProps, null)(GroupTr
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -582,7 +618,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

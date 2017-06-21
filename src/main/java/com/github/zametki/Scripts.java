@@ -28,9 +28,11 @@ public class Scripts {
 
     public static final JavaScriptUrlReferenceHeaderItem REACT_DOM_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"), "react-dom.js");
 
-    public static final JavaScriptUrlReferenceHeaderItem REDUX = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.0/redux.min.js"), "redux.js");
+    public static final JavaScriptUrlReferenceHeaderItem REDUX_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.0/redux.min.js"), "redux.js");
 
-    public static final JavaScriptUrlReferenceHeaderItem REACT_REDUX = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/react-redux/5.0.5/react-redux.min.js"), "react-redux.js");
+    public static final JavaScriptUrlReferenceHeaderItem REACT_REDUX_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/react-redux/5.0.5/react-redux.min.js"), "react-redux.js");
+
+    public static final JavaScriptUrlReferenceHeaderItem STORE_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.20/store.min.js"), "store.js");
 
     @NotNull
     private static String min(@NotNull String url) {

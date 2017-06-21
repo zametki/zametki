@@ -8,7 +8,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /\.ts(x)?$/, loader: "ts-loader"}
+            {test: /\.ts(x)?$/, loader: "ts-loader?silent=true"}
         ]
     },
     externals: {
@@ -17,6 +17,7 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM",
         "redux": "Redux",
-        "react-redux": "ReactRedux"
+        "react-redux": "ReactRedux",
+        "store": "store"
     }
 };

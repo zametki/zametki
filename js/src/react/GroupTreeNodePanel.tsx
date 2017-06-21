@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from './Store'
-import {activateGroup} from '../api/ajax'
+import {activateGroup} from '../utils/ajax'
 import {createToggleTreeNodeAction} from './Actions'
 import {GroupTreeCountsBadge} from './GroupTreeCountsBadge'
 
