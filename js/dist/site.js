@@ -88,12 +88,24 @@ exports.createToggleTreeNodeAction = function (nodeId, expanded) { return ({ typ
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+module.exports = React;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = ReactRedux;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var Redux = __webpack_require__(2);
+var Redux = __webpack_require__(4);
 var Reducers_1 = __webpack_require__(11);
 exports.GROUP_TREE_ROOT_NODE_ID = 0;
 exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
@@ -104,22 +116,10 @@ exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = Redux;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = React;
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = ReactRedux;
+module.exports = Redux;
 
 /***/ }),
 /* 5 */
@@ -156,8 +156,8 @@ exports.__esModule = true;
 var site_def_1 = __webpack_require__(8);
 __webpack_require__(9);
 var react_utils_1 = __webpack_require__(10);
-var site_utils_1 = __webpack_require__(15);
-var shortcuts_1 = __webpack_require__(16);
+var site_utils_1 = __webpack_require__(16);
+var shortcuts_1 = __webpack_require__(17);
 var ajax_1 = __webpack_require__(5);
 site_def_1["default"].ReactUtils = react_utils_1["default"];
 site_def_1["default"].Utils = site_utils_1["default"];
@@ -226,7 +226,7 @@ if (window.Parsley) {
 "use strict";
 
 exports.__esModule = true;
-var Store_1 = __webpack_require__(1);
+var Store_1 = __webpack_require__(3);
 var GroupTreeView_1 = __webpack_require__(12);
 var Actions_1 = __webpack_require__(0);
 function renderGroupTree(elementId) {
@@ -258,7 +258,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 exports.__esModule = true;
-var Redux = __webpack_require__(2);
+var Redux = __webpack_require__(4);
 var Actions_1 = __webpack_require__(0);
 /** Group Tree reducer */
 function groupTree(state, action) {
@@ -293,92 +293,27 @@ exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 exports.__esModule = true;
-var React = __webpack_require__(3);
-var ReactDOM = __webpack_require__(13);
-var ReactRedux = __webpack_require__(4);
-var Store_1 = __webpack_require__(1);
-var ajax_1 = __webpack_require__(5);
-var Actions_1 = __webpack_require__(0);
-var GroupTreeCountsBadge_1 = __webpack_require__(14);
-/** Maps Store state to component props */
-var mapStateToProps = function (store, ownProps) {
-    var node = store.groupTree.nodeById[ownProps.nodeId];
-    return {
-        name: node.name,
-        subGroups: node.children,
-        active: node.active,
-        expanded: node.expanded,
-        level: node.level
-    };
-};
-// noinspection JSUnusedLocalSymbols
-function mapDispatchToProps(dispatch) {
-    return {
-        expandNode: function (nodeId, expanded) { return dispatch(Actions_1.createToggleTreeNodeAction(nodeId, expanded)); }
-    };
-}
-var GroupTreeView = (function (_super) {
-    __extends(GroupTreeView, _super);
-    function GroupTreeView(props, context) {
-        var _this = 
-        //noinspection TypeScriptValidateTypes
-        _super.call(this, props, context) || this;
-        _this.onToggleExpandedState = _this.onToggleExpandedState.bind(_this);
-        _this.activateGroup = _this.activateGroup.bind(_this);
-        return _this;
+var React = __webpack_require__(1);
+var react_dom_1 = __webpack_require__(13);
+var react_redux_1 = __webpack_require__(2);
+var Store_1 = __webpack_require__(3);
+var GroupTreeNodePanel_1 = __webpack_require__(14);
+var GroupTreeView = (function () {
+    function GroupTreeView() {
     }
     GroupTreeView.wrap = function (elementId) {
         var groupTree = Store_1.appStore.getState().groupTree;
         var nodeById = groupTree.nodeById;
         var treeNodes = groupTree.nodeIds
             .filter(function (id) { return nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID; })
-            .map(function (id) { return React.createElement(exports.GTV, { nodeId: id, key: 'node-' + id }); });
-        ReactDOM.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
+            .map(function (id) { return React.createElement(GroupTreeNodePanel_1.GroupTreeNodePanel, { nodeId: id, key: 'node-' + id }); });
+        react_dom_1.render(React.createElement(react_redux_1.Provider, { store: Store_1.appStore },
             React.createElement("div", null, treeNodes)), document.getElementById(elementId));
     };
-    GroupTreeView.prototype.render = function () {
-        var _a = this.props, nodeId = _a.nodeId, name = _a.name, subGroups = _a.subGroups, active = _a.active, expanded = _a.expanded, level = _a.level;
-        if (!name) {
-            console.error("Node not found: " + this.props);
-            return null;
-        }
-        return (React.createElement("div", null,
-            React.createElement("div", { className: 'tree-node' + (active ? ' tree-node-active' : '') },
-                React.createElement("div", { style: { paddingLeft: level * 16 } },
-                    React.createElement("table", { className: 'w100' },
-                        React.createElement("tbody", null,
-                            React.createElement("tr", null,
-                                React.createElement("td", { className: 'tree-junction-td' },
-                                    React.createElement("a", { className: 'tree-junction' + (subGroups && subGroups.length > 0 ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : ''), onClick: this.onToggleExpandedState })),
-                                React.createElement("td", null,
-                                    React.createElement("div", { className: 'tree-content' },
-                                        React.createElement("a", { className: 'tree-node-group-link', onClick: this.activateGroup },
-                                            React.createElement(GroupTreeCountsBadge_1["default"], { nodeId: nodeId }),
-                                            React.createElement("span", null, name))))))))),
-            expanded && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GTV, { nodeId: childId, key: 'node-' + childId }); })));
-    };
-    GroupTreeView.prototype.onToggleExpandedState = function () {
-        this.props.expandNode(this.props.nodeId, !this.props.expanded);
-    };
-    GroupTreeView.prototype.activateGroup = function () {
-        ajax_1.activateGroup(this.props.nodeId);
-    };
     return GroupTreeView;
-}(React.Component));
+}());
 exports.GroupTreeView = GroupTreeView;
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-exports.GTV = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeView);
 
 
 /***/ }),
@@ -404,8 +339,90 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var React = __webpack_require__(3);
-var ReactRedux = __webpack_require__(4);
+var React = __webpack_require__(1);
+var ReactRedux = __webpack_require__(2);
+var ajax_1 = __webpack_require__(5);
+var Actions_1 = __webpack_require__(0);
+var GroupTreeCountsBadge_1 = __webpack_require__(15);
+/** Maps Store state to component props */
+var mapStateToProps = function (store, ownProps) {
+    var node = store.groupTree.nodeById[ownProps.nodeId];
+    return {
+        name: node.name,
+        subGroups: node.children,
+        active: node.active,
+        expanded: node.expanded,
+        level: node.level
+    };
+};
+// noinspection JSUnusedLocalSymbols
+function mapDispatchToProps(dispatch) {
+    return {
+        expandNode: function (nodeId, expanded) { return dispatch(Actions_1.createToggleTreeNodeAction(nodeId, expanded)); }
+    };
+}
+var GroupTreeNodePanelImpl = (function (_super) {
+    __extends(GroupTreeNodePanelImpl, _super);
+    function GroupTreeNodePanelImpl(props, context) {
+        var _this = 
+        //noinspection TypeScriptValidateTypes
+        _super.call(this, props, context) || this;
+        _this.onToggleExpandedState = _this.onToggleExpandedState.bind(_this);
+        _this.activateGroup = _this.activateGroup.bind(_this);
+        return _this;
+    }
+    GroupTreeNodePanelImpl.prototype.render = function () {
+        var _a = this.props, nodeId = _a.nodeId, name = _a.name, subGroups = _a.subGroups, active = _a.active, expanded = _a.expanded, level = _a.level;
+        if (!name) {
+            console.error("Node not found: " + this.props);
+            return null;
+        }
+        return (React.createElement("div", null,
+            React.createElement("div", { className: 'tree-node' + (active ? ' tree-node-active' : '') },
+                React.createElement("div", { style: { paddingLeft: level * 16 } },
+                    React.createElement("table", { className: 'w100' },
+                        React.createElement("tbody", null,
+                            React.createElement("tr", null,
+                                React.createElement("td", { className: 'tree-junction-td' },
+                                    React.createElement("a", { className: 'tree-junction' + (subGroups && subGroups.length > 0 ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : ''), onClick: this.onToggleExpandedState })),
+                                React.createElement("td", null,
+                                    React.createElement("div", { className: 'tree-content' },
+                                        React.createElement("a", { className: 'tree-node-group-link', onClick: this.activateGroup },
+                                            React.createElement(GroupTreeCountsBadge_1.GroupTreeCountsBadge, { nodeId: nodeId }),
+                                            React.createElement("span", null, name))))))))),
+            expanded && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GroupTreeNodePanel, { nodeId: childId, key: 'node-' + childId }); })));
+    };
+    GroupTreeNodePanelImpl.prototype.onToggleExpandedState = function () {
+        this.props.expandNode(this.props.nodeId, !this.props.expanded);
+    };
+    GroupTreeNodePanelImpl.prototype.activateGroup = function () {
+        ajax_1.activateGroup(this.props.nodeId);
+    };
+    return GroupTreeNodePanelImpl;
+}(React.Component));
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+exports.GroupTreeNodePanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodePanelImpl);
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+var React = __webpack_require__(1);
+var ReactRedux = __webpack_require__(2);
 /** Maps Store state to component props */
 var mapStateToProps = function (store, ownProps) {
     var node = store.groupTree.nodeById[ownProps.nodeId];
@@ -413,28 +430,29 @@ var mapStateToProps = function (store, ownProps) {
         entriesCount: node.entriesCount
     };
 };
-var GroupTreeCountsBadge = (function (_super) {
-    __extends(GroupTreeCountsBadge, _super);
-    function GroupTreeCountsBadge() {
+var GroupTreeCountsBadgeImpl = (function (_super) {
+    __extends(GroupTreeCountsBadgeImpl, _super);
+    function GroupTreeCountsBadgeImpl() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    GroupTreeCountsBadge.prototype.shouldComponentUpdate = function (nextProps) {
+    GroupTreeCountsBadgeImpl.prototype.shouldComponentUpdate = function (nextProps) {
         return nextProps.entriesCount !== this.props.entriesCount;
     };
-    GroupTreeCountsBadge.prototype.render = function () {
+    GroupTreeCountsBadgeImpl.prototype.render = function () {
         var entriesCount = this.props.entriesCount;
         if (entriesCount <= 0) {
             return null;
         }
         return (React.createElement("div", { className: 'badge zametka-count-badge float-right ml-1' }, entriesCount));
     };
-    return GroupTreeCountsBadge;
+    return GroupTreeCountsBadgeImpl;
 }(React.Component));
-exports["default"] = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge);
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+exports.GroupTreeCountsBadge = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadgeImpl);
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -564,7 +582,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
