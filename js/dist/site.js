@@ -267,7 +267,9 @@ function groupTree(state, action) {
         var nodeById_1 = {};
         var nodeIds_1 = [];
         action.payload.nodes.map(function (n) {
+            var old = state.nodeById[n.id];
             nodeById_1[n.id] = n;
+            nodeById_1[n.id].expanded = old && old.expanded;
             nodeIds_1.push(n.id);
         });
         return { nodeById: nodeById_1, nodeIds: nodeIds_1 };

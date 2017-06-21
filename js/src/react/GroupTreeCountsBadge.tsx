@@ -6,23 +6,23 @@ type OwnProps = {
   nodeId: number
 };
 
-type ConnectedState = {
+type StateProps = {
   entriesCount: number
 }
 
-type Props = ConnectedState & OwnProps
+type AllProps = StateProps & OwnProps
 
 /** Maps Store state to component props */
-const mapStateToProps = (store: AppStore, ownProps: OwnProps): ConnectedState => {
+const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
   let node = store.groupTree.nodeById[ownProps.nodeId]
   return {
     entriesCount: node.entriesCount
   }
 }
 
-class GroupTreeCountsBadge extends React.Component<Props, {}> {
+class GroupTreeCountsBadge extends React.Component<AllProps, {}> {
 
-  shouldComponentUpdate(nextProps: Readonly<Props>): boolean {
+  shouldComponentUpdate(nextProps: Readonly<AllProps>): boolean {
     return nextProps.entriesCount !== this.props.entriesCount
   }
 

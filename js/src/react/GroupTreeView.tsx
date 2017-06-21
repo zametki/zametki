@@ -10,7 +10,7 @@ type OwnProps = {
   nodeId: number
 }
 
-type ConnectedState = {
+type StateProps = {
   name: string
   subGroups: Array<number>
   active: boolean
@@ -18,14 +18,14 @@ type ConnectedState = {
   level: number
 }
 
-type ConnectedDispatch = {
+type DispatchProps = {
   expandNode: (nodeId: number, expanded: boolean) => void
 }
 
-type GroupTreeViewProps = ConnectedState & ConnectedDispatch & OwnProps
+type AllProps = StateProps & DispatchProps & OwnProps
 
 /** Maps Store state to component props */
-const mapStateToProps = (store: AppStore, ownProps: OwnProps): ConnectedState => {
+const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
   let node = store.groupTree.nodeById[ownProps.nodeId]
   return {
     name: node.name,
@@ -37,15 +37,15 @@ const mapStateToProps = (store: AppStore, ownProps: OwnProps): ConnectedState =>
 }
 
 // noinspection JSUnusedLocalSymbols
-function mapDispatchToProps(dispatch): ConnectedDispatch {
+function mapDispatchToProps(dispatch): DispatchProps {
   return {
     expandNode: (nodeId, expanded) => dispatch(createToggleTreeNodeAction(nodeId, expanded))
   }
 }
 
-export class GroupTreeView extends React.Component<GroupTreeViewProps, {}> {
+export class GroupTreeView extends React.Component<AllProps, {}> {
 
-  constructor(props: GroupTreeViewProps, context: any) {
+  constructor(props: AllProps, context: any) {
     //noinspection TypeScriptValidateTypes
     super(props, context)
     this.onToggleExpandedState = this.onToggleExpandedState.bind(this)

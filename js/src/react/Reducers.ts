@@ -8,7 +8,9 @@ function groupTree(state: GroupTree = {nodeById: {}, nodeIds: []}, action: Actio
     const nodeById = {}
     const nodeIds = []
     action.payload.nodes.map(n => {
+      const old = state.nodeById[n.id]
       nodeById[n.id] = n
+      nodeById[n.id].expanded = old && old.expanded
       nodeIds.push(n.id)
     })
     return {nodeById, nodeIds}
