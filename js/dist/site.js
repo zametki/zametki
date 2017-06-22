@@ -153,17 +153,17 @@ module.exports = $;
 "use strict";
 
 exports.__esModule = true;
-var site_def_1 = __webpack_require__(8);
+var SiteDef_1 = __webpack_require__(8);
 __webpack_require__(9);
-var react_utils_1 = __webpack_require__(10);
-var site_utils_1 = __webpack_require__(18);
-var shortcuts_1 = __webpack_require__(19);
-var ajax_1 = __webpack_require__(5);
-site_def_1["default"].ReactUtils = react_utils_1["default"];
-site_def_1["default"].Utils = site_utils_1["default"];
-site_def_1["default"].Shortcuts = shortcuts_1["default"];
-site_def_1["default"].Ajax = ajax_1["default"];
-window.$site = site_def_1["default"];
+var Server2Client_1 = __webpack_require__(10);
+var SiteUtils_1 = __webpack_require__(18);
+var Shortcuts_1 = __webpack_require__(19);
+var Client2Server_1 = __webpack_require__(5);
+SiteDef_1["default"].Server2Client = Server2Client_1["default"];
+SiteDef_1["default"].Utils = SiteUtils_1["default"];
+SiteDef_1["default"].Shortcuts = Shortcuts_1["default"];
+SiteDef_1["default"].Ajax = Client2Server_1["default"];
+window.$site = SiteDef_1["default"];
 
 
 /***/ }),
@@ -175,7 +175,7 @@ window.$site = site_def_1["default"];
 exports.__esModule = true;
 exports["default"] = {
     /** React helpers */
-    ReactUtils: undefined,
+    Server2Client: undefined,
     /** Set of utility functions */
     Utils: undefined,
     /** Key bindings support */
@@ -226,6 +226,9 @@ if (window.Parsley) {
 "use strict";
 
 exports.__esModule = true;
+/**
+ * Interface used by server code to trigger client actions.
+ */
 var Store_1 = __webpack_require__(3);
 var GroupTreeView_1 = __webpack_require__(14);
 var Actions_1 = __webpack_require__(0);
@@ -377,7 +380,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var React = __webpack_require__(1);
 var ReactRedux = __webpack_require__(2);
-var ajax_1 = __webpack_require__(5);
+var Client2Server_1 = __webpack_require__(5);
 var Actions_1 = __webpack_require__(0);
 var GroupTreeCountsBadge_1 = __webpack_require__(17);
 /** Maps Store state to component props */
@@ -432,7 +435,7 @@ var GroupTreeNodePanelImpl = (function (_super) {
         this.props.expandNode(this.props.nodeId, !this.props.expanded);
     };
     GroupTreeNodePanelImpl.prototype.activateGroup = function () {
-        ajax_1.activateGroup(this.props.nodeId);
+        Client2Server_1.activateGroup(this.props.nodeId);
     };
     return GroupTreeNodePanelImpl;
 }(React.Component));

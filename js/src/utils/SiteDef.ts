@@ -1,7 +1,7 @@
 export default {
 
     /** React helpers */
-    ReactUtils: undefined,
+    Server2Client: undefined,
 
     /** Set of utility functions */
     Utils: undefined,

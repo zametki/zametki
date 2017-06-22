@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {AppStore} from './Store'
+import {AppStore} from '../Store'
 import * as ReactRedux from 'react-redux'
 
 type OwnProps = {

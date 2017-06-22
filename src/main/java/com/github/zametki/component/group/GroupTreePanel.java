@@ -65,7 +65,7 @@ public class GroupTreePanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(OnDomReadyHeaderItem.forScript(getUpdateScript() + ";$site.ReactUtils.renderGroupTree('" + tree.getMarkupId() + "')"));
+        response.render(OnDomReadyHeaderItem.forScript(getUpdateScript() + ";$site.Server2Client.renderGroupTree('" + tree.getMarkupId() + "')"));
     }
 
     private static final Group ROOT_GROUP = new Group();
@@ -79,7 +79,7 @@ public class GroupTreePanel extends Panel {
         GroupTreeModel treeModel = GroupTreeModel.build(WebUtils.getUserOrRedirectHome());
         JSONArray nodes = new JSONArray();
         treeModel.flatList().forEach(n -> nodes.put(toJSON(n)));
-        return "$site.ReactUtils.onGroupTreeChanged(" + nodes.toString() + ");";
+        return "$site.Server2Client.onGroupTreeChanged(" + nodes.toString() + ");";
     }
 
     @Nullable

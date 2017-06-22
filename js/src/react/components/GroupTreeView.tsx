@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {render} from 'react-dom'
 import {Provider} from 'react-redux'
-import {appStore, GROUP_TREE_ROOT_NODE_ID} from './Store'
+import {appStore, GROUP_TREE_ROOT_NODE_ID} from '../Store'
 import {GroupTreeNodePanel} from './GroupTreeNodePanel'
 
 export class GroupTreeView {
