@@ -79,11 +79,13 @@ var ActionType = (function () {
     }
     return ActionType;
 }());
-ActionType.UpdateTree = 'UpdateTreeAction';
-ActionType.ToggleTreeNode = 'ToggleTreeNode';
+ActionType.UpdateGroupTree = 'UpdateTreeAction';
+ActionType.ToggleGroupTreeNode = 'ToggleGroupTreeNode';
+ActionType.ActivateGroupTreeNode = 'ActivateGroupTreeNode';
 exports.ActionType = ActionType;
-exports.createUpdateTreeAction = function (nodes) { return ({ type: ActionType.UpdateTree, payload: { nodes: nodes } }); };
-exports.createToggleTreeNodeAction = function (nodeId, expanded) { return ({ type: ActionType.ToggleTreeNode, payload: { nodeId: nodeId, expanded: expanded } }); };
+exports.createUpdateGroupTreeAction = function (nodes) { return ({ type: ActionType.UpdateGroupTree, payload: { nodes: nodes } }); };
+exports.createToggleGroupTreeNodeAction = function (nodeId, expanded) { return ({ type: ActionType.ToggleGroupTreeNode, payload: { nodeId: nodeId, expanded: expanded } }); };
+exports.createActivateGroupTreeNodeAction = function (nodeId) { return ({ type: ActionType.ActivateGroupTreeNode, payload: { nodeId: nodeId } }); };
 
 
 /***/ }),
@@ -233,16 +235,20 @@ var Store_1 = __webpack_require__(3);
 var GroupTreeView_1 = __webpack_require__(14);
 var Actions_1 = __webpack_require__(0);
 function renderGroupTree(elementId) {
-    GroupTreeView_1.GroupTreeView.wrap(elementId);
+    GroupTreeView_1.renderGroupTreeView(elementId);
 }
-function onGroupTreeChanged(rootNode) {
-    var updateTreeAction = Actions_1.createUpdateTreeAction(rootNode);
+function dispatchUpdateGroupTreeAction(rootNode) {
     //noinspection TypeScriptValidateTypes
-    Store_1.appStore.dispatch(updateTreeAction);
+    Store_1.appStore.dispatch(Actions_1.createUpdateGroupTreeAction(rootNode));
+}
+function dispatchActivateGroupNodeAction(nodeId) {
+    //noinspection TypeScriptValidateTypes
+    Store_1.appStore.dispatch(Actions_1.createActivateGroupTreeNodeAction(nodeId));
 }
 exports["default"] = {
-    onGroupTreeChanged: onGroupTreeChanged,
-    renderGroupTree: renderGroupTree
+    renderGroupTreeView: GroupTreeView_1.renderGroupTreeView,
+    dispatchUpdateGroupTreeAction: dispatchUpdateGroupTreeAction,
+    dispatchActivateGroupNodeAction: dispatchActivateGroupNodeAction
 };
 
 
@@ -267,29 +273,62 @@ var ClientStorage_1 = __webpack_require__(12);
 /** Group Tree reducer */
 function groupTree(state, action) {
     if (state === void 0) { state = { nodeById: {}, nodeIds: [] }; }
-    if (Actions_1.isAction(action, Actions_1.ActionType.UpdateTree)) {
-        var nodeById_1 = {};
-        var nodeIds_1 = [];
-        action.payload.nodes.map(function (n) {
-            var old = state.nodeById[n.id];
-            n.expanded = !!old ? old.expanded : ClientStorage_1.ClientStorage.isNodeExpanded(n.id);
-            nodeById_1[n.id] = n;
-            nodeIds_1.push(n.id);
-        });
-        return { nodeById: nodeById_1, nodeIds: nodeIds_1 };
+    if (Actions_1.isAction(action, Actions_1.ActionType.UpdateGroupTree)) {
+        return updateGroupTree(state, action.payload);
     }
-    else if (Actions_1.isAction(action, Actions_1.ActionType.ToggleTreeNode)) {
-        var nodeById = state.nodeById;
-        var n = nodeById[action.payload.nodeId];
-        if (n) {
-            n.expanded = action.payload.expanded;
-            ClientStorage_1.ClientStorage.setNodeExpanded(n.id, n.expanded);
-        }
-        return __assign({}, state, { nodeById: nodeById });
+    else if (Actions_1.isAction(action, Actions_1.ActionType.ToggleGroupTreeNode)) {
+        return toggleGroupTreeNode(state, action.payload);
+    }
+    else if (Actions_1.isAction(action, Actions_1.ActionType.ActivateGroupTreeNode)) {
+        return activateGroupTreeNode(state, action.payload);
     }
     return state;
 }
 exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
+function updateGroupTree(state, payload) {
+    var nodeById = {};
+    var nodeIds = [];
+    payload.nodes.map(function (n) {
+        var old = state.nodeById[n.id];
+        n.expanded = !!old ? old.expanded : ClientStorage_1.ClientStorage.isNodeExpanded(n.id);
+        nodeById[n.id] = n;
+        nodeIds.push(n.id);
+    });
+    return __assign({}, state, { nodeById: nodeById, nodeIds: nodeIds });
+}
+function toggleGroupTreeNode(state, payload) {
+    var nodeById = state.nodeById;
+    var n = nodeById[payload.nodeId];
+    if (n) {
+        n.expanded = payload.expanded;
+        ClientStorage_1.ClientStorage.setNodeExpanded(n.id, n.expanded);
+    }
+    return __assign({}, state, { nodeById: nodeById });
+}
+function activateGroupTreeNode(state, payload) {
+    var nodeById = state.nodeById;
+    // deactivate all other nodes.
+    for (var _i = 0, _a = state.nodeIds; _i < _a.length; _i++) {
+        var id = _a[_i];
+        nodeById[id].active = false;
+    }
+    // activate new node.
+    var n = nodeById[payload.nodeId];
+    if (!n) {
+        return;
+    }
+    n.active = true;
+    // expand all parent nodes to make new node visible.
+    var parentNode = nodeById[n.parentId];
+    while (parentNode) {
+        if (!parentNode.expanded) {
+            parentNode.expanded = true;
+            ClientStorage_1.ClientStorage.setNodeExpanded(parentNode.id, true);
+        }
+        parentNode = nodeById[parentNode.parentId];
+    }
+    return __assign({}, state, { nodeById: nodeById });
+}
 
 
 /***/ }),
@@ -332,27 +371,48 @@ module.exports = store;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 var React = __webpack_require__(1);
 var react_dom_1 = __webpack_require__(15);
-var react_redux_1 = __webpack_require__(2);
+var ReactRedux = __webpack_require__(2);
 var Store_1 = __webpack_require__(3);
 var GroupTreeNodePanel_1 = __webpack_require__(16);
-var GroupTreeView = (function () {
-    function GroupTreeView() {
+var mapStateToProps = function (store) {
+    var topLevelGroupIds = store.groupTree.nodeIds
+        .filter(function (id) { return store.groupTree.nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID; });
+    return { topLevelGroupIds: topLevelGroupIds };
+};
+var GroupTreeViewImpl = (function (_super) {
+    __extends(GroupTreeViewImpl, _super);
+    function GroupTreeViewImpl() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    GroupTreeView.wrap = function (elementId) {
-        var groupTree = Store_1.appStore.getState().groupTree;
-        var nodeById = groupTree.nodeById;
-        var treeNodes = groupTree.nodeIds
-            .filter(function (id) { return nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID; })
-            .map(function (id) { return React.createElement(GroupTreeNodePanel_1.GroupTreeNodePanel, { nodeId: id, key: 'node-' + id }); });
-        react_dom_1.render(React.createElement(react_redux_1.Provider, { store: Store_1.appStore },
-            React.createElement("div", null, treeNodes)), document.getElementById(elementId));
+    GroupTreeViewImpl.prototype.render = function () {
+        var treeNodes = this.props.topLevelGroupIds.map(function (id) { return React.createElement(GroupTreeNodePanel_1.GroupTreeNodePanel, { nodeId: id, key: 'node-' + id }); });
+        return (React.createElement("div", null, treeNodes));
     };
-    return GroupTreeView;
-}());
-exports.GroupTreeView = GroupTreeView;
+    return GroupTreeViewImpl;
+}(React.Component));
+exports.GroupTreeViewImpl = GroupTreeViewImpl;
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+exports.GroupTreeView = ReactRedux.connect(mapStateToProps, null)(GroupTreeViewImpl);
+function renderGroupTreeView(elementId) {
+    react_dom_1.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
+        React.createElement("div", null,
+            React.createElement(exports.GroupTreeView, null),
+            ")")), document.getElementById(elementId));
+}
+exports.renderGroupTreeView = renderGroupTreeView;
 
 
 /***/ }),
@@ -397,7 +457,7 @@ var mapStateToProps = function (store, ownProps) {
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch) {
     return {
-        expandNode: function (nodeId, expanded) { return dispatch(Actions_1.createToggleTreeNodeAction(nodeId, expanded)); }
+        toggleExpandedState: function (nodeId, expanded) { return dispatch(Actions_1.createToggleGroupTreeNodeAction(nodeId, expanded)); }
     };
 }
 var GroupTreeNodePanelImpl = (function (_super) {
@@ -432,7 +492,7 @@ var GroupTreeNodePanelImpl = (function (_super) {
             expanded && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GroupTreeNodePanel, { nodeId: childId, key: 'node-' + childId }); })));
     };
     GroupTreeNodePanelImpl.prototype.onToggleExpandedState = function () {
-        this.props.expandNode(this.props.nodeId, !this.props.expanded);
+        this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded);
     };
     GroupTreeNodePanelImpl.prototype.activateGroup = function () {
         Client2Server_1.activateGroup(this.props.nodeId);

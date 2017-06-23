@@ -10,12 +10,15 @@ export function isAction<T>(action: Action<any>, actionName: string): action is 
 }
 
 export class ActionType {
-  static UpdateTree = 'UpdateTreeAction'
-  static ToggleTreeNode = 'ToggleTreeNode'
+  static UpdateGroupTree = 'UpdateTreeAction'
+  static ToggleGroupTreeNode = 'ToggleGroupTreeNode'
+  static ActivateGroupTreeNode = 'ActivateGroupTreeNode'
 }
 
-export type UpdateTreeActionPayload = { nodes: Array<GroupTreeNode>; }
-export type ToggleTreeNodeActionPayload = { nodeId: number, expanded: boolean; }
+export type UpdateGroupTreeActionPayload = { nodes: Array<GroupTreeNode>; }
+export type ToggleGroupTreeNodeActionPayload = { nodeId: number, expanded: boolean; }
+export type ActivateGroupTreeNodeActionPayload = { nodeId: number }
 
-export const createUpdateTreeAction = (nodes: Array<GroupTreeNode>): Action<UpdateTreeActionPayload> => ({type: ActionType.UpdateTree, payload: {nodes}})
-export const createToggleTreeNodeAction = (nodeId: number, expanded: boolean): Action<ToggleTreeNodeActionPayload> => ({type: ActionType.ToggleTreeNode, payload: {nodeId, expanded}})
+export const createUpdateGroupTreeAction = (nodes: Array<GroupTreeNode>): Action<UpdateGroupTreeActionPayload> => ({type: ActionType.UpdateGroupTree, payload: {nodes}})
+export const createToggleGroupTreeNodeAction = (nodeId: number, expanded: boolean): Action<ToggleGroupTreeNodeActionPayload> => ({type: ActionType.ToggleGroupTreeNode, payload: {nodeId, expanded}})
+export const createActivateGroupTreeNodeAction = (nodeId: number): Action<ActivateGroupTreeNodeActionPayload> => ({type: ActionType.ActivateGroupTreeNode, payload: {nodeId}})

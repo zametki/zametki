@@ -2,20 +2,26 @@
  * Interface used by server code to trigger client actions.
  */
 import {appStore, GroupTreeNode} from '../react/Store'
-import {GroupTreeView} from '../react/components/GroupTreeView'
-import {createUpdateTreeAction} from '../react/Actions'
+import {renderGroupTreeView} from '../react/components/GroupTreeView'
+import {createActivateGroupTreeNodeAction, createUpdateGroupTreeAction} from '../react/Actions'
 
 function renderGroupTree(elementId: string): void {
-  GroupTreeView.wrap(elementId)
+  renderGroupTreeView(elementId)
 }
 
-function onGroupTreeChanged(rootNode: Array<GroupTreeNode>) {
-  const updateTreeAction = createUpdateTreeAction(rootNode)
+function dispatchUpdateGroupTreeAction(rootNode: Array<GroupTreeNode>) {
   //noinspection TypeScriptValidateTypes
-  appStore.dispatch(updateTreeAction)
+  appStore.dispatch(createUpdateGroupTreeAction(rootNode))
 }
+
+function dispatchActivateGroupNodeAction(nodeId: number) {
+  //noinspection TypeScriptValidateTypes
+  appStore.dispatch(createActivateGroupTreeNodeAction(nodeId))
+}
+
 
 export default {
-  onGroupTreeChanged: onGroupTreeChanged,
-  renderGroupTree: renderGroupTree
+  renderGroupTreeView,
+  dispatchUpdateGroupTreeAction,
+  dispatchActivateGroupNodeAction
 }

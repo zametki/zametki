@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
-import {createToggleTreeNodeAction} from '../Actions'
+import {createToggleGroupTreeNodeAction} from '../Actions'
 import {GroupTreeCountsBadge} from './GroupTreeCountsBadge'
 
 type OwnProps = {
@@ -18,7 +18,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  expandNode: (nodeId: number, expanded: boolean) => void
+  toggleExpandedState: (nodeId: number, expanded: boolean) => void
 }
 
 type AllProps = StateProps & DispatchProps & OwnProps
@@ -38,7 +38,7 @@ const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch): DispatchProps {
   return {
-    expandNode: (nodeId, expanded) => dispatch(createToggleTreeNodeAction(nodeId, expanded))
+    toggleExpandedState: (nodeId, expanded) => dispatch(createToggleGroupTreeNodeAction(nodeId, expanded))
   }
 }
 
@@ -57,6 +57,7 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
       console.error(`Node not found: ${this.props}`)
       return null
     }
+
     return (
       <div>
         <div className={'tree-node' + (active ? ' tree-node-active' : '')}>
@@ -87,7 +88,7 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
   }
 
   private onToggleExpandedState() {
-    this.props.expandNode(this.props.nodeId, !this.props.expanded)
+    this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded)
   }
 
   private activateGroup() {

@@ -100,9 +100,12 @@ public class WorkspacePage extends BaseUserPage {
             e.target.add(lenta);
             groupsModal.hide(e.target);
 
+            GroupId activeGroupId = state.activeGroupModel.getObject();
             UserSettings us = UserSettings.get();
-            us.lastShownGroup = state.activeGroupModel.getObject();
+            us.lastShownGroup = activeGroupId;
             UserSettings.set(us);
+
+            e.target.appendJavaScript("$site.Server2Client.dispatchActivateGroupNodeAction(" + (activeGroupId == null ? null : activeGroupId.intValue) + ");");
         }
     }
 

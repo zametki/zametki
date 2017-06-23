@@ -8,8 +8,6 @@ import com.github.zametki.event.GroupTreeChangeEvent;
 import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateEvent;
 import com.github.zametki.event.ZametkaUpdateType;
-import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
-import com.github.zametki.event.dispatcher.OnModelUpdate;
 import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
@@ -46,11 +44,6 @@ public class GroupTreePanel extends Panel {
         update(e.target);
     }
 
-    @OnModelUpdate
-    public void onModelUpdateAjaxEvent(@NotNull ModelUpdateAjaxEvent e) {
-        update(e.target);
-    }
-
     private void update(@NotNull AjaxRequestTarget target) {
         target.appendJavaScript(getUpdateScript());
     }
@@ -65,7 +58,7 @@ public class GroupTreePanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(OnDomReadyHeaderItem.forScript(getUpdateScript() + ";$site.Server2Client.renderGroupTree('" + tree.getMarkupId() + "')"));
+        response.render(OnDomReadyHeaderItem.forScript(getUpdateScript() + ";$site.Server2Client.renderGroupTreeView('" + tree.getMarkupId() + "')"));
     }
 
     private static final Group ROOT_GROUP = new Group();
@@ -79,7 +72,7 @@ public class GroupTreePanel extends Panel {
         GroupTreeModel treeModel = GroupTreeModel.build(WebUtils.getUserOrRedirectHome());
         JSONArray nodes = new JSONArray();
         treeModel.flatList().forEach(n -> nodes.put(toJSON(n)));
-        return "$site.Server2Client.onGroupTreeChanged(" + nodes.toString() + ");";
+        return "$site.Server2Client.dispatchUpdateGroupTreeAction(" + nodes.toString() + ");";
     }
 
     @Nullable
@@ -109,6 +102,4 @@ public class GroupTreePanel extends Panel {
         }
         return json;
     }
-
-
 }
