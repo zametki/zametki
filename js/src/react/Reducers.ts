@@ -1,16 +1,26 @@
 import * as Redux from 'redux'
-import {AppStore, GroupTree} from './Store'
-import {Action, ActionType, ActivateGroupTreeNodeActionPayload, isAction, ToggleGroupTreeNodeActionPayload, UpdateGroupTreeActionPayload} from './Actions'
+import {AppStore,  GroupTree} from './Store'
+import {Action, ActionType, ActivateGroupTreeNodeActionPayload, GroupTreeFilterUpdatePayload, isAction, ToggleGroupTreeNodeActionPayload, UpdateGroupTreeActionPayload} from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
 
+const defaultStoreInstance: AppStore = {
+  groupTree: {
+    nodeById: {},
+    nodeIds: [],
+    filterText: ''
+  }
+}
+
 /** Group Tree reducer */
-function groupTree(state: GroupTree = {nodeById: {}, nodeIds: []}, action: Action<any>): GroupTree {
+function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Action<any>): GroupTree {
   if (isAction<UpdateGroupTreeActionPayload>(action, ActionType.UpdateGroupTree)) {
     return updateGroupTree(state, action.payload)
   } else if (isAction<ToggleGroupTreeNodeActionPayload>(action, ActionType.ToggleGroupTreeNode)) {
     return toggleGroupTreeNode(state, action.payload)
   } else if (isAction<ActivateGroupTreeNodeActionPayload>(action, ActionType.ActivateGroupTreeNode)) {
     return activateGroupTreeNode(state, action.payload)
+  } else if (isAction<GroupTreeFilterUpdatePayload>(action, ActionType.GroupTreeFilterUpdate)) {
+    return updateGroupTreeFilter(state, action.payload)
   }
   return state
 }
@@ -26,7 +36,7 @@ function updateGroupTree(state: GroupTree, payload: UpdateGroupTreeActionPayload
     nodeById[n.id] = n
     nodeIds.push(n.id)
   })
-  return {...state, nodeById, nodeIds}
+  return {...state, nodeById, nodeIds} as GroupTree
 }
 
 function toggleGroupTreeNode(state: GroupTree, payload: ToggleGroupTreeNodeActionPayload): GroupTree {
@@ -65,3 +75,9 @@ function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeA
   }
   return {...state, nodeById} as GroupTree
 }
+
+function updateGroupTreeFilter(state: GroupTree, payload: GroupTreeFilterUpdatePayload): GroupTree {
+  return {...state, filterText: payload.filterText} as GroupTree
+}
+
+

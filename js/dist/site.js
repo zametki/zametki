@@ -82,10 +82,12 @@ var ActionType = (function () {
 ActionType.UpdateGroupTree = 'UpdateTreeAction';
 ActionType.ToggleGroupTreeNode = 'ToggleGroupTreeNode';
 ActionType.ActivateGroupTreeNode = 'ActivateGroupTreeNode';
+ActionType.GroupTreeFilterUpdate = 'GroupTreeFilterUpdate';
 exports.ActionType = ActionType;
 exports.createUpdateGroupTreeAction = function (nodes) { return ({ type: ActionType.UpdateGroupTree, payload: { nodes: nodes } }); };
 exports.createToggleGroupTreeNodeAction = function (nodeId, expanded) { return ({ type: ActionType.ToggleGroupTreeNode, payload: { nodeId: nodeId, expanded: expanded } }); };
 exports.createActivateGroupTreeNodeAction = function (nodeId) { return ({ type: ActionType.ActivateGroupTreeNode, payload: { nodeId: nodeId } }); };
+exports.createGroupTreeFilterUpdateAction = function (filterText) { return ({ type: ActionType.GroupTreeFilterUpdate, payload: { filterText: filterText } }); };
 
 
 /***/ }),
@@ -110,9 +112,14 @@ exports.__esModule = true;
 var Redux = __webpack_require__(4);
 var Reducers_1 = __webpack_require__(11);
 exports.GROUP_TREE_ROOT_NODE_ID = 0;
-exports.appStore = Redux.createStore(Reducers_1.AppReducers, {
-    groupTree: { nodeById: {} }
-}, window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
+exports.defaultStoreInstance = {
+    groupTree: {
+        nodeById: {},
+        nodeIds: [],
+        filterText: ''
+    }
+};
+exports.appStore = window['appStore'] = Redux.createStore(Reducers_1.AppReducers, exports.defaultStoreInstance, window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
 // Redux.applyMiddleware(thunk),
 );
 
@@ -158,9 +165,10 @@ exports.__esModule = true;
 var SiteDef_1 = __webpack_require__(8);
 __webpack_require__(9);
 var Server2Client_1 = __webpack_require__(10);
-var SiteUtils_1 = __webpack_require__(18);
-var Shortcuts_1 = __webpack_require__(19);
+var SiteUtils_1 = __webpack_require__(19);
+var Shortcuts_1 = __webpack_require__(20);
 var Client2Server_1 = __webpack_require__(5);
+__webpack_require__(21);
 SiteDef_1["default"].Server2Client = Server2Client_1["default"];
 SiteDef_1["default"].Utils = SiteUtils_1["default"];
 SiteDef_1["default"].Shortcuts = Shortcuts_1["default"];
@@ -270,9 +278,16 @@ exports.__esModule = true;
 var Redux = __webpack_require__(4);
 var Actions_1 = __webpack_require__(0);
 var ClientStorage_1 = __webpack_require__(12);
+var defaultStoreInstance = {
+    groupTree: {
+        nodeById: {},
+        nodeIds: [],
+        filterText: ''
+    }
+};
 /** Group Tree reducer */
 function groupTree(state, action) {
-    if (state === void 0) { state = { nodeById: {}, nodeIds: [] }; }
+    if (state === void 0) { state = defaultStoreInstance.groupTree; }
     if (Actions_1.isAction(action, Actions_1.ActionType.UpdateGroupTree)) {
         return updateGroupTree(state, action.payload);
     }
@@ -281,6 +296,9 @@ function groupTree(state, action) {
     }
     else if (Actions_1.isAction(action, Actions_1.ActionType.ActivateGroupTreeNode)) {
         return activateGroupTreeNode(state, action.payload);
+    }
+    else if (Actions_1.isAction(action, Actions_1.ActionType.GroupTreeFilterUpdate)) {
+        return updateGroupTreeFilter(state, action.payload);
     }
     return state;
 }
@@ -328,6 +346,9 @@ function activateGroupTreeNode(state, payload) {
         parentNode = nodeById[parentNode.parentId];
     }
     return __assign({}, state, { nodeById: nodeById });
+}
+function updateGroupTreeFilter(state, payload) {
+    return __assign({}, state, { filterText: payload.filterText });
 }
 
 
@@ -387,6 +408,7 @@ var react_dom_1 = __webpack_require__(15);
 var ReactRedux = __webpack_require__(2);
 var Store_1 = __webpack_require__(3);
 var GroupTreeNodePanel_1 = __webpack_require__(16);
+var GroupTreeFilterPanel_1 = __webpack_require__(18);
 var mapStateToProps = function (store) {
     var topLevelGroupIds = store.groupTree.nodeIds
         .filter(function (id) { return store.groupTree.nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID; });
@@ -399,7 +421,9 @@ var GroupTreeViewImpl = (function (_super) {
     }
     GroupTreeViewImpl.prototype.render = function () {
         var treeNodes = this.props.topLevelGroupIds.map(function (id) { return React.createElement(GroupTreeNodePanel_1.GroupTreeNodePanel, { nodeId: id, key: 'node-' + id }); });
-        return (React.createElement("div", null, treeNodes));
+        return (React.createElement("div", null,
+            React.createElement(GroupTreeFilterPanel_1.GroupTreeFilterPanel, null),
+            treeNodes));
     };
     return GroupTreeViewImpl;
 }(React.Component));
@@ -409,8 +433,7 @@ exports.GroupTreeView = ReactRedux.connect(mapStateToProps, null)(GroupTreeViewI
 function renderGroupTreeView(elementId) {
     react_dom_1.render(React.createElement(ReactRedux.Provider, { store: Store_1.appStore },
         React.createElement("div", null,
-            React.createElement(exports.GroupTreeView, null),
-            ")")), document.getElementById(elementId));
+            React.createElement(exports.GroupTreeView, null))), document.getElementById(elementId));
 }
 exports.renderGroupTreeView = renderGroupTreeView;
 
@@ -451,7 +474,8 @@ var mapStateToProps = function (store, ownProps) {
         subGroups: node.children,
         active: node.active,
         expanded: node.expanded,
-        level: node.level
+        level: node.level,
+        filterText: store.groupTree.filterText
     };
 };
 // noinspection JSUnusedLocalSymbols
@@ -471,25 +495,28 @@ var GroupTreeNodePanelImpl = (function (_super) {
         return _this;
     }
     GroupTreeNodePanelImpl.prototype.render = function () {
-        var _a = this.props, nodeId = _a.nodeId, name = _a.name, subGroups = _a.subGroups, active = _a.active, expanded = _a.expanded, level = _a.level;
+        var _a = this.props, nodeId = _a.nodeId, name = _a.name, subGroups = _a.subGroups, active = _a.active, expanded = _a.expanded, level = _a.level, filterText = _a.filterText;
         if (!name) {
             console.error("Node not found: " + this.props);
             return null;
         }
-        return (React.createElement("div", null,
-            React.createElement("div", { className: 'tree-node' + (active ? ' tree-node-active' : '') },
-                React.createElement("div", { style: { paddingLeft: level * 16 } },
+        var filteredMode = filterText.length > 0;
+        var node = filteredMode && name.indexOf(filterText) == -1 ? null :
+            (React.createElement("div", { className: 'tree-node' + (active ? ' tree-node-active' : '') },
+                React.createElement("div", { style: { paddingLeft: (filteredMode ? 0 : level) * 16 } },
                     React.createElement("table", { className: 'w100' },
                         React.createElement("tbody", null,
                             React.createElement("tr", null,
                                 React.createElement("td", { className: 'tree-junction-td' },
-                                    React.createElement("a", { className: 'tree-junction' + (subGroups && subGroups.length > 0 ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : ''), onClick: this.onToggleExpandedState })),
+                                    React.createElement("a", { className: 'tree-junction' + (subGroups && subGroups.length > 0 && !filteredMode ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : ''), onClick: this.onToggleExpandedState })),
                                 React.createElement("td", null,
                                     React.createElement("div", { className: 'tree-content' },
                                         React.createElement("a", { className: 'tree-node-group-link', onClick: this.activateGroup },
                                             React.createElement(GroupTreeCountsBadge_1.GroupTreeCountsBadge, { nodeId: nodeId }),
-                                            React.createElement("span", null, name))))))))),
-            expanded && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GroupTreeNodePanel, { nodeId: childId, key: 'node-' + childId }); })));
+                                            React.createElement("span", null, name))))))))));
+        return (React.createElement("div", null,
+            node,
+            (expanded || filteredMode) && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GroupTreeNodePanel, { nodeId: childId, key: 'node-' + childId }); })));
     };
     GroupTreeNodePanelImpl.prototype.onToggleExpandedState = function () {
         this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded);
@@ -552,6 +579,61 @@ exports.GroupTreeCountsBadge = ReactRedux.connect(mapStateToProps, null)(GroupTr
 
 /***/ }),
 /* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+var React = __webpack_require__(1);
+var ReactRedux = __webpack_require__(2);
+var Actions_1 = __webpack_require__(0);
+/** Maps Store state to component props */
+var mapStateToProps = function (store) {
+    return {
+        filterText: store.groupTree.filterText
+    };
+};
+// noinspection JSUnusedLocalSymbols
+function mapDispatchToProps(dispatch) {
+    return {
+        updateFilterText: function (filterText) { return dispatch(Actions_1.createGroupTreeFilterUpdateAction(filterText)); }
+    };
+}
+var GroupTreeFilterPanelImpl = (function (_super) {
+    __extends(GroupTreeFilterPanelImpl, _super);
+    function GroupTreeFilterPanelImpl() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    GroupTreeFilterPanelImpl.prototype.render = function () {
+        return (React.createElement("div", { className: "search-wrapper" },
+            React.createElement("form", { onReset: this.handleReset.bind(this) },
+                React.createElement("input", { ref: "inputElement", onChange: this.handleTextChange.bind(this), type: "text", name: "focus", className: "search-box", placeholder: "TODO: filter", required: true }),
+                React.createElement("button", { className: "close-icon", type: "reset" }))));
+    };
+    GroupTreeFilterPanelImpl.prototype.handleReset = function () {
+        this.props.updateFilterText('');
+    };
+    GroupTreeFilterPanelImpl.prototype.handleTextChange = function () {
+        this.props.updateFilterText(this.refs.inputElement.value);
+    };
+    return GroupTreeFilterPanelImpl;
+}(React.Component));
+// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+exports.GroupTreeFilterPanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeFilterPanelImpl);
+
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -681,7 +763,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -720,6 +802,130 @@ exports["default"] = {
     bindWorkspacePageKeys: bindWorkspacePageKeys
 };
 
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(22)
+__webpack_require__(23)
+__webpack_require__(24)
+__webpack_require__(25)
+__webpack_require__(26)
+__webpack_require__(27)
+__webpack_require__(28)
+__webpack_require__(29)
+__webpack_require__(30)
+__webpack_require__(31)
+__webpack_require__(32)
+__webpack_require__(33)
+__webpack_require__(34)
+__webpack_require__(35)
+__webpack_require__(36)
+__webpack_require__(37)
+__webpack_require__(38)
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

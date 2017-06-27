@@ -15,6 +15,7 @@ export type GroupTreeNode = {
 export type GroupTree = {
   nodeById: { [nodeId: number]: GroupTreeNode }
   nodeIds: Array<number>
+  filterText: string
 }
 
 export type AppStore = {
@@ -23,11 +24,17 @@ export type AppStore = {
 
 export const GROUP_TREE_ROOT_NODE_ID = 0
 
-export const appStore: Redux.Store<AppStore> = Redux.createStore(
+export const defaultStoreInstance: AppStore = {
+  groupTree: {
+    nodeById: {},
+    nodeIds: [],
+    filterText: ''
+  }
+}
+
+export const appStore: Redux.Store<AppStore> = window['appStore'] = Redux.createStore(
   AppReducers,
-  {
-    groupTree: {nodeById: {}}
-  } as AppStore,
+  defaultStoreInstance,
   window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
   // Redux.applyMiddleware(thunk),
 )

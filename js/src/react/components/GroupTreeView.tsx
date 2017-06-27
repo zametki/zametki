@@ -3,6 +3,7 @@ import {render} from 'react-dom'
 import * as ReactRedux from 'react-redux'
 import {appStore, AppStore, GROUP_TREE_ROOT_NODE_ID} from '../Store'
 import {GroupTreeNodePanel} from './GroupTreeNodePanel'
+import {GroupTreeFilterPanel} from './GroupTreeFilterPanel'
 
 type OwnProps = {}
 type StateProps = {
@@ -19,10 +20,11 @@ const mapStateToProps = (store: AppStore): StateProps => {
 
 export class GroupTreeViewImpl extends React.Component<AllProps, {}> {
 
-  render () {
-    const treeNodes = this.props.topLevelGroupIds.map(id => <GroupTreeNodePanel nodeId={id} key={'node-' + id}/>)
+  render() {
+    const treeNodes = this.props.topLevelGroupIds.map(id => <GroupTreeNodePanel nodeId={id} key={'node-' + id} />)
     return (
       <div>
+        <GroupTreeFilterPanel />
         {treeNodes}
       </div>
     )
@@ -34,11 +36,11 @@ export class GroupTreeViewImpl extends React.Component<AllProps, {}> {
 export const GroupTreeView = ReactRedux.connect(mapStateToProps, null)(GroupTreeViewImpl) as React.ComponentClass<OwnProps>
 
 
-export function renderGroupTreeView (elementId: string) {
+export function renderGroupTreeView(elementId: string) {
   render(
     <ReactRedux.Provider store={appStore}>
       <div>
-        <GroupTreeView/>)
+        <GroupTreeView />
       </div>
     </ReactRedux.Provider>,
     document.getElementById(elementId)

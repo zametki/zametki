@@ -14,7 +14,8 @@ type StateProps = {
   subGroups: Array<number>
   active: boolean
   expanded: boolean
-  level: number
+  level: number,
+  filterText: string
 }
 
 type DispatchProps = {
@@ -31,7 +32,8 @@ const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
     subGroups: node.children,
     active: node.active,
     expanded: node.expanded,
-    level: node.level
+    level: node.level,
+    filterText: store.groupTree.filterText
   }
 }
 
@@ -52,21 +54,21 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
   }
 
   render() {
-    const {nodeId, name, subGroups, active, expanded, level} = this.props
+    const {nodeId, name, subGroups, active, expanded, level, filterText} = this.props
     if (!name) {
       console.error(`Node not found: ${this.props}`)
       return null
     }
-
-    return (
-      <div>
+    const filteredMode = filterText.length > 0
+    const node = filteredMode && name.indexOf(filterText) == -1 ? null :
+      (
         <div className={'tree-node' + (active ? ' tree-node-active' : '')}>
-          <div style={{paddingLeft: level * 16}}>
+          <div style={{paddingLeft: (filteredMode ? 0 : level) * 16}}>
             <table className='w100'>
               <tbody>
               <tr>
                 <td className='tree-junction-td'>
-                  <a className={'tree-junction' + (subGroups && subGroups.length > 0 ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : '')}
+                  <a className={'tree-junction' + (subGroups && subGroups.length > 0 && !filteredMode ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : '')}
                      onClick={this.onToggleExpandedState} />
                 </td>
                 <td>
@@ -82,7 +84,12 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
             </table>
           </div>
         </div>
-        {expanded && subGroups && subGroups.map(childId => <GroupTreeNodePanel nodeId={childId} key={'node-' + childId} />)}
+      )
+
+    return (
+      <div>
+        {node}
+        {(expanded || filteredMode) && subGroups && subGroups.map(childId => <GroupTreeNodePanel nodeId={childId} key={'node-' + childId} />)}
       </div>
     )
   }

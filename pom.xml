@@ -65,32 +65,19 @@
                         <webResource>
                             <directory>${basedir}/js/dist</directory>
                             <targetPath>js</targetPath>
+                            <includes>
+                                <include>*.js</include>
+                            </includes>
+                        </webResource>
+                        <webResource>
+                            <directory>${basedir}/js/dist</directory>
+                            <targetPath>css</targetPath>
+                            <includes>
+                                <include>*.css</include>
+                            </includes>
                         </webResource>
                     </webResources>
-                    <!-- All CSS are minified to style.css, site.js is copied from js module's 'dist' folder -->
-                    <warSourceExcludes>**/css/*.css</warSourceExcludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.samaxes.maven</groupId>
-                <artifactId>minify-maven-plugin</artifactId>
-                <version>1.7.6</version>
-                <executions>
-                    <execution>
-                        <id>default-minify</id>
-                        <configuration>
-                            <charset>UTF-8</charset>
-                            <!-- style.min.css must be the same as style.css -->
-                            <nosuffix>true</nosuffix>
-                            <cssSourceIncludes>
-                                <cssSourceInclude>**</cssSourceInclude>
-                            </cssSourceIncludes>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
