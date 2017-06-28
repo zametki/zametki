@@ -1,5 +1,6 @@
 import * as Redux from 'redux'
 import {AppReducers} from './Reducers'
+import {ClientStorage} from '../utils/ClientStorage'
 
 export type GroupTreeNode = {
   id: number,
@@ -28,7 +29,7 @@ export const defaultStoreInstance: AppStore = {
   groupTree: {
     nodeById: {},
     nodeIds: [],
-    filterText: ''
+    filterText: ClientStorage.getGroupFilterText()
   }
 }
 

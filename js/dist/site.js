@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -110,13 +110,14 @@ module.exports = ReactRedux;
 
 exports.__esModule = true;
 var Redux = __webpack_require__(4);
-var Reducers_1 = __webpack_require__(11);
+var Reducers_1 = __webpack_require__(12);
+var ClientStorage_1 = __webpack_require__(5);
 exports.GROUP_TREE_ROOT_NODE_ID = 0;
 exports.defaultStoreInstance = {
     groupTree: {
         nodeById: {},
         nodeIds: [],
-        filterText: ''
+        filterText: ClientStorage_1.ClientStorage.getGroupFilterText()
     }
 };
 exports.appStore = window['appStore'] = Redux.createStore(Reducers_1.AppReducers, exports.defaultStoreInstance, window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
@@ -137,6 +138,45 @@ module.exports = Redux;
 "use strict";
 
 exports.__esModule = true;
+var store = __webpack_require__(13);
+var APP = 'Z';
+function getGroupTreeFilterKey() {
+    return APP + "-GT-filter";
+}
+function getNodeExpandedKey(nodeId) {
+    return APP + "-GT-n-" + nodeId + ".expanded";
+}
+function update(key, value) {
+    value ? store.set(key, value) : store.remove(key);
+}
+/** Wrapper over localStorage */
+var ClientStorage = (function () {
+    function ClientStorage() {
+    }
+    ClientStorage.isNodeExpanded = function (nodeId) {
+        return !!nodeId && store.get(getNodeExpandedKey(nodeId)) === true;
+    };
+    ClientStorage.setNodeExpanded = function (nodeId, value) {
+        update(getNodeExpandedKey(nodeId), value);
+    };
+    ClientStorage.setGroupFilterText = function (value) {
+        update(getGroupTreeFilterKey(), value);
+    };
+    ClientStorage.getGroupFilterText = function () {
+        return store.get(getGroupTreeFilterKey()) || '';
+    };
+    return ClientStorage;
+}());
+exports.ClientStorage = ClientStorage;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
 var callbacks = {
     activateGroup: undefined
 };
@@ -150,24 +190,24 @@ exports["default"] = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = $;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var SiteDef_1 = __webpack_require__(8);
-__webpack_require__(9);
-var Server2Client_1 = __webpack_require__(10);
+var SiteDef_1 = __webpack_require__(9);
+__webpack_require__(10);
+var Server2Client_1 = __webpack_require__(11);
 var SiteUtils_1 = __webpack_require__(19);
 var Shortcuts_1 = __webpack_require__(20);
-var Client2Server_1 = __webpack_require__(5);
+var Client2Server_1 = __webpack_require__(6);
 __webpack_require__(21);
 SiteDef_1["default"].Server2Client = Server2Client_1["default"];
 SiteDef_1["default"].Utils = SiteUtils_1["default"];
@@ -177,7 +217,7 @@ window.$site = SiteDef_1["default"];
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -196,7 +236,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 if (window.Parsley) {
@@ -230,7 +270,7 @@ if (window.Parsley) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -261,7 +301,7 @@ exports["default"] = {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -277,12 +317,12 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 exports.__esModule = true;
 var Redux = __webpack_require__(4);
 var Actions_1 = __webpack_require__(0);
-var ClientStorage_1 = __webpack_require__(12);
+var ClientStorage_1 = __webpack_require__(5);
 var defaultStoreInstance = {
     groupTree: {
         nodeById: {},
         nodeIds: [],
-        filterText: ''
+        filterText: ClientStorage_1.ClientStorage.getGroupFilterText()
     }
 };
 /** Group Tree reducer */
@@ -348,36 +388,9 @@ function activateGroupTreeNode(state, payload) {
     return __assign({}, state, { nodeById: nodeById });
 }
 function updateGroupTreeFilter(state, payload) {
+    ClientStorage_1.ClientStorage.setGroupFilterText(payload.filterText);
     return __assign({}, state, { filterText: payload.filterText });
 }
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var store = __webpack_require__(13);
-var APP = 'Z';
-function getNodeExpandedKey(nodeId) {
-    return APP + "-GT-n-" + nodeId + ".expanded";
-}
-/** Wrapper over localStorage */
-var ClientStorage = (function () {
-    function ClientStorage() {
-    }
-    ClientStorage.isNodeExpanded = function (nodeId) {
-        return !!nodeId && store.get(getNodeExpandedKey(nodeId)) === true;
-    };
-    ClientStorage.setNodeExpanded = function (nodeId, v) {
-        var key = getNodeExpandedKey(nodeId);
-        v ? store.set(key, true) : store.remove(key);
-    };
-    return ClientStorage;
-}());
-exports.ClientStorage = ClientStorage;
 
 
 /***/ }),
@@ -463,7 +476,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var React = __webpack_require__(1);
 var ReactRedux = __webpack_require__(2);
-var Client2Server_1 = __webpack_require__(5);
+var Client2Server_1 = __webpack_require__(6);
 var Actions_1 = __webpack_require__(0);
 var GroupTreeCountsBadge_1 = __webpack_require__(17);
 /** Maps Store state to component props */
@@ -615,10 +628,13 @@ var GroupTreeFilterPanelImpl = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     GroupTreeFilterPanelImpl.prototype.render = function () {
-        return (React.createElement("div", { className: "search-wrapper" },
-            React.createElement("form", { onReset: this.handleReset.bind(this) },
-                React.createElement("input", { ref: "inputElement", onChange: this.handleTextChange.bind(this), type: "text", name: "focus", className: "search-box", placeholder: "TODO: filter", required: true }),
-                React.createElement("button", { className: "close-icon", type: "reset" }))));
+        var filterText = this.props.filterText;
+        var resetIsOn = filterText.length > 0;
+        var resetButtonClassName = "gt-search-reset-button" + (resetIsOn ? ' gt-search-reset-button-on' : '');
+        return (React.createElement("div", { className: "gt-search-block" },
+            React.createElement("form", { onReset: this.handleReset.bind(this), onSubmit: function (e) { return e.preventDefault(); } },
+                React.createElement("input", { ref: "inputElement", onChange: this.handleTextChange.bind(this), type: "search", className: "gt-search-input", placeholder: " …", value: filterText, title: "Фильтр имён групп" }),
+                React.createElement("button", { className: resetButtonClassName, type: "reset", title: "Сбросить фильтр" }, "\u00D7"))));
     };
     GroupTreeFilterPanelImpl.prototype.handleReset = function () {
         this.props.updateFilterText('');
@@ -639,7 +655,7 @@ exports.GroupTreeFilterPanel = ReactRedux.connect(mapStateToProps, mapDispatchTo
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(6);
+var $ = __webpack_require__(7);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -769,7 +785,7 @@ exports["default"] = {
 "use strict";
 
 exports.__esModule = true;
-var $ = __webpack_require__(6);
+var $ = __webpack_require__(7);
 function isABootstrapModalOpen() {
     return $(".modal.show").length > 0;
 }

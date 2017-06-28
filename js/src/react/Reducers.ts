@@ -7,7 +7,7 @@ const defaultStoreInstance: AppStore = {
   groupTree: {
     nodeById: {},
     nodeIds: [],
-    filterText: ''
+    filterText: ClientStorage.getGroupFilterText()
   }
 }
 
@@ -77,6 +77,7 @@ function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeA
 }
 
 function updateGroupTreeFilter(state: GroupTree, payload: GroupTreeFilterUpdatePayload): GroupTree {
+  ClientStorage.setGroupFilterText(payload.filterText);
   return {...state, filterText: payload.filterText} as GroupTree
 }
 

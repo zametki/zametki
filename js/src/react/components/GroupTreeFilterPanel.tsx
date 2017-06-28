@@ -35,16 +35,21 @@ class GroupTreeFilterPanelImpl extends React.Component<AllProps, {}> {
   }
 
   render() {
+    const {filterText} = this.props
+    const resetIsOn = filterText.length > 0
+    const resetButtonClassName = `gt-search-reset-button${resetIsOn ? ' gt-search-reset-button-on' : ''}`
     return (
-      <div className="search-wrapper">
-        <form onReset={this.handleReset.bind(this)}>
+      <div className="gt-search-block">
+        <form onReset={this.handleReset.bind(this)}
+              onSubmit={e => e.preventDefault()}>
           <input ref="inputElement"
                  onChange={this.handleTextChange.bind(this)}
-                 type="text" name="focus"
-                 className="search-box"
-                 placeholder="TODO: filter"
-                 required />
-          <button className="close-icon" type="reset" />
+                 type="search"
+                 className="gt-search-input"
+                 placeholder=" …"
+                 value={filterText}
+                 title="Фильтр имён групп" />
+          <button className={resetButtonClassName} type="reset" title="Сбросить фильтр">×</button>
         </form>
       </div>
     )
