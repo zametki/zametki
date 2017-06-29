@@ -8,4 +8,5 @@
     "src/types/tsd.d.ts",
     "src/site.ts"
   ]
+  //TODO:  "exclude": ["node_modules"]
 }
