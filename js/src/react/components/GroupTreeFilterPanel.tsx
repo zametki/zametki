@@ -48,7 +48,7 @@ class GroupTreeFilterPanelImpl extends React.Component<AllProps, {}> {
                  className="gt-search-input"
                  placeholder=" …"
                  value={filterText}
-                 title="Фильтр имён групп" />
+                 title="Фильтр по имени группы" />
           <button className={resetButtonClassName} type="reset" title="Сбросить фильтр">×</button>
         </form>
       </div>
