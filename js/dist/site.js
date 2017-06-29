@@ -659,8 +659,8 @@ var $ = __webpack_require__(7);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
-        if (!$(this).attr("title")) {
-            $(this).attr("title", title);
+        if (!$(this).attr('title')) {
+            $(this).attr('title', title);
         }
     });
 }
@@ -692,41 +692,42 @@ function showMenuByClick(e, id) {
     if (evt && evt.cancelBubble) {
         evt.cancelBubble = true;
     }
-    $("#" + id).dropdown("toggle");
+    $('#' + id).dropdown('toggle');
     return false;
 }
 function getURLParameter(name) {
-    var regExp = new RegExp("[?|&]" + name + "=" + "([^&;]+?)(&|#|;|$)");
-    return decodeURIComponent((regExp.exec(location.search) || [undefined, ""])[1].replace(/\+/g, "%20")) || undefined;
+    var regExp = new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)');
+    return decodeURIComponent((regExp.exec(location.search) || [undefined, ''])[1].replace(/\+/g, '%20')) || undefined;
 }
-function limitTextArea($textArea, $feedback, $button, maxTextLen, minRemainingToShow) {
-    var f = function () {
-        var remaining = maxTextLen - $textArea.val().length;
+function limitTextArea(textAreaId, $feedback, $button, maxTextLen, minRemainingToShow) {
+    var textArea = window.document.getElementById(textAreaId);
+    var limitFn = function () {
+        var remaining = maxTextLen - textArea.value.length;
         if (remaining <= minRemainingToShow) {
-            $feedback.html("" + remaining);
+            $feedback.html('' + remaining);
         }
         else {
-            $feedback.html("");
+            $feedback.html('');
         }
         if (remaining < 0) {
-            $feedback.css("color", "red");
+            $feedback.css('color', 'red');
             if ($button) {
-                $button.attr("disabled", "");
+                $button.attr('disabled', '');
             }
         }
         else {
-            $feedback.css("color", "inherit");
+            $feedback.css('color', 'inherit');
             if ($button) {
-                $button.removeAttr("disabled");
+                $button.removeAttr('disabled');
             }
         }
     };
-    $textArea.keyup(f);
-    f();
+    textArea.addEventListener('keyup', limitFn);
+    limitFn();
 }
 function enableScrollTop() {
     $(document).ready(function () {
-        var $backTop = $("#back-top");
+        var $backTop = $('#back-top');
         if (!$backTop) {
             return;
         }
@@ -734,14 +735,14 @@ function enableScrollTop() {
         $(function () {
             $(window).scroll(function () {
                 if ($(this).scrollTop() > 100) {
-                    $("#back-top").fadeIn();
+                    $('#back-top').fadeIn();
                 }
                 else {
-                    $("#back-top").fadeOut();
+                    $('#back-top').fadeOut();
                 }
             });
-            $("#back-top").find("a").click(function () {
-                $("body,html").animate({
+            $('#back-top').find('a').click(function () {
+                $('body,html').animate({
                     scrollTop: 0
                 }, 500);
                 return false;
@@ -751,17 +752,17 @@ function enableScrollTop() {
 }
 function removeServerSideParsleyError(el) {
     var p = $(el).parsley();
-    p.removeError("server-side-parsley-error");
+    p.removeError('server-side-parsley-error');
 }
 function scrollToBlock(selector) {
     var $block = $(selector);
     var offset = $block.offset();
-    $("html, body").animate({
+    $('html, body').animate({
         scrollTop: offset.top
     });
 }
 function closeModal(jqSelector) {
-    $(jqSelector).closest(".modal").modal("hide");
+    $(jqSelector).closest('.modal').modal('hide');
 }
 exports["default"] = {
     setTitle: setTitle,
@@ -787,30 +788,35 @@ exports["default"] = {
 exports.__esModule = true;
 var $ = __webpack_require__(7);
 function isABootstrapModalOpen() {
-    return $(".modal.show").length > 0;
+    return $('.modal.show').length > 0;
 }
-function isInInput(e) {
-    var el = $(e.target);
-    return (el.is("input") || el.is("textarea"));
+function isInInput(element) {
+    if (!element || !element.tagName) {
+        return false;
+    }
+    return element.tagName === 'INPUT' || element.tagName === 'TEXTAREA';
 }
 function bindWorkspacePageKeys() {
-    $(document).on("keydown", function (e) {
-        if (isABootstrapModalOpen() || isInInput(e)) {
+    window.document.addEventListener('keydown', function (event) {
+        if (isABootstrapModalOpen()) {
             return;
         }
-        if (e.which === 65 || e.which === 97) {
-            var $btn = $("#add-zametka-button");
-            if ($btn.hasClass("active-create")) {
+        var element = event.srcElement;
+        if (isInInput(element)) {
+            if (event.which === 27) {
+                var elementId = element.getAttribute('id');
+                if (elementId === 'create-zametka-text-area') {
+                    $('#create-zametka-cancel-button').click();
+                }
+            }
+            return;
+        }
+        if (event.which === 65 || event.which === 97) {
+            var $btn = $('#add-zametka-button');
+            if ($btn.hasClass('active-create')) {
                 return;
             }
             $btn.click();
-        }
-        else if (e.which === 27) {
-            var clicked = e.originalEvent.srcElement.getAttribute("id");
-            console.log(clicked);
-            if (clicked === "create-zametka-text-area") {
-                $("#create-zametka-cancel-button").click();
-            }
         }
     });
 }

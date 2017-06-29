@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "jsx": "react"
-    //    "lib": ["es2015", "es2015.iterable", "dom"]
+    "jsx": "react",
+    "lib": ["es2015", "es2015.iterable", "dom"]
   },
   "files": [
     "src/types/tsd.d.ts",

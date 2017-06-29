@@ -1,35 +1,41 @@
-import * as $ from "jquery";
+import * as $ from 'jquery'
 
 function isABootstrapModalOpen(): boolean {
-    return $(".modal.show").length > 0;
+  return $('.modal.show').length > 0
 }
 
-function isInInput(e: JQueryEventObject): boolean {
-    let el = $(e.target);
-    return (el.is("input") || el.is("textarea"));
+function isInInput(element: Element): boolean {
+  if (!element || !element.tagName) {
+    return false
+  }
+  return element.tagName === 'INPUT' || element.tagName === 'TEXTAREA'
 }
 
 function bindWorkspacePageKeys() {
-    $(document).on("keydown", function (e) {
-        if (isABootstrapModalOpen() || isInInput(e)) {
-            return;
+  window.document.addEventListener('keydown', function (event: KeyboardEvent) {
+    if (isABootstrapModalOpen()) {
+      return
+    }
+    let element = event.srcElement
+    if (isInInput(element)) {
+      if (event.which === 27) { //todo: rework this part. Make it work for editing existing entries too
+        const elementId = element.getAttribute('id')
+        if (elementId === 'create-zametka-text-area') {
+          $('#create-zametka-cancel-button').click()
         }
-        if (e.which === 65 || e.which === 97) {
-            const $btn = $("#add-zametka-button");
-            if ($btn.hasClass("active-create")) {
-                return
-            }
-            $btn.click();
-        } else if (e.which === 27) {
-            let clicked = e.originalEvent.srcElement.getAttribute("id");
-            console.log(clicked);
-            if (clicked === "create-zametka-text-area") {
-                $("#create-zametka-cancel-button").click();
-            }
-        }
-    });
+      }
+      return
+    }
+    if (event.which === 65 || event.which === 97) {
+      const $btn = $('#add-zametka-button')
+      if ($btn.hasClass('active-create')) {
+        return
+      }
+      $btn.click()
+    }
+  })
 }
 
 export default {
-    bindWorkspacePageKeys: bindWorkspacePageKeys
+  bindWorkspacePageKeys: bindWorkspacePageKeys
 }
