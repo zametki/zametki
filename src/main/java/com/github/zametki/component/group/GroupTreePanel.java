@@ -89,17 +89,12 @@ public class GroupTreePanel extends Panel {
         json.put("level", node.getLevel());
         json.put("active", node.getGroupId().equals(activeGroupModel.getObject()));
         json.put("entriesCount", Context.getZametkaDbi().countByGroup(g.userId, groupId));
-        int childCount = node.getChildCount();
-        if (childCount > 0) {
-            JSONArray children = new JSONArray();
-            for (int i = 0; i < childCount; i++) {
-                GroupTreeNode childNode = (GroupTreeNode) node.getChildAt(i);
-                children.put(childNode.getGroupId().intValue);
-            }
-            if (children.length() > 0) {
-                json.put("children", children);
-            }
+        JSONArray children = new JSONArray();
+        for (int i = 0, n = node.getChildCount(); i < n; i++) {
+            GroupTreeNode childNode = (GroupTreeNode) node.getChildAt(i);
+            children.put(childNode.getGroupId().intValue);
         }
+        json.put("children", children);
         return json;
     }
 }

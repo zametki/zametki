@@ -69,25 +69,22 @@
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function isAction(action, actionName) {
     return action && action.type && action.type === actionName;
 }
 exports.isAction = isAction;
-var ActionType = (function () {
-    function ActionType() {
-    }
-    ActionType.UpdateGroupTree = 'UpdateTreeAction';
-    ActionType.ToggleGroupTreeNode = 'ToggleGroupTreeNode';
-    ActionType.ActivateGroupTreeNode = 'ActivateGroupTreeNode';
-    ActionType.GroupTreeFilterUpdate = 'GroupTreeFilterUpdate';
-    return ActionType;
-}());
+class ActionType {
+}
+ActionType.UpdateGroupTree = 'UpdateTreeAction';
+ActionType.ToggleGroupTreeNode = 'ToggleGroupTreeNode';
+ActionType.ActivateGroupTreeNode = 'ActivateGroupTreeNode';
+ActionType.GroupTreeFilterUpdate = 'GroupTreeFilterUpdate';
 exports.ActionType = ActionType;
-exports.createUpdateGroupTreeAction = function (nodes) { return ({ type: ActionType.UpdateGroupTree, payload: { nodes: nodes } }); };
-exports.createToggleGroupTreeNodeAction = function (nodeId, expanded) { return ({ type: ActionType.ToggleGroupTreeNode, payload: { nodeId: nodeId, expanded: expanded } }); };
-exports.createActivateGroupTreeNodeAction = function (nodeId) { return ({ type: ActionType.ActivateGroupTreeNode, payload: { nodeId: nodeId } }); };
-exports.createGroupTreeFilterUpdateAction = function (filterText) { return ({ type: ActionType.GroupTreeFilterUpdate, payload: { filterText: filterText } }); };
+exports.createUpdateGroupTreeAction = (nodes) => ({ type: ActionType.UpdateGroupTree, payload: { nodes } });
+exports.createToggleGroupTreeNodeAction = (nodeId, expanded) => ({ type: ActionType.ToggleGroupTreeNode, payload: { nodeId, expanded } });
+exports.createActivateGroupTreeNodeAction = (nodeId) => ({ type: ActionType.ActivateGroupTreeNode, payload: { nodeId } });
+exports.createGroupTreeFilterUpdateAction = (filterText) => ({ type: ActionType.GroupTreeFilterUpdate, payload: { filterText } });
 
 
 /***/ }),
@@ -108,10 +105,10 @@ module.exports = ReactRedux;
 
 "use strict";
 
-exports.__esModule = true;
-var Redux = __webpack_require__(4);
-var Reducers_1 = __webpack_require__(12);
-var ClientStorage_1 = __webpack_require__(5);
+Object.defineProperty(exports, "__esModule", { value: true });
+const Redux = __webpack_require__(4);
+const Reducers_1 = __webpack_require__(12);
+const ClientStorage_1 = __webpack_require__(5);
 exports.GROUP_TREE_ROOT_NODE_ID = 0;
 exports.defaultStoreInstance = {
     groupTree: {
@@ -137,36 +134,33 @@ module.exports = Redux;
 
 "use strict";
 
-exports.__esModule = true;
-var store = __webpack_require__(13);
-var APP = 'Z';
+Object.defineProperty(exports, "__esModule", { value: true });
+const store = __webpack_require__(13);
+const APP = 'Z';
 function getGroupTreeFilterKey() {
-    return APP + "-GT-filter";
+    return `${APP}-GT-filter`;
 }
 function getNodeExpandedKey(nodeId) {
-    return APP + "-GT-n-" + nodeId + ".expanded";
+    return `${APP}-GT-n-${nodeId}.expanded`;
 }
 function update(key, value) {
     value ? store.set(key, value) : store.remove(key);
 }
 /** Wrapper over localStorage */
-var ClientStorage = (function () {
-    function ClientStorage() {
-    }
-    ClientStorage.isNodeExpanded = function (nodeId) {
+class ClientStorage {
+    static isNodeExpanded(nodeId) {
         return !!nodeId && store.get(getNodeExpandedKey(nodeId)) === true;
-    };
-    ClientStorage.setNodeExpanded = function (nodeId, value) {
+    }
+    static setNodeExpanded(nodeId, value) {
         update(getNodeExpandedKey(nodeId), value);
-    };
-    ClientStorage.setGroupFilterText = function (value) {
+    }
+    static setGroupFilterText(value) {
         update(getGroupTreeFilterKey(), value);
-    };
-    ClientStorage.getGroupFilterText = function () {
+    }
+    static getGroupFilterText() {
         return store.get(getGroupTreeFilterKey()) || '';
-    };
-    return ClientStorage;
-}());
+    }
+}
 exports.ClientStorage = ClientStorage;
 
 
@@ -176,16 +170,16 @@ exports.ClientStorage = ClientStorage;
 
 "use strict";
 
-exports.__esModule = true;
-var callbacks = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const callbacks = {
     activateGroup: undefined
 };
 function activateGroup(groupId) {
     callbacks.activateGroup(groupId);
 }
 exports.activateGroup = activateGroup;
-exports["default"] = {
-    callbacks: callbacks
+exports.default = {
+    callbacks
 };
 
 
@@ -201,19 +195,19 @@ module.exports = $;
 
 "use strict";
 
-exports.__esModule = true;
-var SiteDef_1 = __webpack_require__(9);
+Object.defineProperty(exports, "__esModule", { value: true });
+const SiteDef_1 = __webpack_require__(9);
 __webpack_require__(10);
-var Server2Client_1 = __webpack_require__(11);
-var SiteUtils_1 = __webpack_require__(19);
-var Shortcuts_1 = __webpack_require__(20);
-var Client2Server_1 = __webpack_require__(6);
+const Server2Client_1 = __webpack_require__(11);
+const SiteUtils_1 = __webpack_require__(19);
+const Shortcuts_1 = __webpack_require__(20);
+const Client2Server_1 = __webpack_require__(6);
 __webpack_require__(21);
-SiteDef_1["default"].Server2Client = Server2Client_1["default"];
-SiteDef_1["default"].Utils = SiteUtils_1["default"];
-SiteDef_1["default"].Shortcuts = Shortcuts_1["default"];
-SiteDef_1["default"].Ajax = Client2Server_1["default"];
-window.$site = SiteDef_1["default"];
+SiteDef_1.default.Server2Client = Server2Client_1.default;
+SiteDef_1.default.Utils = SiteUtils_1.default;
+SiteDef_1.default.Shortcuts = Shortcuts_1.default;
+SiteDef_1.default.Ajax = Client2Server_1.default;
+window.$site = SiteDef_1.default;
 
 
 /***/ }),
@@ -222,8 +216,8 @@ window.$site = SiteDef_1["default"];
 
 "use strict";
 
-exports.__esModule = true;
-exports["default"] = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     /** React helpers */
     Server2Client: undefined,
     /** Set of utility functions */
@@ -275,13 +269,13 @@ if (window.Parsley) {
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Interface used by server code to trigger client actions.
  */
-var Store_1 = __webpack_require__(3);
-var GroupTreeView_1 = __webpack_require__(14);
-var Actions_1 = __webpack_require__(0);
+const Store_1 = __webpack_require__(3);
+const GroupTreeView_1 = __webpack_require__(14);
+const Actions_1 = __webpack_require__(0);
 function renderGroupTree(elementId) {
     GroupTreeView_1.renderGroupTreeView(elementId);
 }
@@ -293,10 +287,10 @@ function dispatchActivateGroupNodeAction(nodeId) {
     //noinspection TypeScriptValidateTypes
     Store_1.appStore.dispatch(Actions_1.createActivateGroupTreeNodeAction(nodeId));
 }
-exports["default"] = {
+exports.default = {
     renderGroupTreeView: GroupTreeView_1.renderGroupTreeView,
-    dispatchUpdateGroupTreeAction: dispatchUpdateGroupTreeAction,
-    dispatchActivateGroupNodeAction: dispatchActivateGroupNodeAction
+    dispatchUpdateGroupTreeAction,
+    dispatchActivateGroupNodeAction
 };
 
 
@@ -306,19 +300,11 @@ exports["default"] = {
 
 "use strict";
 
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
-exports.__esModule = true;
-var Redux = __webpack_require__(4);
-var Actions_1 = __webpack_require__(0);
-var ClientStorage_1 = __webpack_require__(5);
-var defaultStoreInstance = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const Redux = __webpack_require__(4);
+const Actions_1 = __webpack_require__(0);
+const ClientStorage_1 = __webpack_require__(5);
+const defaultStoreInstance = {
     groupTree: {
         nodeById: {},
         nodeIds: [],
@@ -326,8 +312,7 @@ var defaultStoreInstance = {
     }
 };
 /** Group Tree reducer */
-function groupTree(state, action) {
-    if (state === void 0) { state = defaultStoreInstance.groupTree; }
+function groupTree(state = defaultStoreInstance.groupTree, action) {
     if (Actions_1.isAction(action, Actions_1.ActionType.UpdateGroupTree)) {
         return updateGroupTree(state, action.payload);
     }
@@ -342,42 +327,41 @@ function groupTree(state, action) {
     }
     return state;
 }
-exports.AppReducers = Redux.combineReducers({ groupTree: groupTree });
+exports.AppReducers = Redux.combineReducers({ groupTree });
 function updateGroupTree(state, payload) {
-    var nodeById = {};
-    var nodeIds = [];
-    payload.nodes.map(function (n) {
-        var old = state.nodeById[n.id];
+    const nodeById = {};
+    const nodeIds = [];
+    payload.nodes.map(n => {
+        const old = state.nodeById[n.id];
         n.expanded = !!old ? old.expanded : ClientStorage_1.ClientStorage.isNodeExpanded(n.id);
         nodeById[n.id] = n;
         nodeIds.push(n.id);
     });
-    return __assign({}, state, { nodeById: nodeById, nodeIds: nodeIds });
+    return Object.assign({}, state, { nodeById, nodeIds });
 }
 function toggleGroupTreeNode(state, payload) {
-    var nodeById = state.nodeById;
-    var n = nodeById[payload.nodeId];
+    const nodeById = state.nodeById;
+    const n = nodeById[payload.nodeId];
     if (n) {
         n.expanded = payload.expanded;
         ClientStorage_1.ClientStorage.setNodeExpanded(n.id, n.expanded);
     }
-    return __assign({}, state, { nodeById: nodeById });
+    return Object.assign({}, state, { nodeById });
 }
 function activateGroupTreeNode(state, payload) {
-    var nodeById = state.nodeById;
+    const nodeById = state.nodeById;
     // deactivate all other nodes.
-    for (var _i = 0, _a = state.nodeIds; _i < _a.length; _i++) {
-        var id = _a[_i];
+    for (let id of state.nodeIds) {
         nodeById[id].active = false;
     }
     // activate new node.
-    var n = nodeById[payload.nodeId];
+    const n = nodeById[payload.nodeId];
     if (!n) {
         return;
     }
     n.active = true;
     // expand all parent nodes to make new node visible.
-    var parentNode = nodeById[n.parentId];
+    let parentNode = nodeById[n.parentId];
     while (parentNode) {
         if (!parentNode.expanded) {
             parentNode.expanded = true;
@@ -385,11 +369,11 @@ function activateGroupTreeNode(state, payload) {
         }
         parentNode = nodeById[parentNode.parentId];
     }
-    return __assign({}, state, { nodeById: nodeById });
+    return Object.assign({}, state, { nodeById });
 }
 function updateGroupTreeFilter(state, payload) {
     ClientStorage_1.ClientStorage.setGroupFilterText(payload.filterText);
-    return __assign({}, state, { filterText: payload.filterText });
+    return Object.assign({}, state, { filterText: payload.filterText });
 }
 
 
@@ -405,41 +389,26 @@ module.exports = store;
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = __webpack_require__(1);
-var react_dom_1 = __webpack_require__(15);
-var ReactRedux = __webpack_require__(2);
-var Store_1 = __webpack_require__(3);
-var GroupTreeNodePanel_1 = __webpack_require__(16);
-var GroupTreeFilterPanel_1 = __webpack_require__(18);
-var mapStateToProps = function (store) {
-    var topLevelGroupIds = store.groupTree.nodeIds
-        .filter(function (id) { return store.groupTree.nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID; });
-    return { topLevelGroupIds: topLevelGroupIds };
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(1);
+const react_dom_1 = __webpack_require__(15);
+const ReactRedux = __webpack_require__(2);
+const Store_1 = __webpack_require__(3);
+const GroupTreeNodePanel_1 = __webpack_require__(16);
+const GroupTreeFilterPanel_1 = __webpack_require__(18);
+const mapStateToProps = (store) => {
+    const topLevelGroupIds = store.groupTree.nodeIds
+        .filter(id => store.groupTree.nodeById[id].parentId === Store_1.GROUP_TREE_ROOT_NODE_ID);
+    return { topLevelGroupIds };
 };
-var GroupTreeViewImpl = (function (_super) {
-    __extends(GroupTreeViewImpl, _super);
-    function GroupTreeViewImpl() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    GroupTreeViewImpl.prototype.render = function () {
-        var treeNodes = this.props.topLevelGroupIds.map(function (id) { return React.createElement(GroupTreeNodePanel_1.GroupTreeNodePanel, { nodeId: id, key: 'node-' + id }); });
+class GroupTreeViewImpl extends React.Component {
+    render() {
+        const treeNodes = this.props.topLevelGroupIds.map(id => React.createElement(GroupTreeNodePanel_1.GroupTreeNodePanel, { nodeId: id, key: 'node-' + id }));
         return (React.createElement("div", null,
             React.createElement(GroupTreeFilterPanel_1.GroupTreeFilterPanel, null),
             treeNodes));
-    };
-    return GroupTreeViewImpl;
-}(React.Component));
+    }
+}
 exports.GroupTreeViewImpl = GroupTreeViewImpl;
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
 exports.GroupTreeView = ReactRedux.connect(mapStateToProps, null)(GroupTreeViewImpl);
@@ -463,25 +432,16 @@ module.exports = ReactDOM;
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = __webpack_require__(1);
-var ReactRedux = __webpack_require__(2);
-var Client2Server_1 = __webpack_require__(6);
-var Actions_1 = __webpack_require__(0);
-var GroupTreeCountsBadge_1 = __webpack_require__(17);
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(1);
+const ReactRedux = __webpack_require__(2);
+const Store_1 = __webpack_require__(3);
+const Client2Server_1 = __webpack_require__(6);
+const Actions_1 = __webpack_require__(0);
+const GroupTreeCountsBadge_1 = __webpack_require__(17);
 /** Maps Store state to component props */
-var mapStateToProps = function (store, ownProps) {
-    var node = store.groupTree.nodeById[ownProps.nodeId];
+const mapStateToProps = (store, ownProps) => {
+    let node = store.groupTree.nodeById[ownProps.nodeId];
     return {
         name: node.name,
         subGroups: node.children,
@@ -494,34 +454,41 @@ var mapStateToProps = function (store, ownProps) {
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch) {
     return {
-        toggleExpandedState: function (nodeId, expanded) { return dispatch(Actions_1.createToggleGroupTreeNodeAction(nodeId, expanded)); }
+        toggleExpandedState: (nodeId, expanded) => dispatch(Actions_1.createToggleGroupTreeNodeAction(nodeId, expanded))
     };
 }
-var GroupTreeNodePanelImpl = (function (_super) {
-    __extends(GroupTreeNodePanelImpl, _super);
-    function GroupTreeNodePanelImpl(props, context) {
-        var _this = 
-        //noinspection TypeScriptValidateTypes
-        _super.call(this, props, context) || this;
-        _this.onToggleExpandedState = _this.onToggleExpandedState.bind(_this);
-        _this.activateGroup = _this.activateGroup.bind(_this);
-        return _this;
+function matchesByFilter(nodeId, filterText, nodeById) {
+    if (filterText.length == 0) {
+        return true;
     }
-    GroupTreeNodePanelImpl.prototype.render = function () {
-        var _a = this.props, nodeId = _a.nodeId, name = _a.name, subGroups = _a.subGroups, active = _a.active, expanded = _a.expanded, level = _a.level, filterText = _a.filterText;
+    const node = nodeById[nodeId];
+    if (node && node.name.toLowerCase().includes(filterText)) {
+        return true;
+    }
+    return node.children.find(id => matchesByFilter(id, filterText, nodeById)) >= 0;
+}
+class GroupTreeNodePanelImpl extends React.Component {
+    constructor(props, context) {
+        //noinspection TypeScriptValidateTypes
+        super(props, context);
+        this.onToggleExpandedState = this.onToggleExpandedState.bind(this);
+        this.activateGroup = this.activateGroup.bind(this);
+    }
+    render() {
+        const { nodeId, name, subGroups, active, expanded, level, filterText } = this.props;
         if (!name) {
-            console.error("Node not found: " + this.props);
+            console.error(`Node not found: ${this.props}`);
             return null;
         }
-        var filteredMode = filterText.length > 0;
-        var node = filteredMode && name.indexOf(filterText) == -1 ? null :
+        const filtered = !matchesByFilter(nodeId, filterText.toLowerCase(), Store_1.appStore.getState().groupTree.nodeById);
+        const node = filtered ? null :
             (React.createElement("div", { className: 'tree-node' + (active ? ' tree-node-active' : '') },
-                React.createElement("div", { style: { paddingLeft: (filteredMode ? 0 : level) * 16 } },
+                React.createElement("div", { style: { paddingLeft: level * 16 } },
                     React.createElement("table", { className: 'w100' },
                         React.createElement("tbody", null,
                             React.createElement("tr", null,
                                 React.createElement("td", { className: 'tree-junction-td' },
-                                    React.createElement("a", { className: 'tree-junction' + (subGroups && subGroups.length > 0 && !filteredMode ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : ''), onClick: this.onToggleExpandedState })),
+                                    React.createElement("a", { className: 'tree-junction' + (subGroups && subGroups.length > 0 && (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed')), onClick: this.onToggleExpandedState })),
                                 React.createElement("td", null,
                                     React.createElement("div", { className: 'tree-content' },
                                         React.createElement("a", { className: 'tree-node-group-link', onClick: this.activateGroup },
@@ -529,16 +496,15 @@ var GroupTreeNodePanelImpl = (function (_super) {
                                             React.createElement("span", null, name))))))))));
         return (React.createElement("div", null,
             node,
-            (expanded || filteredMode) && subGroups && subGroups.map(function (childId) { return React.createElement(exports.GroupTreeNodePanel, { nodeId: childId, key: 'node-' + childId }); })));
-    };
-    GroupTreeNodePanelImpl.prototype.onToggleExpandedState = function () {
+            expanded && !filtered && subGroups && subGroups.map(childId => React.createElement(exports.GroupTreeNodePanel, { nodeId: childId, key: 'node-' + childId }))));
+    }
+    onToggleExpandedState() {
         this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded);
-    };
-    GroupTreeNodePanelImpl.prototype.activateGroup = function () {
+    }
+    activateGroup() {
         Client2Server_1.activateGroup(this.props.nodeId);
-    };
-    return GroupTreeNodePanelImpl;
-}(React.Component));
+    }
+}
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
 exports.GroupTreeNodePanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodePanelImpl);
 
@@ -549,43 +515,28 @@ exports.GroupTreeNodePanel = ReactRedux.connect(mapStateToProps, mapDispatchToPr
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = __webpack_require__(1);
-var ReactRedux = __webpack_require__(2);
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(1);
+const ReactRedux = __webpack_require__(2);
 /** Maps Store state to component props */
-var mapStateToProps = function (store, ownProps) {
-    var node = store.groupTree.nodeById[ownProps.nodeId];
+const mapStateToProps = (store, ownProps) => {
+    let node = store.groupTree.nodeById[ownProps.nodeId];
     return {
         entriesCount: node.entriesCount
     };
 };
-var GroupTreeCountsBadgeImpl = (function (_super) {
-    __extends(GroupTreeCountsBadgeImpl, _super);
-    function GroupTreeCountsBadgeImpl() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    GroupTreeCountsBadgeImpl.prototype.shouldComponentUpdate = function (nextProps) {
+class GroupTreeCountsBadgeImpl extends React.Component {
+    shouldComponentUpdate(nextProps) {
         return nextProps.entriesCount !== this.props.entriesCount;
-    };
-    GroupTreeCountsBadgeImpl.prototype.render = function () {
-        var entriesCount = this.props.entriesCount;
+    }
+    render() {
+        const { entriesCount } = this.props;
         if (entriesCount <= 0) {
             return null;
         }
         return (React.createElement("div", { className: 'badge zametka-count-badge float-right ml-1' }, entriesCount));
-    };
-    return GroupTreeCountsBadgeImpl;
-}(React.Component));
+    }
+}
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
 exports.GroupTreeCountsBadge = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadgeImpl);
 
@@ -596,22 +547,12 @@ exports.GroupTreeCountsBadge = ReactRedux.connect(mapStateToProps, null)(GroupTr
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = __webpack_require__(1);
-var ReactRedux = __webpack_require__(2);
-var Actions_1 = __webpack_require__(0);
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(1);
+const ReactRedux = __webpack_require__(2);
+const Actions_1 = __webpack_require__(0);
 /** Maps Store state to component props */
-var mapStateToProps = function (store) {
+const mapStateToProps = (store) => {
     return {
         filterText: store.groupTree.filterText
     };
@@ -619,31 +560,26 @@ var mapStateToProps = function (store) {
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch) {
     return {
-        updateFilterText: function (filterText) { return dispatch(Actions_1.createGroupTreeFilterUpdateAction(filterText)); }
+        updateFilterText: (filterText) => dispatch(Actions_1.createGroupTreeFilterUpdateAction(filterText))
     };
 }
-var GroupTreeFilterPanelImpl = (function (_super) {
-    __extends(GroupTreeFilterPanelImpl, _super);
-    function GroupTreeFilterPanelImpl() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    GroupTreeFilterPanelImpl.prototype.render = function () {
-        var filterText = this.props.filterText;
-        var resetIsOn = filterText.length > 0;
-        var resetButtonClassName = "gt-search-reset-button" + (resetIsOn ? ' gt-search-reset-button-on' : '');
+class GroupTreeFilterPanelImpl extends React.Component {
+    render() {
+        const { filterText } = this.props;
+        const resetIsOn = filterText.length > 0;
+        const resetButtonClassName = `gt-search-reset-button${resetIsOn ? ' gt-search-reset-button-on' : ''}`;
         return (React.createElement("div", { className: "gt-search-block" },
-            React.createElement("form", { onReset: this.handleReset.bind(this), onSubmit: function (e) { return e.preventDefault(); } },
+            React.createElement("form", { onReset: this.handleReset.bind(this), onSubmit: e => e.preventDefault() },
                 React.createElement("input", { ref: "inputElement", onChange: this.handleTextChange.bind(this), type: "search", className: "gt-search-input", placeholder: " …", value: filterText, title: "Фильтр по имени группы" }),
                 React.createElement("button", { className: resetButtonClassName, type: "reset", title: "Сбросить фильтр" }, "\u00D7"))));
-    };
-    GroupTreeFilterPanelImpl.prototype.handleReset = function () {
+    }
+    handleReset() {
         this.props.updateFilterText('');
-    };
-    GroupTreeFilterPanelImpl.prototype.handleTextChange = function () {
+    }
+    handleTextChange() {
         this.props.updateFilterText(this.refs.inputElement.value);
-    };
-    return GroupTreeFilterPanelImpl;
-}(React.Component));
+    }
+}
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
 exports.GroupTreeFilterPanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeFilterPanelImpl);
 
@@ -654,8 +590,8 @@ exports.GroupTreeFilterPanel = ReactRedux.connect(mapStateToProps, mapDispatchTo
 
 "use strict";
 
-exports.__esModule = true;
-var $ = __webpack_require__(7);
+Object.defineProperty(exports, "__esModule", { value: true });
+const $ = __webpack_require__(7);
 function setTitle(selector, title, root) {
     root = root ? root : window.document.body;
     $(root).find(selector).each(function () {
@@ -671,21 +607,21 @@ function focusOnEnter(event, id) {
     }
 }
 function clickOnEnter(event, id) {
-    var keyCode = (event.which ? event.which : event.keyCode);
+    let keyCode = (event.which ? event.which : event.keyCode);
     if ((keyCode === 10 || keyCode === 13) && !event.ctrlKey) {
         $(id).click();
         event.preventDefault();
     }
 }
 function clickOnCtrlEnter(event, id) {
-    var keyCode = (event.which ? event.which : event.keyCode);
+    let keyCode = (event.which ? event.which : event.keyCode);
     if ((keyCode === 10 || keyCode === 13) && event.ctrlKey) {
         $(id).click();
         event.preventDefault();
     }
 }
 function showMenuByClick(e, id) {
-    var evt = e ? e : window.event;
+    let evt = e ? e : window.event;
     if (evt && evt.stopPropagation) {
         evt.stopPropagation();
     }
@@ -696,13 +632,13 @@ function showMenuByClick(e, id) {
     return false;
 }
 function getURLParameter(name) {
-    var regExp = new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)');
+    let regExp = new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)');
     return decodeURIComponent((regExp.exec(location.search) || [undefined, ''])[1].replace(/\+/g, '%20')) || undefined;
 }
 function limitTextArea(textAreaId, $feedback, $button, maxTextLen, minRemainingToShow) {
-    var textArea = window.document.getElementById(textAreaId);
-    var limitFn = function () {
-        var remaining = maxTextLen - textArea.value.length;
+    const textArea = window.document.getElementById(textAreaId);
+    const limitFn = function () {
+        let remaining = maxTextLen - textArea.value.length;
         if (remaining <= minRemainingToShow) {
             $feedback.html('' + remaining);
         }
@@ -726,13 +662,13 @@ function limitTextArea(textAreaId, $feedback, $button, maxTextLen, minRemainingT
     limitFn();
 }
 function enableScrollTop() {
-    $(document).ready(function () {
-        var $backTop = $('#back-top');
+    $(document).ready(() => {
+        let $backTop = $('#back-top');
         if (!$backTop) {
             return;
         }
         $backTop.hide(); // hide #back-top first
-        $(function () {
+        $(() => {
             $(window).scroll(function () {
                 if ($(this).scrollTop() > 100) {
                     $('#back-top').fadeIn();
@@ -741,7 +677,7 @@ function enableScrollTop() {
                     $('#back-top').fadeOut();
                 }
             });
-            $('#back-top').find('a').click(function () {
+            $('#back-top').find('a').click(() => {
                 $('body,html').animate({
                     scrollTop: 0
                 }, 500);
@@ -751,12 +687,12 @@ function enableScrollTop() {
     });
 }
 function removeServerSideParsleyError(el) {
-    var p = $(el).parsley();
+    const p = $(el).parsley();
     p.removeError('server-side-parsley-error');
 }
 function scrollToBlock(selector) {
-    var $block = $(selector);
-    var offset = $block.offset();
+    const $block = $(selector);
+    const offset = $block.offset();
     $('html, body').animate({
         scrollTop: offset.top
     });
@@ -764,14 +700,14 @@ function scrollToBlock(selector) {
 function closeModal(jqSelector) {
     $(jqSelector).closest('.modal').modal('hide');
 }
-exports["default"] = {
+exports.default = {
     setTitle: setTitle,
     focusOnEnter: focusOnEnter,
     clickOnEnter: clickOnEnter,
     clickOnCtrlEnter: clickOnCtrlEnter,
     showMenuByClick: showMenuByClick,
     getURLParameter: getURLParameter,
-    limitTextArea: limitTextArea,
+    limitTextArea,
     enableScrollTop: enableScrollTop,
     removeServerSideParsleyError: removeServerSideParsleyError,
     scrollToBlock: scrollToBlock,
@@ -785,8 +721,8 @@ exports["default"] = {
 
 "use strict";
 
-exports.__esModule = true;
-var $ = __webpack_require__(7);
+Object.defineProperty(exports, "__esModule", { value: true });
+const $ = __webpack_require__(7);
 function isABootstrapModalOpen() {
     return $('.modal.show').length > 0;
 }
@@ -801,10 +737,10 @@ function bindWorkspacePageKeys() {
         if (isABootstrapModalOpen()) {
             return;
         }
-        var element = event.srcElement;
+        let element = event.srcElement;
         if (isInInput(element)) {
             if (event.which === 27) {
-                var elementId = element.getAttribute('id');
+                const elementId = element.getAttribute('id');
                 if (elementId === 'create-zametka-text-area') {
                     $('#create-zametka-cancel-button').click();
                 }
@@ -812,7 +748,7 @@ function bindWorkspacePageKeys() {
             return;
         }
         if (event.which === 65 || event.which === 97) {
-            var $btn = $('#add-zametka-button');
+            const $btn = $('#add-zametka-button');
             if ($btn.hasClass('active-create')) {
                 return;
             }
@@ -820,7 +756,7 @@ function bindWorkspacePageKeys() {
         }
     });
 }
-exports["default"] = {
+exports.default = {
     bindWorkspacePageKeys: bindWorkspacePageKeys
 };
 

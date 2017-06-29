@@ -8,7 +8,7 @@ export type GroupTreeNode = {
   parentId: number,
   level: number,
   entriesCount: number
-  children?: Array<number>
+  children: Array<number>
   active?: boolean
   expanded?: boolean
 }
