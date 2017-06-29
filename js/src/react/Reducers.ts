@@ -1,6 +1,6 @@
 import * as Redux from 'redux'
-import {AppStore,  GroupTree} from './Store'
-import {Action, ActionType, ActivateGroupTreeNodeActionPayload, GroupTreeFilterUpdatePayload, isAction, ToggleGroupTreeNodeActionPayload, UpdateGroupTreeActionPayload} from './Actions'
+import {AppStore, GroupTree} from './Store'
+import {ActionType, ActivateGroupTreeNodeActionPayload, GroupTreeFilterUpdatePayload, isAction, ToggleGroupTreeNodeActionPayload, UpdateGroupTreeActionPayload} from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
 
 const defaultStoreInstance: AppStore = {
@@ -12,7 +12,7 @@ const defaultStoreInstance: AppStore = {
 }
 
 /** Group Tree reducer */
-function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Action<any>): GroupTree {
+function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Redux.Action): GroupTree {
   if (isAction<UpdateGroupTreeActionPayload>(action, ActionType.UpdateGroupTree)) {
     return updateGroupTree(state, action.payload)
   } else if (isAction<ToggleGroupTreeNodeActionPayload>(action, ActionType.ToggleGroupTreeNode)) {
@@ -77,7 +77,7 @@ function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeA
 }
 
 function updateGroupTreeFilter(state: GroupTree, payload: GroupTreeFilterUpdatePayload): GroupTree {
-  ClientStorage.setGroupFilterText(payload.filterText);
+  ClientStorage.setGroupFilterText(payload.filterText)
   return {...state, filterText: payload.filterText} as GroupTree
 }
 

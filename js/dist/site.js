@@ -77,12 +77,12 @@ exports.isAction = isAction;
 var ActionType = (function () {
     function ActionType() {
     }
+    ActionType.UpdateGroupTree = 'UpdateTreeAction';
+    ActionType.ToggleGroupTreeNode = 'ToggleGroupTreeNode';
+    ActionType.ActivateGroupTreeNode = 'ActivateGroupTreeNode';
+    ActionType.GroupTreeFilterUpdate = 'GroupTreeFilterUpdate';
     return ActionType;
 }());
-ActionType.UpdateGroupTree = 'UpdateTreeAction';
-ActionType.ToggleGroupTreeNode = 'ToggleGroupTreeNode';
-ActionType.ActivateGroupTreeNode = 'ActivateGroupTreeNode';
-ActionType.GroupTreeFilterUpdate = 'GroupTreeFilterUpdate';
 exports.ActionType = ActionType;
 exports.createUpdateGroupTreeAction = function (nodes) { return ({ type: ActionType.UpdateGroupTree, payload: { nodes: nodes } }); };
 exports.createToggleGroupTreeNodeAction = function (nodeId, expanded) { return ({ type: ActionType.ToggleGroupTreeNode, payload: { nodeId: nodeId, expanded: expanded } }); };
@@ -633,7 +633,7 @@ var GroupTreeFilterPanelImpl = (function (_super) {
         var resetButtonClassName = "gt-search-reset-button" + (resetIsOn ? ' gt-search-reset-button-on' : '');
         return (React.createElement("div", { className: "gt-search-block" },
             React.createElement("form", { onReset: this.handleReset.bind(this), onSubmit: function (e) { return e.preventDefault(); } },
-                React.createElement("input", { ref: "inputElement", onChange: this.handleTextChange.bind(this), type: "search", className: "gt-search-input", placeholder: " …", value: filterText, title: "Фильтр имён групп" }),
+                React.createElement("input", { ref: "inputElement", onChange: this.handleTextChange.bind(this), type: "search", className: "gt-search-input", placeholder: " …", value: filterText, title: "Фильтр по имени группы" }),
                 React.createElement("button", { className: resetButtonClassName, type: "reset", title: "Сбросить фильтр" }, "\u00D7"))));
     };
     GroupTreeFilterPanelImpl.prototype.handleReset = function () {
