@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "jsx": "react"
+    "jsx": "react",
+    "target": "es6"
   },
   "files": [
     "src/types/tsd.d.ts",
     "src/site.ts"
   ]
+  //TODO:  "exclude": ["node_modules"]
 }

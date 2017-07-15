@@ -1,8 +1,8 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
-import {AppStore} from './Store'
-import {activateGroup} from '../utils/ajax'
-import {createToggleTreeNodeAction} from './Actions'
+import {AppStore, appStore, GroupTreeNode} from '../Store'
+import {activateGroup} from '../../utils/Client2Server'
+import {createToggleGroupTreeNodeAction} from '../Actions'
 import {GroupTreeCountsBadge} from './GroupTreeCountsBadge'
 
 type OwnProps = {
@@ -14,11 +14,12 @@ type StateProps = {
   subGroups: Array<number>
   active: boolean
   expanded: boolean
-  level: number
+  level: number,
+  filterText: string
 }
 
 type DispatchProps = {
-  expandNode: (nodeId: number, expanded: boolean) => void
+  toggleExpandedState: (nodeId: number, expanded: boolean) => void
 }
 
 type AllProps = StateProps & DispatchProps & OwnProps
@@ -31,15 +32,27 @@ const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
     subGroups: node.children,
     active: node.active,
     expanded: node.expanded,
-    level: node.level
+    level: node.level,
+    filterText: store.groupTree.filterText
   }
 }
 
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch): DispatchProps {
   return {
-    expandNode: (nodeId, expanded) => dispatch(createToggleTreeNodeAction(nodeId, expanded))
+    toggleExpandedState: (nodeId, expanded) => dispatch(createToggleGroupTreeNodeAction(nodeId, expanded))
   }
+}
+
+function matchesByFilter(nodeId: number, filterText: string, nodeById: { [nodeId: number]: GroupTreeNode }): boolean {
+  if (filterText.length == 0) {
+    return true
+  }
+  const node = nodeById[nodeId]
+  if (node && node.name.toLowerCase().includes(filterText)) {
+    return true
+  }
+  return node.children.find(id => matchesByFilter(id, filterText, nodeById)) >= 0
 }
 
 class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
@@ -52,20 +65,21 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
   }
 
   render() {
-    const {nodeId, name, subGroups, active, expanded, level} = this.props
+    const {nodeId, name, subGroups, active, expanded, level, filterText} = this.props
     if (!name) {
       console.error(`Node not found: ${this.props}`)
       return null
     }
-    return (
-      <div>
+    const filtered = !matchesByFilter(nodeId, filterText.toLowerCase(), appStore.getState().groupTree.nodeById)
+    const node = filtered ? null :
+      (
         <div className={'tree-node' + (active ? ' tree-node-active' : '')}>
           <div style={{paddingLeft: level * 16}}>
             <table className='w100'>
               <tbody>
               <tr>
                 <td className='tree-junction-td'>
-                  <a className={'tree-junction' + (subGroups && subGroups.length > 0 ? (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed') : '')}
+                  <a className={'tree-junction' + (subGroups && subGroups.length > 0 && (expanded ? ' tree-junction-expanded' : ' tree-junction-collapsed'))}
                      onClick={this.onToggleExpandedState} />
                 </td>
                 <td>
@@ -81,13 +95,18 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
             </table>
           </div>
         </div>
-        {expanded && subGroups && subGroups.map(childId => <GroupTreeNodePanel nodeId={childId} key={'node-' + childId} />)}
+      )
+
+    return (
+      <div>
+        {node}
+        {expanded && !filtered && subGroups && subGroups.map(childId => <GroupTreeNodePanel nodeId={childId} key={'node-' + childId} />)}
       </div>
     )
   }
 
   private onToggleExpandedState() {
-    this.props.expandNode(this.props.nodeId, !this.props.expanded)
+    this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded)
   }
 
   private activateGroup() {

@@ -1,0 +1,34 @@
+.gt-search-block {
+    width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 5px;
+    overflow: hidden;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.gt-search-input {
+    width: 100%;
+    border: 1px solid #ccc;
+    outline: 0;
+}
+
+.gt-search-reset-button {
+    cursor: pointer;
+    border: none;
+    opacity: 0;
+    margin-left: -24px;
+    outline: none;
+    background: transparent;
+    color: #999;
+}
+
+.gt-search-reset-button:active, .gt-search-reset-button:hover, .gt-search-reset-button:focus {
+    outline: none;
+}
+
+.gt-search-reset-button-on {
+    opacity: 1;
+}
+

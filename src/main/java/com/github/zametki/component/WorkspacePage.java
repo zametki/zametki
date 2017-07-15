@@ -9,7 +9,6 @@ import com.github.zametki.component.bootstrap.BootstrapModal;
 import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
 import com.github.zametki.component.group.GroupListPanel;
 import com.github.zametki.component.group.GroupTreePanel;
-import com.github.zametki.component.react.ReactGroupTreePanel;
 import com.github.zametki.component.user.BaseUserPage;
 import com.github.zametki.component.user.UserProfileSettingsPage;
 import com.github.zametki.component.zametka.CreateZametkaPanel;
@@ -63,11 +62,8 @@ public class WorkspacePage extends BaseUserPage {
         add(groupsModal);
         add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
-        if (!pp.get("react").isEmpty()) {
-            add(new ReactGroupTreePanel("groups", state.activeGroupModel));
-        } else {
-            add(new GroupTreePanel("groups", state.activeGroupModel));
-        }
+        add(new GroupTreePanel("groups", state.activeGroupModel));
+
         CreateZametkaPanel createPanel = new CreateZametkaPanel("create_panel", state.activeGroupModel);
         add(createPanel);
         add(lenta);
@@ -104,9 +100,12 @@ public class WorkspacePage extends BaseUserPage {
             e.target.add(lenta);
             groupsModal.hide(e.target);
 
+            GroupId activeGroupId = state.activeGroupModel.getObject();
             UserSettings us = UserSettings.get();
-            us.lastShownGroup = state.activeGroupModel.getObject();
+            us.lastShownGroup = activeGroupId;
             UserSettings.set(us);
+
+            e.target.appendJavaScript("$site.Server2Client.dispatchActivateGroupNodeAction(" + (activeGroupId == null ? null : activeGroupId.intValue) + ");");
         }
     }
 

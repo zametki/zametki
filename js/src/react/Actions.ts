@@ -1,21 +1,27 @@
-import * as Redux from 'redux'
 import {GroupTreeNode} from './Store'
+import {Action} from 'redux'
 
-export interface Action<T> extends Redux.Action {
+export interface ZAction<T> extends Action {
   payload: T
 }
 
-export function isAction<T>(action: Action<any>, actionName: string): action is Action<T> {
+export function isAction<T>(action: Action, actionName: string): action is ZAction<T> {
   return action && action.type && action.type === actionName
 }
 
 export class ActionType {
-  static UpdateTree = 'UpdateTreeAction'
-  static ToggleTreeNode = 'ToggleTreeNode'
+  static UpdateGroupTree = 'UpdateTreeAction'
+  static ToggleGroupTreeNode = 'ToggleGroupTreeNode'
+  static ActivateGroupTreeNode = 'ActivateGroupTreeNode'
+  static GroupTreeFilterUpdate = 'GroupTreeFilterUpdate'
 }
 
-export type UpdateTreeActionPayload = { nodes: Array<GroupTreeNode>; }
-export type ToggleTreeNodeActionPayload = { nodeId: number, expanded: boolean; }
+export type UpdateGroupTreeActionPayload = { nodes: Array<GroupTreeNode>; }
+export type ToggleGroupTreeNodeActionPayload = { nodeId: number, expanded: boolean; }
+export type ActivateGroupTreeNodeActionPayload = { nodeId: number }
+export type GroupTreeFilterUpdatePayload = { filterText: string }
 
-export const createUpdateTreeAction = (nodes: Array<GroupTreeNode>): Action<UpdateTreeActionPayload> => ({type: ActionType.UpdateTree, payload: {nodes}})
-export const createToggleTreeNodeAction = (nodeId: number, expanded: boolean): Action<ToggleTreeNodeActionPayload> => ({type: ActionType.ToggleTreeNode, payload: {nodeId, expanded}})
+export const createUpdateGroupTreeAction = (nodes: Array<GroupTreeNode>): ZAction<UpdateGroupTreeActionPayload> => ({type: ActionType.UpdateGroupTree, payload: {nodes}})
+export const createToggleGroupTreeNodeAction = (nodeId: number, expanded: boolean): ZAction<ToggleGroupTreeNodeActionPayload> => ({type: ActionType.ToggleGroupTreeNode, payload: {nodeId, expanded}})
+export const createActivateGroupTreeNodeAction = (nodeId: number): ZAction<ActivateGroupTreeNodeActionPayload> => ({type: ActionType.ActivateGroupTreeNode, payload: {nodeId}})
+export const createGroupTreeFilterUpdateAction = (filterText: string): ZAction<GroupTreeFilterUpdatePayload> => ({type: ActionType.GroupTreeFilterUpdate, payload: {filterText}})
