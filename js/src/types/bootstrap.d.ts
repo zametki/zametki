@@ -4,7 +4,7 @@
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 interface ModalOptions {
-    backdrop?: boolean|string;
+    backdrop?: boolean | string;
     keyboard?: boolean;
     show?: boolean;
     remote?: string;
@@ -50,7 +50,7 @@ interface PopoverOptions {
 }
 
 interface CollapseOptions {
-    parent?: any;    
+    parent?: any;
     toggle?: boolean;
 }
 
@@ -113,5 +113,5 @@ interface JQuery {
     affix(options?: AffixOptions): JQuery;
 }
 
-declare module "bootstrap" {
+declare module 'bootstrap' {
 }

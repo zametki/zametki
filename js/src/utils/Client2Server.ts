@@ -1,15 +1,15 @@
 type CallbacksMap = {
-  activateGroup(groupId: number)
+    activateGroup(groupId: number)
 }
 
 const callbacks: CallbacksMap = {
-  activateGroup: undefined
+    activateGroup: undefined
 }
 
 export function activateGroup(groupId: number) {
-  callbacks.activateGroup(groupId)
+    callbacks.activateGroup(groupId)
 }
 
 export default {
-  callbacks
+    callbacks
 }

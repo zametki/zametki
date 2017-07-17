@@ -12,5 +12,5 @@ site.Utils = SiteUtils
 site.Shortcuts = Shortcuts
 site.Ajax = Ajax;
 
-(<any>window).$site = site
+(window as any).$site = site
 

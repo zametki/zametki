@@ -18,7 +18,7 @@ interface JQuery {
     parsley(): Parsley;
 }
 
-declare module "parsleyjs" {
+declare module 'parsleyjs' {
     export = Parsley;
 }
 
