@@ -6,6 +6,8 @@ import {
     GroupTreeFilterUpdatePayload,
     isAction,
     ToggleGroupTreeNodeActionPayload,
+    ToggleGroupTreeNodeMenuPayload,
+    ToggleGroupTreeNodeRenamePayload,
     UpdateGroupTreeActionPayload
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
@@ -14,7 +16,8 @@ const defaultStoreInstance: AppStore = {
     groupTree: {
         nodeById: {},
         nodeIds: [],
-        filterText: ClientStorage.getGroupFilterText()
+        filterText: ClientStorage.getGroupFilterText(),
+        contextMenuNodeId: -1
     }
 }
 
@@ -28,6 +31,10 @@ function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Re
         return activateGroupTreeNode(state, action.payload)
     } else if (isAction<GroupTreeFilterUpdatePayload>(action, ActionType.GroupTreeFilterUpdate)) {
         return updateGroupTreeFilter(state, action.payload)
+    } else if (isAction<ToggleGroupTreeNodeRenamePayload>(action, ActionType.ToggleGroupTreeNodeRename)) {
+        return toggleGroupTreeNodeRename(state, action.payload)
+    } else if (isAction<ToggleGroupTreeNodeMenuPayload>(action, ActionType.ToggleGroupTreeNodeMenu)) {
+        return toggleGroupTreeNodeMenu(state, action.payload)
     }
     return state
 }
@@ -43,7 +50,7 @@ function updateGroupTree(state: GroupTree, payload: UpdateGroupTreeActionPayload
         nodeById[n.id] = n
         nodeIds.push(n.id)
     })
-    return {...state, nodeById, nodeIds}
+    return {...state, nodeById, nodeIds} as GroupTree
 }
 
 function toggleGroupTreeNode(state: GroupTree, payload: ToggleGroupTreeNodeActionPayload): GroupTree {
@@ -53,7 +60,7 @@ function toggleGroupTreeNode(state: GroupTree, payload: ToggleGroupTreeNodeActio
         n.expanded = payload.expanded
         ClientStorage.setNodeExpanded(n.id, n.expanded)
     }
-    return {...state, nodeById}
+    return {...state, nodeById} as GroupTree
 }
 
 function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeActionPayload): GroupTree {
@@ -80,10 +87,24 @@ function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeA
         }
         parentNode = nodeById[parentNode.parentId]
     }
-    return {...state, nodeById}
+    return {...state, nodeById} as GroupTree
 }
 
 function updateGroupTreeFilter(state: GroupTree, payload: GroupTreeFilterUpdatePayload): GroupTree {
     ClientStorage.setGroupFilterText(payload.filterText)
-    return {...state, filterText: payload.filterText}
+    return {...state, filterText: payload.filterText} as GroupTree
+}
+
+function toggleGroupTreeNodeRename(state: GroupTree, payload: ToggleGroupTreeNodeRenamePayload) {
+    return state
+}
+
+function toggleGroupTreeNodeMenu(state: GroupTree, payload: ToggleGroupTreeNodeMenuPayload) {
+    if (payload.active) {
+        return {...state, contextMenuNodeId: payload.nodeId}
+    }
+    if (state.contextMenuNodeId === payload.nodeId) {
+        return {...state, contextMenuNodeId: -1}
+    }
+    return state
 }

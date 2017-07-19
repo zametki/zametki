@@ -2,7 +2,7 @@
   "extends": "tslint:latest",
   "rules": {
     "indent": [true, "spaces"],
-    "indent-size": [true, 2],
+    "indent-size": [true, 4],
     "semicolon": [true, "never"],
     "trailing-comma": false,
     "quotemark": false,

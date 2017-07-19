@@ -14,26 +14,43 @@ export class ActionType {
     static ToggleGroupTreeNode = 'ToggleGroupTreeNode'
     static ActivateGroupTreeNode = 'ActivateGroupTreeNode'
     static GroupTreeFilterUpdate = 'GroupTreeFilterUpdate'
+    static ToggleGroupTreeNodeRename = 'ToggleGroupTreeNodeRename'
+    static ToggleGroupTreeNodeMenu = 'ToggleGroupTreeNodeMenu'
 }
 
 export type UpdateGroupTreeActionPayload = { nodes: GroupTreeNode[]; }
 export type ToggleGroupTreeNodeActionPayload = { nodeId: number, expanded: boolean; }
 export type ActivateGroupTreeNodeActionPayload = { nodeId: number }
 export type GroupTreeFilterUpdatePayload = { filterText: string }
+export type ToggleGroupTreeNodeRenamePayload = { nodeId: number, active: boolean }
+export type ToggleGroupTreeNodeMenuPayload = { nodeId: number, active: boolean }
 
 export const createUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreeActionPayload> => ({
     type: ActionType.UpdateGroupTree,
     payload: {nodes}
 })
+
 export const createToggleGroupTreeNodeAction = (nodeId: number, expanded: boolean): ZAction<ToggleGroupTreeNodeActionPayload> => ({
     type: ActionType.ToggleGroupTreeNode,
     payload: {nodeId, expanded}
 })
+
 export const createActivateGroupTreeNodeAction = (nodeId: number): ZAction<ActivateGroupTreeNodeActionPayload> => ({
     type: ActionType.ActivateGroupTreeNode,
     payload: {nodeId}
 })
+
 export const createGroupTreeFilterUpdateAction = (filterText: string): ZAction<GroupTreeFilterUpdatePayload> => ({
     type: ActionType.GroupTreeFilterUpdate,
     payload: {filterText}
+})
+
+export const createToggleGroupTreeNodeRenameAction = (nodeId: number, active: boolean): ZAction<ToggleGroupTreeNodeRenamePayload> => ({
+    type: ActionType.ToggleGroupTreeNodeRename,
+    payload: {nodeId, active}
+})
+
+export const createToggleGroupTreeNodeMenuAction = (nodeId: number, active: boolean): ZAction<ToggleGroupTreeNodeMenuPayload> => ({
+    type: ActionType.ToggleGroupTreeNodeMenu,
+    payload: {nodeId, active}
 })

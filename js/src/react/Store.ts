@@ -17,6 +17,7 @@ export type GroupTree = {
     nodeById: { [nodeId: number]: GroupTreeNode }
     nodeIds: number[]
     filterText: string
+    contextMenuNodeId: number
 }
 
 export type AppStore = {
@@ -29,7 +30,8 @@ export const defaultStoreInstance: AppStore = {
     groupTree: {
         nodeById: {},
         nodeIds: [],
-        filterText: ClientStorage.getGroupFilterText()
+        filterText: ClientStorage.getGroupFilterText(),
+        contextMenuNodeId: -1
     }
 }
 

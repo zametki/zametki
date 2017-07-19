@@ -21,7 +21,7 @@ function bindWorkspacePageKeys() {
             if (event.which === 27) { // todo: rework this part. Make it work for editing existing entries too
                 const elementId = element.getAttribute('id')
                 if (elementId === 'create-zametka-text-area') {
-                    $('#create-zametka-cancel-button').click()
+                    setTimeout(() => $('#create-zametka-cancel-button').click(), 100)
                 }
             }
             return

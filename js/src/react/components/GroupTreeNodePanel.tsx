@@ -4,6 +4,7 @@ import {AppStore, appStore, GroupTreeNode} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
 import {createToggleGroupTreeNodeAction} from '../Actions'
 import {GroupTreeCountsBadge} from './GroupTreeCountsBadge'
+import {GroupTreeNodeMenu} from './GroupTreeNodeMenu'
 
 type OwnProps = {
     nodeId: number
@@ -85,6 +86,7 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
                                 <td>
                                     <div className='tree-content'>
                                         <a className='tree-node-group-link' onClick={this.activateGroup}>
+                                            <GroupTreeNodeMenu nodeId={nodeId}/>
                                             <GroupTreeCountsBadge nodeId={nodeId}/>
                                             <span>{name}</span>
                                         </a>
@@ -100,8 +102,8 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
         return (
             <div>
                 {node}
-                {expanded && !filtered && subGroups && subGroups.map(childId => <GroupTreeNodePanel nodeId={childId}
-                                                                                                    key={'node-' + childId}/>)}
+                {expanded && !filtered && subGroups && subGroups.map(
+                    childId => <GroupTreeNodePanel nodeId={childId} key={'node-' + childId}/>)}
             </div>
         )
     }
