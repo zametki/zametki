@@ -16,6 +16,8 @@ export class ActionType {
     static GroupTreeFilterUpdate = 'GroupTreeFilterUpdate'
     static ToggleGroupTreeNodeRename = 'ToggleGroupTreeNodeRename'
     static ToggleGroupTreeNodeMenu = 'ToggleGroupTreeNodeMenu'
+    static ShowCreateGroup = 'ShowCreateGroup'
+    static HideModal = 'HideModal'
 }
 
 export type UpdateGroupTreeActionPayload = { nodes: GroupTreeNode[]; }
@@ -24,6 +26,8 @@ export type ActivateGroupTreeNodeActionPayload = { nodeId: number }
 export type GroupTreeFilterUpdatePayload = { filterText: string }
 export type ToggleGroupTreeNodeRenamePayload = { nodeId: number, active: boolean }
 export type ToggleGroupTreeNodeMenuPayload = { nodeId: number, active: boolean }
+export type ShowCreateGroupPayload = { parentNodeId: number }
+export type HideModalPayload = {}
 
 export const createUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreeActionPayload> => ({
     type: ActionType.UpdateGroupTree,
@@ -53,4 +57,14 @@ export const createToggleGroupTreeNodeRenameAction = (nodeId: number, active: bo
 export const createToggleGroupTreeNodeMenuAction = (nodeId: number, active: boolean): ZAction<ToggleGroupTreeNodeMenuPayload> => ({
     type: ActionType.ToggleGroupTreeNodeMenu,
     payload: {nodeId, active}
+})
+
+export const createShowCreateGroupAction = (parentNodeId: number): ZAction<ShowCreateGroupPayload> => ({
+    type: ActionType.ShowCreateGroup,
+    payload: {parentNodeId}
+})
+
+export const createHideModalAction = (): ZAction<HideModalPayload> => ({
+    type: ActionType.HideModal,
+    payload: {}
 })

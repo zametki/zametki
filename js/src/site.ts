@@ -13,4 +13,3 @@ site.Shortcuts = Shortcuts
 site.Ajax = Ajax;
 
 (window as any).$site = site
-

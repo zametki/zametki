@@ -1,10 +1,11 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
-import {AppStore, appStore, GroupTreeNode} from '../Store'
+import {AppStore, GroupTreeNode} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
 import {createToggleGroupTreeNodeAction} from '../Actions'
 import {GroupTreeCountsBadge} from './GroupTreeCountsBadge'
 import {GroupTreeNodeMenu} from './GroupTreeNodeMenu'
+import {appStore} from '../Reducers'
 
 type OwnProps = {
     nodeId: number

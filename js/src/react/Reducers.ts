@@ -1,25 +1,19 @@
 import * as Redux from 'redux'
-import {AppStore, GroupTree} from './Store'
+import {AppStore, defaultStoreInstance, GroupTree} from './Store'
 import {
     ActionType,
     ActivateGroupTreeNodeActionPayload,
     GroupTreeFilterUpdatePayload,
+    HideModalPayload,
     isAction,
+    ShowCreateGroupPayload,
     ToggleGroupTreeNodeActionPayload,
     ToggleGroupTreeNodeMenuPayload,
     ToggleGroupTreeNodeRenamePayload,
     UpdateGroupTreeActionPayload
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
-
-const defaultStoreInstance: AppStore = {
-    groupTree: {
-        nodeById: {},
-        nodeIds: [],
-        filterText: ClientStorage.getGroupFilterText(),
-        contextMenuNodeId: -1
-    }
-}
+import {CREATE_GROUP_MODAL_ID} from './components/CreateGroupModalOverlay'
 
 /** Group Tree reducer */
 function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Redux.Action): GroupTree {
@@ -39,7 +33,18 @@ function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Re
     return state
 }
 
-export const AppReducers = Redux.combineReducers<AppStore>({groupTree})
+/** Active modal reducers */
+function activeModalId(state: string = defaultStoreInstance.activeModalId, action: Redux.Action): string {
+    if (isAction<ShowCreateGroupPayload>(action, ActionType.ShowCreateGroup)) {
+        return handleShowCreateGroup(state, action.payload)
+    } else if (isAction<HideModalPayload>(action, ActionType.HideModal)) {
+        return handleHideModal(state, action.payload)
+    }
+
+    return state
+}
+
+export const AppReducers = Redux.combineReducers<AppStore>({groupTree, activeModalId})
 
 function updateGroupTree(state: GroupTree, payload: UpdateGroupTreeActionPayload): GroupTree {
     const nodeById = {}
@@ -108,3 +113,20 @@ function toggleGroupTreeNodeMenu(state: GroupTree, payload: ToggleGroupTreeNodeM
     }
     return state
 }
+
+function handleShowCreateGroup(state: string, payload: ShowCreateGroupPayload): string {
+    return CREATE_GROUP_MODAL_ID
+}
+
+function handleHideModal(state: string, payload: HideModalPayload): string {
+    return null
+}
+
+// todo: do not export, use listeners!!
+//noinspection TsLint
+export const appStore: Redux.Store<AppStore> = window['appStore'] = Redux.createStore(
+    AppReducers,
+    defaultStoreInstance,
+    window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
+    // Redux.applyMiddleware(thunk),
+)

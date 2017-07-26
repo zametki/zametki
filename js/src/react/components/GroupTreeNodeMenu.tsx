@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
-import {createToggleGroupTreeNodeMenuAction, createToggleGroupTreeNodeRenameAction} from '../Actions'
+import {createShowCreateGroupAction, createToggleGroupTreeNodeMenuAction, createToggleGroupTreeNodeRenameAction} from '../Actions'
 import {AppStore} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
 
@@ -16,6 +16,7 @@ type StateProps = {
 type DispatchProps = {
     toggleGroupTreeNodeRename: (nodeId: number) => void
     toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => void
+    showCreateGroupModal: (nodeId: number) => void
 }
 
 type AllProps = DispatchProps & StateProps & OwnProps
@@ -51,7 +52,12 @@ class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
                 </div>
                 <div className={'dropdown' + (this.props.menuVisible ? ' show' : '')}>
                     <div className="dropdown-menu dropdown-menu-right">
-                        <div className="dropdown-item">Переименовать</div>
+                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupModal(this.props.nodeId)}>
+                            Новая группа…
+                        </div>
+                        <div className="dropdown-item">
+                            Переименовать…
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,7 +70,9 @@ class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
     }
 
     private closeMenu() {
-        this.props.menuVisible && this.props.toggleGroupTreeNodeMenu(this.props.nodeId, false)
+        if (this.props.menuVisible) {
+            this.props.toggleGroupTreeNodeMenu(this.props.nodeId, false)
+        }
     }
 }
 
@@ -83,7 +91,8 @@ function mapDispatchToProps(dispatch): DispatchProps {
                 activateGroup(nodeId)
             }
             dispatch(createToggleGroupTreeNodeMenuAction(nodeId, active))
-        }
+        },
+        showCreateGroupModal: (nodeId) => dispatch(createShowCreateGroupAction(nodeId))
     }
 }
 

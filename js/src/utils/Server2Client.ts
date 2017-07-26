@@ -1,9 +1,10 @@
 /**
  * Interface used by server code to trigger client actions.
  */
-import {appStore, GroupTreeNode} from '../react/Store'
+import {GroupTreeNode} from '../react/Store'
 import {renderGroupTreeView} from '../react/components/GroupTreeView'
 import {createActivateGroupTreeNodeAction, createUpdateGroupTreeAction} from '../react/Actions'
+import {appStore} from '../react/Reducers'
 
 function renderGroupTree(elementId: string): void {
     renderGroupTreeView(elementId)

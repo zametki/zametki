@@ -1,0 +1,49 @@
+.z-modal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    transition: opacity 1s ease-in;
+    pointer-events: auto;
+    overflow-y: auto
+}
+
+.z-modal {
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .25);
+    border-color: rgba(0, 0, 0, .75);
+}
+
+.z-modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .4) inset;
+    padding: 0 10px;
+    margin: 0;
+}
+
+.z-modal-header-content {
+}
+
+.z-modal-header-close {
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.z-modal-body {
+    background-color: #fff;
+    padding: 10px 15px;
+    text-align: left;
+    overflow-x: hidden;
+}

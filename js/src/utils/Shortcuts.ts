@@ -1,6 +1,6 @@
 import * as $ from 'jquery'
 
-function isABootstrapModalOpen(): boolean {
+function isModalOpen(): boolean {
     return $('.modal.show').length > 0
 }
 
@@ -13,7 +13,7 @@ function isInInput(element: Element): boolean {
 
 function bindWorkspacePageKeys() {
     window.document.addEventListener('keydown', (event: KeyboardEvent) => {
-        if (isABootstrapModalOpen()) {
+        if (isModalOpen()) {
             return
         }
         const element = event.srcElement
