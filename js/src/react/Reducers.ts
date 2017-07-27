@@ -1,87 +1,70 @@
+///<reference path="Actions.ts"/>
 import * as Redux from 'redux'
-import {AppStore, defaultStoreInstance, GroupTree} from './Store'
+import {AppStore, defaultStoreInstance} from './Store'
 import {
     ActionType,
     ActivateGroupTreeNodeActionPayload,
     GroupTreeFilterUpdatePayload,
     HideModalPayload,
-    isAction,
     ShowCreateGroupPayload,
     ToggleGroupTreeNodeActionPayload,
     ToggleGroupTreeNodeMenuPayload,
     ToggleGroupTreeNodeRenamePayload,
-    UpdateGroupTreeActionPayload
+    UpdateGroupTreeActionPayload,
+    ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
 import {CREATE_GROUP_MODAL_ID} from './components/CreateGroupModalOverlay'
 
-/** Group Tree reducer */
-function groupTree(state: GroupTree = defaultStoreInstance.groupTree, action: Redux.Action): GroupTree {
-    if (isAction<UpdateGroupTreeActionPayload>(action, ActionType.UpdateGroupTree)) {
-        return updateGroupTree(state, action.payload)
-    } else if (isAction<ToggleGroupTreeNodeActionPayload>(action, ActionType.ToggleGroupTreeNode)) {
-        return toggleGroupTreeNode(state, action.payload)
-    } else if (isAction<ActivateGroupTreeNodeActionPayload>(action, ActionType.ActivateGroupTreeNode)) {
-        return activateGroupTreeNode(state, action.payload)
-    } else if (isAction<GroupTreeFilterUpdatePayload>(action, ActionType.GroupTreeFilterUpdate)) {
-        return updateGroupTreeFilter(state, action.payload)
-    } else if (isAction<ToggleGroupTreeNodeRenamePayload>(action, ActionType.ToggleGroupTreeNodeRename)) {
-        return toggleGroupTreeNodeRename(state, action.payload)
-    } else if (isAction<ToggleGroupTreeNodeMenuPayload>(action, ActionType.ToggleGroupTreeNodeMenu)) {
-        return toggleGroupTreeNodeMenu(state, action.payload)
+const REDUCERS = {}
+REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
+REDUCERS[ActionType.ToggleGroupTreeNode] = toggleGroupTreeNode
+REDUCERS[ActionType.ActivateGroupTreeNode] = activateGroupTreeNode
+REDUCERS[ActionType.GroupTreeFilterUpdate] = updateGroupTreeFilter
+REDUCERS[ActionType.ToggleGroupTreeNodeRename] = toggleGroupTreeNodeRename
+REDUCERS[ActionType.ToggleGroupTreeNodeMenu] = toggleGroupTreeNodeMenu
+REDUCERS[ActionType.ShowCreateGroup] = handleShowCreateGroup
+REDUCERS[ActionType.HideModal] = handleHideModal
+
+function allReducers (state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
+    if (!action || !action.type || !action.payload) {
+        return state
     }
-    return state
+    const reducer = REDUCERS[action.type]
+    return reducer ? reducer(state, action.payload) : state
 }
 
-/** Active modal reducers */
-function activeModalId(state: string = defaultStoreInstance.activeModalId, action: Redux.Action): string {
-    if (isAction<ShowCreateGroupPayload>(action, ActionType.ShowCreateGroup)) {
-        return handleShowCreateGroup(state, action.payload)
-    } else if (isAction<HideModalPayload>(action, ActionType.HideModal)) {
-        return handleHideModal(state, action.payload)
-    }
-
-    return state
-}
-
-export const AppReducers = Redux.combineReducers<AppStore>({groupTree, activeModalId})
-
-function updateGroupTree(state: GroupTree, payload: UpdateGroupTreeActionPayload): GroupTree {
+function updateGroupTree (state: AppStore, payload: UpdateGroupTreeActionPayload): AppStore {
     const nodeById = {}
     const nodeIds = []
     payload.nodes.map(n => {
-        const old = state.nodeById[n.id]
+        const old = state.groupTree.nodeById[n.id]
         n.expanded = !!old ? old.expanded : ClientStorage.isNodeExpanded(n.id)
         nodeById[n.id] = n
         nodeIds.push(n.id)
     })
-    return {...state, nodeById, nodeIds} as GroupTree
+    // noinspection TypeScriptValidateTypes
+    return {...state, groupTree: {...state.groupTree, nodeById, nodeIds}}
 }
 
-function toggleGroupTreeNode(state: GroupTree, payload: ToggleGroupTreeNodeActionPayload): GroupTree {
-    const nodeById = state.nodeById
+function toggleGroupTreeNode (state: AppStore, payload: ToggleGroupTreeNodeActionPayload): AppStore {
+    const nodeById = state.groupTree.nodeById
     const n = nodeById[payload.nodeId]
     if (n) {
         n.expanded = payload.expanded
         ClientStorage.setNodeExpanded(n.id, n.expanded)
     }
-    return {...state, nodeById} as GroupTree
+    // noinspection TypeScriptValidateTypes
+    return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeActionPayload): GroupTree {
-    const nodeById = state.nodeById
+function activateGroupTreeNode (state: AppStore, payload: ActivateGroupTreeNodeActionPayload): AppStore {
+    const nodeById = state.groupTree.nodeById
 
-    // deactivate all other nodes.
-    for (const id of state.nodeIds) {
-        nodeById[id].active = false
-    }
-
-    // activate new node.
     const n = nodeById[payload.nodeId]
     if (!n) {
-        return
+        return state
     }
-    n.active = true
 
     // expand all parent nodes to make new node visible.
     let parentNode = nodeById[n.parentId]
@@ -92,40 +75,46 @@ function activateGroupTreeNode(state: GroupTree, payload: ActivateGroupTreeNodeA
         }
         parentNode = nodeById[parentNode.parentId]
     }
-    return {...state, nodeById} as GroupTree
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeGroupId: payload.nodeId}
 }
 
-function updateGroupTreeFilter(state: GroupTree, payload: GroupTreeFilterUpdatePayload): GroupTree {
+function updateGroupTreeFilter (state: AppStore, payload: GroupTreeFilterUpdatePayload): AppStore {
     ClientStorage.setGroupFilterText(payload.filterText)
-    return {...state, filterText: payload.filterText} as GroupTree
+    // noinspection TypeScriptValidateTypes
+    return {...state, groupTree: {...state.groupTree, filterText: payload.filterText}}
 }
 
-function toggleGroupTreeNodeRename(state: GroupTree, payload: ToggleGroupTreeNodeRenamePayload) {
+function toggleGroupTreeNodeRename (state: AppStore, payload: ToggleGroupTreeNodeRenamePayload): AppStore {
     return state
 }
 
-function toggleGroupTreeNodeMenu(state: GroupTree, payload: ToggleGroupTreeNodeMenuPayload) {
+function toggleGroupTreeNodeMenu (state: AppStore, payload: ToggleGroupTreeNodeMenuPayload): AppStore {
     if (payload.active) {
-        return {...state, contextMenuNodeId: payload.nodeId}
+        // noinspection TypeScriptValidateTypes
+        return {...state, activeGroupId: payload.nodeId, groupTree: {...state.groupTree, contextMenuIsActive: true}}
     }
-    if (state.contextMenuNodeId === payload.nodeId) {
-        return {...state, contextMenuNodeId: -1}
+    if (state.activeGroupId === payload.nodeId) {
+        // noinspection TypeScriptValidateTypes
+        return {...state, groupTree: {...state.groupTree, contextMenuIsActive: false}}
     }
     return state
 }
 
-function handleShowCreateGroup(state: string, payload: ShowCreateGroupPayload): string {
-    return CREATE_GROUP_MODAL_ID
+function handleShowCreateGroup (state: AppStore, payload: ShowCreateGroupPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeModalId: CREATE_GROUP_MODAL_ID, activeGroupId: payload.parentNodeId}
 }
 
-function handleHideModal(state: string, payload: HideModalPayload): string {
-    return null
+function handleHideModal (state: AppStore, payload: HideModalPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeModalId: null}
 }
 
 // todo: do not export, use listeners!!
 //noinspection TsLint
 export const appStore: Redux.Store<AppStore> = window['appStore'] = Redux.createStore(
-    AppReducers,
+    allReducers,
     defaultStoreInstance,
     window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
     // Redux.applyMiddleware(thunk),

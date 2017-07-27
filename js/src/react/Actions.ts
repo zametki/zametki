@@ -5,10 +5,6 @@ export interface ZAction<T> extends Action {
     payload: T
 }
 
-export function isAction<T>(action: Action, actionName: string): action is ZAction<T> {
-    return action && action.type && action.type === actionName
-}
-
 export class ActionType {
     static UpdateGroupTree = 'UpdateTreeAction'
     static ToggleGroupTreeNode = 'ToggleGroupTreeNode'

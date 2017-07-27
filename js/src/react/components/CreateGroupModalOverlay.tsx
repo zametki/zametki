@@ -21,7 +21,7 @@ class CreateGroupModalOverlayImpl extends React.Component<OwnProps & StateProps 
     /**
      * React render method, which displays the component.
      */
-    render() {
+    render () {
         return (
             <Modal show={this.props.show} close={this.close.bind(this)}>
                 <div className="z-modal-header">
@@ -35,17 +35,17 @@ class CreateGroupModalOverlayImpl extends React.Component<OwnProps & StateProps 
         )
     }
 
-    close() {
+    close () {
         console.log('CreateGroupModalOverlayImpl: close')
         this.props.hideModal()
     }
 }
 
-function mapStateToProps(store: AppStore, ownProps: OwnProps): StateProps {
+function mapStateToProps (store: AppStore, ownProps: OwnProps): StateProps {
     return {show: store.activeModalId === CREATE_GROUP_MODAL_ID}
 }
 
-function mapDispatchToProps(dispatch): DispatchProps {
+function mapDispatchToProps (dispatch): DispatchProps {
     return {hideModal: () => dispatch(createHideModalAction())}
 }
 

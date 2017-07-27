@@ -7,20 +7,20 @@ export type GroupTreeNode = {
     level: number,
     entriesCount: number
     children: number[]
-    active?: boolean
     expanded?: boolean
 }
 
 export type GroupTree = {
     nodeById: { [nodeId: number]: GroupTreeNode }
     nodeIds: number[]
-    filterText: string
-    contextMenuNodeId: number
+    filterText: string,
+    contextMenuIsActive: boolean
 }
 
 export type AppStore = {
     groupTree: GroupTree,
-    activeModalId: string
+    activeModalId: string,
+    activeGroupId: number
 }
 
 export const GROUP_TREE_ROOT_NODE_ID = 0
@@ -30,7 +30,8 @@ export const defaultStoreInstance: AppStore = {
         nodeById: {},
         nodeIds: [],
         filterText: ClientStorage.getGroupFilterText(),
-        contextMenuNodeId: -1
+        contextMenuIsActive: false
     },
-    activeModalId: null
+    activeModalId: null,
+    activeGroupId: -1
 }

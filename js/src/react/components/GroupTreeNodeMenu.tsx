@@ -23,28 +23,28 @@ type AllProps = DispatchProps & StateProps & OwnProps
 
 class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
 
-    constructor(props: AllProps, context: any) {
+    constructor (props: AllProps, context: any) {
         //noinspection TypeScriptValidateTypes
         super(props, context)
         this.showMenu = this.showMenu.bind(this)
         this.closeMenu = this.closeMenu.bind(this)
     }
 
-    componentDidMount(): void {
+    componentDidMount (): void {
         window.addEventListener('keydown', this.closeMenu)
         window.addEventListener('click', this.closeMenu)
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount (): void {
         window.removeEventListener('keydown', this.closeMenu)
         window.removeEventListener('click', this.closeMenu)
     }
 
-    shouldComponentUpdate(nextProps: Readonly<AllProps>, nextState: Readonly<{}>, nextContext: any): boolean {
+    shouldComponentUpdate (nextProps: Readonly<AllProps>, nextState: Readonly<{}>, nextContext: any): boolean {
         return this.props.menuVisible !== nextProps.menuVisible
     }
 
-    render() {
+    render () {
         return (
             <div className="zametka-group-menu-block">
                 <div onClick={this.showMenu.bind(this)} className='zametka-group-menu-link' title="Настроить группу">
@@ -64,12 +64,12 @@ class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
         )
     }
 
-    private showMenu(e: MouseEvent<any>) {
+    private showMenu (e: MouseEvent<any>) {
         e.stopPropagation()
         this.props.toggleGroupTreeNodeMenu(this.props.nodeId, true)
     }
 
-    private closeMenu() {
+    private closeMenu () {
         if (this.props.menuVisible) {
             this.props.toggleGroupTreeNodeMenu(this.props.nodeId, false)
         }
@@ -77,13 +77,13 @@ class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
 }
 
 /** Maps Store state to component props */
-const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
+const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
     return {
-        menuVisible: store.groupTree.contextMenuNodeId === ownProps.nodeId
+        menuVisible: state.activeGroupId === ownProps.nodeId && state.groupTree.contextMenuIsActive
     }
 }
 
-function mapDispatchToProps(dispatch): DispatchProps {
+function mapDispatchToProps (dispatch): DispatchProps {
     return {
         toggleGroupTreeNodeRename: (nodeId) => dispatch(createToggleGroupTreeNodeRenameAction(nodeId, true)),
         toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => {

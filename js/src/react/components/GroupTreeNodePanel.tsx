@@ -27,26 +27,26 @@ type DispatchProps = {
 type AllProps = StateProps & DispatchProps & OwnProps
 
 /** Maps Store state to component props */
-const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
-    const node = store.groupTree.nodeById[ownProps.nodeId]
+const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
+    const node = state.groupTree.nodeById[ownProps.nodeId]
     return {
         name: node.name,
         subGroups: node.children,
-        active: node.active,
+        active: node.id === state.activeGroupId,
         expanded: node.expanded,
         level: node.level,
-        filterText: store.groupTree.filterText
+        filterText: state.groupTree.filterText
     }
 }
 
 // noinspection JSUnusedLocalSymbols
-function mapDispatchToProps(dispatch): DispatchProps {
+function mapDispatchToProps (dispatch): DispatchProps {
     return {
         toggleExpandedState: (nodeId, expanded) => dispatch(createToggleGroupTreeNodeAction(nodeId, expanded))
     }
 }
 
-function matchesByFilter(nodeId: number, filterText: string, nodeById: { [nodeId: number]: GroupTreeNode }): boolean {
+function matchesByFilter (nodeId: number, filterText: string, nodeById: { [nodeId: number]: GroupTreeNode }): boolean {
     if (filterText.length === 0) {
         return true
     }
@@ -59,14 +59,14 @@ function matchesByFilter(nodeId: number, filterText: string, nodeById: { [nodeId
 
 class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
 
-    constructor(props: AllProps, context: any) {
+    constructor (props: AllProps, context: any) {
         //noinspection TypeScriptValidateTypes
         super(props, context)
         this.onToggleExpandedState = this.onToggleExpandedState.bind(this)
         this.activateGroup = this.activateGroup.bind(this)
     }
 
-    render() {
+    render () {
         const {nodeId, name, subGroups, active, expanded, level, filterText} = this.props
         if (!name) {
             // console.error(`Node not found: ${this.props}`)
@@ -109,11 +109,11 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
         )
     }
 
-    private onToggleExpandedState() {
+    private onToggleExpandedState () {
         this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded)
     }
 
-    private activateGroup() {
+    private activateGroup () {
         activateGroup(this.props.nodeId)
     }
 }
