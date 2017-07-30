@@ -1,15 +1,20 @@
-type CallbacksMap = {
-    activateGroup(groupId: number)
+/** Set of callbacks for Wicket */
+type ServerInterface = {
+    activateGroup(groupId: number),
+    createGroup(parentGroupId: number, name: string)
 }
 
-const callbacks: CallbacksMap = {
-    activateGroup: undefined
+const server: ServerInterface = {
+    activateGroup: undefined,
+    createGroup: undefined
 }
 
 export function activateGroup(groupId: number) {
-    callbacks.activateGroup(groupId)
+    server.activateGroup(groupId)
 }
 
-export default {
-    callbacks
+export function createGroup(parentGroupId: number, name: string) {
+    server.createGroup(parentGroupId, name)
 }
+
+export default server

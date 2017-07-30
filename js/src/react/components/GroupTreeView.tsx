@@ -2,10 +2,10 @@ import * as React from 'react'
 import {render} from 'react-dom'
 import * as ReactRedux from 'react-redux'
 import {AppStore, GROUP_TREE_ROOT_NODE_ID} from '../Store'
-import {GroupTreeNodePanel} from './GroupTreeNodePanel'
-import {GroupTreeFilterPanel} from './GroupTreeFilterPanel'
+import GroupTreeNodePanel from './GroupTreeNodePanel'
+import GroupTreeFilterPanel from './GroupTreeFilterPanel'
 import {appStore} from '../Reducers'
-import {CreateGroupModalOverlay} from './CreateGroupModalOverlay'
+import CreateGroupModalOverlay from './CreateGroupModalOverlay'
 
 type OwnProps = {}
 type StateProps = {
@@ -26,7 +26,7 @@ export class GroupTreeViewImpl extends React.Component<AllProps, {}> {
         const treeNodes = this.props.topLevelGroupIds.map(id => <GroupTreeNodePanel nodeId={id} key={'node-' + id}/>)
         return (
             <div>
-                <GroupTreeFilterPanel />
+                <GroupTreeFilterPanel/>
                 {treeNodes}
             </div>
         )
@@ -41,8 +41,8 @@ export function renderGroupTreeView(elementId: string) {
     render(
         <ReactRedux.Provider store={appStore}>
             <div>
-                <GroupTreeView />
-                <CreateGroupModalOverlay />
+                <GroupTreeView/>
+                <CreateGroupModalOverlay/>
             </div>
         </ReactRedux.Provider>,
         document.getElementById(elementId)

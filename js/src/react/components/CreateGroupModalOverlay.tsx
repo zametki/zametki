@@ -4,51 +4,69 @@ import * as ReactRedux from 'react-redux'
 import Modal from './Modal'
 import {AppStore} from '../Store'
 import {createHideModalAction} from '../Actions'
+import {createGroup} from "../../utils/Client2Server";
 
 type OwnProps = {}
 
 type StateProps = {
     show: boolean
+    parentGroupId: number
 }
 
 type DispatchProps = {
-    hideModal
+    hideModal: () => void
 }
 
 export const CREATE_GROUP_MODAL_ID = 'create-group-modal'
 
-class CreateGroupModalOverlayImpl extends React.Component<OwnProps & StateProps & DispatchProps, any> {
-    /**
-     * React render method, which displays the component.
-     */
-    render () {
+class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & DispatchProps, any> {
+    refs: {
+        nameInput: HTMLInputElement
+    }
+
+    render() {
         return (
             <Modal show={this.props.show} close={this.close.bind(this)}>
-                <div className="z-modal-header">
-                    <a onClick={this.close.bind(this)} className="z-modal-header-close">&times;</a>
-                    <h4 className="z-modal-header-content">Создание новой группы</h4>
-                </div>
                 <div className="z-modal-body">
-                    TODO
+                    <form className="mt10 mb10" onSubmit={this.create.bind(this)}>
+                        <div>
+                            Имя новой группы
+                            <input ref="nameInput" className="form-control form-control-sm mt5" autoFocus={true}/>
+                        </div>
+                        <div className="float-right mt20">
+                            <a onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</a>
+                            <a onClick={this.create.bind(this)} className="btn btn-sm btn-primary ml10">Создать</a>
+                        </div>
+                    </form>
                 </div>
             </Modal>
         )
     }
 
-    close () {
-        console.log('CreateGroupModalOverlayImpl: close')
+    close() {
         this.props.hideModal()
+    }
+
+    create() {
+        const name = this.refs.nameInput.value
+        if (name.length == 0) {
+            return
+        }
+        createGroup(this.props.parentGroupId, name);
+        this.close()
     }
 }
 
-function mapStateToProps (store: AppStore, ownProps: OwnProps): StateProps {
-    return {show: store.activeModalId === CREATE_GROUP_MODAL_ID}
+function mapStateToProps(store: AppStore): StateProps {
+    return {
+        show: store.activeModalId === CREATE_GROUP_MODAL_ID,
+        parentGroupId: store.activeGroupId
+    }
 }
 
-function mapDispatchToProps (dispatch): DispatchProps {
+function mapDispatchToProps(dispatch): DispatchProps {
     return {hideModal: () => dispatch(createHideModalAction())}
 }
 
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const CreateGroupModalOverlay = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(CreateGroupModalOverlayImpl) as React.ComponentClass<OwnProps>
+export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(CreateGroupModalOverlay) as React.ComponentClass<OwnProps>

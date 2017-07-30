@@ -6,6 +6,7 @@ target/
 
 # Intellij IDEA project files.
 .idea/
+*.iml
 
 # NPM logs
 npm-debug.log

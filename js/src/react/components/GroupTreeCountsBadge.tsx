@@ -20,7 +20,7 @@ const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
     }
 }
 
-class GroupTreeCountsBadgeImpl extends React.Component<AllProps, {}> {
+class GroupTreeCountsBadge extends React.Component<AllProps, {}> {
 
     shouldComponentUpdate(nextProps: Readonly<AllProps>): boolean {
         return nextProps.entriesCount !== this.props.entriesCount
@@ -38,4 +38,4 @@ class GroupTreeCountsBadgeImpl extends React.Component<AllProps, {}> {
 }
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const GroupTreeCountsBadge = ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadgeImpl) as React.ComponentClass<OwnProps>
+export default ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge) as React.ComponentClass<OwnProps>

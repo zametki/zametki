@@ -21,7 +21,7 @@ type DispatchProps = {
 
 type AllProps = DispatchProps & StateProps & OwnProps
 
-class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
+class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
 
     constructor (props: AllProps, context: any) {
         //noinspection TypeScriptValidateTypes
@@ -47,8 +47,8 @@ class GroupTreeNodeMenuImpl extends React.Component<AllProps, {}> {
     render () {
         return (
             <div className="zametka-group-menu-block">
-                <div onClick={this.showMenu.bind(this)} className='zametka-group-menu-link' title="Настроить группу">
-                    <i className="fa fa-angle-down"/>
+                <div onClick={this.showMenu.bind(this)} className='zametka-group-menu-link' title="Действия над группой">
+                    <i className="fa fa-angle-down  f14px"/>
                 </div>
                 <div className={'dropdown' + (this.props.menuVisible ? ' show' : '')}>
                     <div className="dropdown-menu dropdown-menu-right">
@@ -96,5 +96,4 @@ function mapDispatchToProps (dispatch): DispatchProps {
     }
 }
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const GroupTreeNodeMenu = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodeMenuImpl) as React.ComponentClass<OwnProps>
+export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodeMenu) as React.ComponentClass<OwnProps>

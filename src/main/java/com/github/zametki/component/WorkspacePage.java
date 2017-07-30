@@ -2,6 +2,7 @@ package com.github.zametki.component;
 
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.behavior.ajax.ActivateGroupAjaxCallback;
+import com.github.zametki.behavior.ajax.CreateGroupAjaxCallback;
 import com.github.zametki.component.basic.ComponentFactory;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
@@ -56,6 +57,7 @@ public class WorkspacePage extends BaseUserPage {
         add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
         add(new LentaLink("lenta_link", state.activeGroupModel));
         add(new ActivateGroupAjaxCallback(state.activeGroupModel));
+        add(new CreateGroupAjaxCallback(state.activeGroupModel));
 
         ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
         groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
@@ -105,7 +107,7 @@ public class WorkspacePage extends BaseUserPage {
             us.lastShownGroup = activeGroupId;
             UserSettings.set(us);
 
-            e.target.appendJavaScript("$site.Server2Client.dispatchActivateGroupNodeAction(" + (activeGroupId == null ? null : activeGroupId.intValue) + ");");
+            e.target.appendJavaScript("$site.Server2Client.dispatchActivateGroupNodeAction(" + (activeGroupId == null ? null : activeGroupId.intValue) + ")");
         }
     }
 

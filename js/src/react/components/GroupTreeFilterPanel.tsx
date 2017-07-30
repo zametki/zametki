@@ -29,7 +29,7 @@ function mapDispatchToProps(dispatch): DispatchProps {
     }
 }
 
-class GroupTreeFilterPanelImpl extends React.Component<AllProps, {}> {
+class GroupTreeFilterPanel extends React.Component<AllProps, {}> {
     public refs: {
         inputElement: HTMLInputElement;
     }
@@ -64,6 +64,5 @@ class GroupTreeFilterPanelImpl extends React.Component<AllProps, {}> {
     }
 }
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-export const GroupTreeFilterPanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeFilterPanelImpl) as React.ComponentClass<OwnProps>
+export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeFilterPanel) as React.ComponentClass<OwnProps>
 
