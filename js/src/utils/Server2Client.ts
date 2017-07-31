@@ -3,7 +3,7 @@
  */
 import {GroupTreeNode} from '../react/Store'
 import {renderGroupTreeView} from '../react/components/GroupTreeView'
-import {createActivateGroupTreeNodeAction, createUpdateGroupTreeAction} from '../react/Actions'
+import {newActivateGroupTreeNodeAction, newUpdateGroupTreeAction} from '../react/Actions'
 import {appStore} from '../react/Reducers'
 
 function renderGroupTree(elementId: string): void {
@@ -12,12 +12,12 @@ function renderGroupTree(elementId: string): void {
 
 function dispatchUpdateGroupTreeAction(rootNode: GroupTreeNode[]) {
     //noinspection TypeScriptValidateTypes
-    appStore.dispatch(createUpdateGroupTreeAction(rootNode))
+    appStore.dispatch(newUpdateGroupTreeAction(rootNode))
 }
 
 function dispatchActivateGroupNodeAction(nodeId: number) {
     //noinspection TypeScriptValidateTypes
-    appStore.dispatch(createActivateGroupTreeNodeAction(nodeId))
+    appStore.dispatch(newActivateGroupTreeNodeAction(nodeId))
 }
 
 export default {

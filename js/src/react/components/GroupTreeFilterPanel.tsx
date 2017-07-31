@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from '../Store'
-import {createGroupTreeFilterUpdateAction} from '../Actions'
+import {newGroupTreeFilterUpdateAction} from '../Actions'
 
 type OwnProps = {}
 
@@ -25,7 +25,7 @@ const mapStateToProps = (store: AppStore): StateProps => {
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        updateFilterText: (filterText) => dispatch(createGroupTreeFilterUpdateAction(filterText))
+        updateFilterText: (filterText) => dispatch(newGroupTreeFilterUpdateAction(filterText))
     }
 }
 

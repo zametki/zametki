@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
-import {createShowCreateGroupAction, createToggleGroupTreeNodeMenuAction, createToggleGroupTreeNodeRenameAction} from '../Actions'
+import {newShowCreateGroupAction, newToggleGroupTreeNodeMenuAction, newShowRenameGroupAction} from '../Actions'
 import {AppStore} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
 
@@ -14,9 +14,9 @@ type StateProps = {
 }
 
 type DispatchProps = {
-    toggleGroupTreeNodeRename: (nodeId: number) => void
     toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => void
-    showCreateGroupModal: (nodeId: number) => void
+    showCreateGroupDialog: (nodeId: number) => void
+    showRenameGroupDialog: (nodeId: number) => void
 }
 
 type AllProps = DispatchProps & StateProps & OwnProps
@@ -46,16 +46,16 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
 
     render () {
         return (
-            <div className="zametka-group-menu-block">
-                <div onClick={this.showMenu.bind(this)} className='zametka-group-menu-link' title="Действия над группой">
+            <div className="tree-node-menu-block">
+                <div onClick={this.showMenu.bind(this)} className='tree-node-menu-link' title="Действия над группой">
                     <i className="fa fa-angle-down  f14px"/>
                 </div>
                 <div className={'dropdown' + (this.props.menuVisible ? ' show' : '')}>
                     <div className="dropdown-menu dropdown-menu-right">
-                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupModal(this.props.nodeId)}>
+                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(this.props.nodeId)}>
                             Новая группа…
                         </div>
-                        <div className="dropdown-item">
+                        <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(this.props.nodeId)}>
                             Переименовать…
                         </div>
                     </div>
@@ -85,14 +85,14 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 
 function mapDispatchToProps (dispatch): DispatchProps {
     return {
-        toggleGroupTreeNodeRename: (nodeId) => dispatch(createToggleGroupTreeNodeRenameAction(nodeId, true)),
         toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => {
             if (active) {
                 activateGroup(nodeId)
             }
-            dispatch(createToggleGroupTreeNodeMenuAction(nodeId, active))
+            dispatch(newToggleGroupTreeNodeMenuAction(nodeId, active))
         },
-        showCreateGroupModal: (nodeId) => dispatch(createShowCreateGroupAction(nodeId))
+        showCreateGroupDialog: nodeId => dispatch(newShowCreateGroupAction(nodeId)),
+        showRenameGroupDialog: nodeId => dispatch(newShowRenameGroupAction(nodeId))
     }
 }
 

@@ -1,7 +1,6 @@
 package com.github.zametki.component.group;
 
 import com.github.zametki.Context;
-import com.github.zametki.event.GroupTreeChangeEvent;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.User;
@@ -67,47 +66,6 @@ public class GroupTreeModel extends DefaultTreeModel {
     private static boolean isParent(@NotNull TreeNode node, @NotNull TreeNode parentNode) {
         TreeNode p = node.getParent();
         return p == parentNode || p != null && isParent(p, parentNode);
-    }
-
-
-    public void onGroupTreeChanged(@NotNull GroupTreeChangeEvent e) {
-        switch (e.changeType) {
-            case Created:
-                onGroupCreated(e.groupId);
-                break;
-            case ParentChanged:
-                onParentChanged(e.groupId);
-                break;
-            case Deleted:
-                //todo:
-                break;
-        }
-    }
-
-    private void onGroupCreated(@NotNull GroupId groupId) {
-        Group newGroup = Context.getGroupsDbi().getById(groupId);
-        if (newGroup == null) {
-            return;
-        }
-        GroupTreeNode newNode = new GroupTreeNode(groupId);
-        nodeByGroup.put(groupId, newNode);
-        GroupTreeNode parentGroup = nodeByGroup.get(newGroup.parentId);
-        parentGroup.add(newNode);
-    }
-
-    private void onParentChanged(@NotNull GroupId groupId) {
-        Group group = Context.getGroupsDbi().getById(groupId);
-        if (group == null) {
-            return;
-        }
-        GroupTreeNode node = nodeByGroup.get(groupId);
-        GroupTreeNode oldParent = node.getParentNode();
-        GroupTreeNode newParent = nodeByGroup.get(group.parentId);
-        if (oldParent == null || newParent == null) {
-            log.error("One of the parents is null: {}, {}, {}", node, oldParent, newParent);
-            return;
-        }
-        newParent.add(node);
     }
 
     public boolean canBeParent(@NotNull GroupId parentId, @NotNull GroupId groupId) {

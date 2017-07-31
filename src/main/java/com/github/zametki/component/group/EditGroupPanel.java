@@ -94,7 +94,7 @@ public class EditGroupPanel extends Panel {
                     Context.getGroupsDbi().update(group);
                     send(getPage(), Broadcast.BREADTH, new GroupUpdateEvent(target, user.id, groupId));
                     if (parentChanged) {
-                        send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, user.id, groupId, GroupTreeChangeType.ParentChanged));
+                        send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, user.id, groupId, GroupTreeChangeType.GroupParentUpdated));
                     }
                 }
                 doneCallback.callback(target);

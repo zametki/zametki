@@ -64,7 +64,7 @@ public class CreateGroupForm extends Panel {
                 modelToUpdate.setObject(group.id);
 
                 doneCallback.callback(target);
-                send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, userId, group.id, GroupTreeChangeType.Created));
+                send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, userId, group.id, GroupTreeChangeType.GroupCreated));
             }
         };
         form.add(createButton);

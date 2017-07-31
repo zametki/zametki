@@ -2,19 +2,25 @@
 type ServerInterface = {
     activateGroup(groupId: number),
     createGroup(parentGroupId: number, name: string)
+    renameGroup(groupId: number, name: string)
 }
 
-const server: ServerInterface = {
+const Server: ServerInterface = {
     activateGroup: undefined,
-    createGroup: undefined
+    createGroup: undefined,
+    renameGroup: undefined
 }
 
 export function activateGroup(groupId: number) {
-    server.activateGroup(groupId)
+    Server.activateGroup(groupId)
 }
 
 export function createGroup(parentGroupId: number, name: string) {
-    server.createGroup(parentGroupId, name)
+    Server.createGroup(parentGroupId, name)
 }
 
-export default server
+export function renameGroup(groupId: number, name: string) {
+    Server.renameGroup(groupId, name)
+}
+
+export default Server

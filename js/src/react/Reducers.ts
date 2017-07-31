@@ -4,29 +4,29 @@ import {AppStore, defaultStoreInstance} from './Store'
 import {
     ActionType,
     ActivateGroupTreeNodeActionPayload,
+    CreateGroupPayload,
     GroupTreeFilterUpdatePayload,
-    HideModalPayload,
-    ShowCreateGroupPayload,
+    RenameGroupPayload,
     ToggleGroupTreeNodeActionPayload,
     ToggleGroupTreeNodeMenuPayload,
-    ToggleGroupTreeNodeRenamePayload,
     UpdateGroupTreeActionPayload,
     ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
 import {CREATE_GROUP_MODAL_ID} from './components/CreateGroupModalOverlay'
+import {RENAME_GROUP_MODAL_ID} from "./components/RenameGroupModalOverlay";
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
 REDUCERS[ActionType.ToggleGroupTreeNode] = toggleGroupTreeNode
 REDUCERS[ActionType.ActivateGroupTreeNode] = activateGroupTreeNode
 REDUCERS[ActionType.GroupTreeFilterUpdate] = updateGroupTreeFilter
-REDUCERS[ActionType.ToggleGroupTreeNodeRename] = toggleGroupTreeNodeRename
 REDUCERS[ActionType.ToggleGroupTreeNodeMenu] = toggleGroupTreeNodeMenu
-REDUCERS[ActionType.ShowCreateGroup] = handleShowCreateGroup
+REDUCERS[ActionType.CreateGroup] = handleCreateGroup
+REDUCERS[ActionType.RenameGroup] = handleRenameGroup
 REDUCERS[ActionType.HideModal] = handleHideModal
 
-function allReducers (state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
+function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
     if (!action || !action.type || !action.payload) {
         return state
     }
@@ -34,7 +34,7 @@ function allReducers (state: AppStore = defaultStoreInstance, action: ZAction<an
     return reducer ? reducer(state, action.payload) : state
 }
 
-function updateGroupTree (state: AppStore, payload: UpdateGroupTreeActionPayload): AppStore {
+function updateGroupTree(state: AppStore, payload: UpdateGroupTreeActionPayload): AppStore {
     const nodeById = {}
     const nodeIds = []
     payload.nodes.map(n => {
@@ -47,7 +47,7 @@ function updateGroupTree (state: AppStore, payload: UpdateGroupTreeActionPayload
     return {...state, groupTree: {...state.groupTree, nodeById, nodeIds}}
 }
 
-function toggleGroupTreeNode (state: AppStore, payload: ToggleGroupTreeNodeActionPayload): AppStore {
+function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodeActionPayload): AppStore {
     const nodeById = state.groupTree.nodeById
     const n = nodeById[payload.nodeId]
     if (n) {
@@ -58,7 +58,7 @@ function toggleGroupTreeNode (state: AppStore, payload: ToggleGroupTreeNodeActio
     return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function activateGroupTreeNode (state: AppStore, payload: ActivateGroupTreeNodeActionPayload): AppStore {
+function activateGroupTreeNode(state: AppStore, payload: ActivateGroupTreeNodeActionPayload): AppStore {
     const nodeById = state.groupTree.nodeById
 
     const n = nodeById[payload.nodeId]
@@ -79,17 +79,13 @@ function activateGroupTreeNode (state: AppStore, payload: ActivateGroupTreeNodeA
     return {...state, activeGroupId: payload.nodeId}
 }
 
-function updateGroupTreeFilter (state: AppStore, payload: GroupTreeFilterUpdatePayload): AppStore {
+function updateGroupTreeFilter(state: AppStore, payload: GroupTreeFilterUpdatePayload): AppStore {
     ClientStorage.setGroupFilterText(payload.filterText)
     // noinspection TypeScriptValidateTypes
     return {...state, groupTree: {...state.groupTree, filterText: payload.filterText}}
 }
 
-function toggleGroupTreeNodeRename (state: AppStore, payload: ToggleGroupTreeNodeRenamePayload): AppStore {
-    return state
-}
-
-function toggleGroupTreeNodeMenu (state: AppStore, payload: ToggleGroupTreeNodeMenuPayload): AppStore {
+function toggleGroupTreeNodeMenu(state: AppStore, payload: ToggleGroupTreeNodeMenuPayload): AppStore {
     if (payload.active) {
         // noinspection TypeScriptValidateTypes
         return {...state, activeGroupId: payload.nodeId, groupTree: {...state.groupTree, contextMenuIsActive: true}}
@@ -101,12 +97,18 @@ function toggleGroupTreeNodeMenu (state: AppStore, payload: ToggleGroupTreeNodeM
     return state
 }
 
-function handleShowCreateGroup (state: AppStore, payload: ShowCreateGroupPayload): AppStore {
+function handleCreateGroup(state: AppStore, payload: CreateGroupPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: CREATE_GROUP_MODAL_ID, activeGroupId: payload.parentNodeId}
 }
 
-function handleHideModal (state: AppStore, payload: HideModalPayload): AppStore {
+function handleRenameGroup(state: AppStore, payload: RenameGroupPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeModalId: RENAME_GROUP_MODAL_ID, activeGroupId: payload.nodeId}
+}
+
+
+function handleHideModal(state: AppStore): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: null}
 }

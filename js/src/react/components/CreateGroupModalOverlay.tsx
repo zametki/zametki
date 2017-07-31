@@ -3,7 +3,7 @@ import * as ReactRedux from 'react-redux'
 
 import Modal from './Modal'
 import {AppStore} from '../Store'
-import {createHideModalAction} from '../Actions'
+import {newHideModalAction} from '../Actions'
 import {createGroup} from "../../utils/Client2Server";
 
 type OwnProps = {}
@@ -25,6 +25,7 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
     }
 
     render() {
+        if (!this.props.show) return null
         return (
             <Modal show={this.props.show} close={this.close.bind(this)}>
                 <div className="z-modal-body">
@@ -47,7 +48,8 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
         this.props.hideModal()
     }
 
-    create() {
+    create(e?: React.FormEvent<any>) {
+        e && e.preventDefault()
         const name = this.refs.nameInput.value
         if (name.length == 0) {
             return
@@ -65,7 +67,7 @@ function mapStateToProps(store: AppStore): StateProps {
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
-    return {hideModal: () => dispatch(createHideModalAction())}
+    return {hideModal: () => dispatch(newHideModalAction())}
 }
 
 

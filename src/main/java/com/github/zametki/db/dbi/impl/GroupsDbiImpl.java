@@ -55,9 +55,9 @@ public class GroupsDbiImpl extends AbstractDbi implements GroupsDbi {
     }
 
     @Override
-    public void update(@NotNull Group c) {
-        sql.update(c);
-        cc().update(c);
+    public void update(@NotNull Group g) {
+        sql.update(g);
+        cc().update(g);
     }
 
     @Nullable

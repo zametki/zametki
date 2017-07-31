@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore, GroupTreeNode} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
-import {createToggleGroupTreeNodeAction} from '../Actions'
+import {newToggleGroupTreeNodeAction} from '../Actions'
 import GroupTreeCountsBadge from './GroupTreeCountsBadge'
 import GroupTreeNodeMenu from './GroupTreeNodeMenu'
 import {appStore} from '../Reducers'
@@ -42,7 +42,7 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 // noinspection JSUnusedLocalSymbols
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        toggleExpandedState: (nodeId, expanded) => dispatch(createToggleGroupTreeNodeAction(nodeId, expanded))
+        toggleExpandedState: (nodeId, expanded) => dispatch(newToggleGroupTreeNodeAction(nodeId, expanded))
     }
 }
 

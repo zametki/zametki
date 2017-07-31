@@ -72,7 +72,7 @@ public class FollowingGroupsSelector extends DropDownChoice<GroupId> {
     public void onGroupTreeChangeEvent(@NotNull GroupTreeChangeEvent e) {
         if (e.userId.equals(userId)) {
             e.target.add(this);
-            if (e.changeType == GroupTreeChangeType.Created) {
+            if (e.changeType == GroupTreeChangeType.GroupCreated) {
                 setModelObject(e.groupId);
             }
         }
