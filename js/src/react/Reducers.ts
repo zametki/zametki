@@ -6,6 +6,7 @@ import {
     ActivateGroupTreeNodeActionPayload,
     CreateGroupPayload,
     GroupTreeFilterUpdatePayload,
+    MoveGroupPayload,
     RenameGroupPayload,
     ToggleGroupTreeNodeActionPayload,
     ToggleGroupTreeNodeMenuPayload,
@@ -14,7 +15,8 @@ import {
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
 import {CREATE_GROUP_MODAL_ID} from './components/CreateGroupModalOverlay'
-import {RENAME_GROUP_MODAL_ID} from "./components/RenameGroupModalOverlay";
+import {RENAME_GROUP_MODAL_ID} from "./components/RenameGroupModalOverlay"
+import {MOVE_GROUP_MODAL_ID} from './components/MoveGroupModalOverlay'
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
@@ -24,6 +26,7 @@ REDUCERS[ActionType.GroupTreeFilterUpdate] = updateGroupTreeFilter
 REDUCERS[ActionType.ToggleGroupTreeNodeMenu] = toggleGroupTreeNodeMenu
 REDUCERS[ActionType.CreateGroup] = handleCreateGroup
 REDUCERS[ActionType.RenameGroup] = handleRenameGroup
+REDUCERS[ActionType.MoveGroup] = handleMoveGroup
 REDUCERS[ActionType.HideModal] = handleHideModal
 
 function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
@@ -105,6 +108,11 @@ function handleCreateGroup(state: AppStore, payload: CreateGroupPayload): AppSto
 function handleRenameGroup(state: AppStore, payload: RenameGroupPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: RENAME_GROUP_MODAL_ID, activeGroupId: payload.nodeId}
+}
+
+function handleMoveGroup(state: AppStore, payload: MoveGroupPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeModalId: MOVE_GROUP_MODAL_ID, activeGroupId: payload.nodeId}
 }
 
 

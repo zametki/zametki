@@ -57,7 +57,7 @@ function matchesByFilter(nodeId: number, filterText: string, nodeById: { [nodeId
     return node.children.find(id => matchesByFilter(id, filterText, nodeById)) >= 0
 }
 
-class GroupTreeNodePanel extends React.Component<AllProps, {}> {
+class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
 
     constructor(props: AllProps, context: any) {
         //noinspection TypeScriptValidateTypes
@@ -104,7 +104,7 @@ class GroupTreeNodePanel extends React.Component<AllProps, {}> {
             <div>
                 {node}
                 {expanded && !filtered && subGroups && subGroups.map(
-                    childId => <GroupTreeNodePanelComponent nodeId={childId} key={'node-' + childId}/>)
+                    childId => <GroupTreeNodePanel nodeId={childId} key={'node-' + childId}/>)
                 }
             </div>
         )
@@ -120,5 +120,5 @@ class GroupTreeNodePanel extends React.Component<AllProps, {}> {
 }
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
-const GroupTreeNodePanelComponent  = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodePanel) as React.ComponentClass<OwnProps>
-export default GroupTreeNodePanelComponent
+const GroupTreeNodePanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodePanelImpl) as React.ComponentClass<OwnProps>
+export default GroupTreeNodePanel

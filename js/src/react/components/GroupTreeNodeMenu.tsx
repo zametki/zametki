@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
-import {newShowCreateGroupAction, newToggleGroupTreeNodeMenuAction, newShowRenameGroupAction} from '../Actions'
+import {newShowCreateGroupAction, newToggleGroupTreeNodeMenuAction, newShowRenameGroupAction, newShowMoveGroupAction} from '../Actions'
 import {AppStore} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
 
@@ -17,6 +17,7 @@ type DispatchProps = {
     toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => void
     showCreateGroupDialog: (nodeId: number) => void
     showRenameGroupDialog: (nodeId: number) => void
+    showMoveGroupDialog: (nodeId: number) => void
 }
 
 type AllProps = DispatchProps & StateProps & OwnProps
@@ -53,10 +54,13 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
                 <div className={'dropdown' + (this.props.menuVisible ? ' show' : '')}>
                     <div className="dropdown-menu dropdown-menu-right">
                         <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(this.props.nodeId)}>
-                            Новая группа…
+                            Новая группа
                         </div>
                         <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(this.props.nodeId)}>
-                            Переименовать…
+                            Переименовать
+                        </div>
+                        <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(this.props.nodeId)}>
+                            Переместить
                         </div>
                     </div>
                 </div>
@@ -92,7 +96,8 @@ function mapDispatchToProps (dispatch): DispatchProps {
             dispatch(newToggleGroupTreeNodeMenuAction(nodeId, active))
         },
         showCreateGroupDialog: nodeId => dispatch(newShowCreateGroupAction(nodeId)),
-        showRenameGroupDialog: nodeId => dispatch(newShowRenameGroupAction(nodeId))
+        showRenameGroupDialog: nodeId => dispatch(newShowRenameGroupAction(nodeId)),
+        showMoveGroupDialog: nodeId => dispatch(newShowMoveGroupAction(nodeId))
     }
 }
 
