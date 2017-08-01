@@ -4,7 +4,6 @@ import * as ReactRedux from 'react-redux'
 import Modal from './Modal'
 import {AppStore} from '../Store'
 import {newHideModalAction} from '../Actions'
-import {renameGroup} from "../../utils/Client2Server"
 import GroupSelector from './GroupSelector'
 
 type OwnProps = {}
@@ -21,15 +20,11 @@ type DispatchProps = {
 
 export const MOVE_GROUP_MODAL_ID = 'move-group-modal'
 
-class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & DispatchProps, any> {
-    refs: {
-        nameInput: HTMLInputElement
-    }
+type State = {
+    newParentGroupId: number
+}
 
-    componentDidUpdate() {
-        this.refs && this.refs.nameInput && this.refs.nameInput.select()
-    }
-
+class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & DispatchProps, State> {
     render() {
         if (!this.props.show) return null
         return (
@@ -40,7 +35,8 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
                             Переместить группу {this.props.groupName}
                         </div>
                         <div className="mt10">
-                            <GroupSelector/>
+                            <GroupSelector groupToExclude={this.props.groupId} onChange={this.onChange.bind(this)}
+                            />
                         </div>
                         <div className="float-right mt20">
                             <a onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</a>
@@ -52,17 +48,20 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
         )
     }
 
+    private onChange(id: number) {
+        this.setState({newParentGroupId: id})
+    }
+
     close() {
         this.props.hideModal()
     }
 
     rename(e?: React.FormEvent<any>) {
         e && e.preventDefault()
-        const name = this.refs.nameInput.value
-        if (name.length == 0) {
+        if (!this.state.newParentGroupId) {
             return
         }
-        renameGroup(this.props.groupId, name)
+        //todo: (this.props.groupId, name)
         this.close()
     }
 }

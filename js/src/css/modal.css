@@ -8,7 +8,7 @@
     z-index: 100;
     transition: opacity 1s ease-in;
     pointer-events: auto;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .z-modal-header {

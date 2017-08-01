@@ -12,14 +12,6 @@ type StateProps = {
 
 type AllProps = StateProps & OwnProps
 
-/** Maps Store state to component props */
-const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
-    const node = store.groupTree.nodeById[ownProps.nodeId]
-    return {
-        entriesCount: node.entriesCount
-    }
-}
-
 class GroupTreeCountsBadge extends React.Component<AllProps, {}> {
 
     shouldComponentUpdate(nextProps: Readonly<AllProps>): boolean {
@@ -37,5 +29,13 @@ class GroupTreeCountsBadge extends React.Component<AllProps, {}> {
     }
 }
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
+
+/** Maps Store state to component props */
+const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
+    const node = store.groupTree.nodeById[ownProps.nodeId]
+    return {
+        entriesCount: node.entriesCount
+    }
+}
+
 export default ReactRedux.connect(mapStateToProps, null)(GroupTreeCountsBadge) as React.ComponentClass<OwnProps>

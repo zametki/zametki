@@ -1,5 +1,7 @@
 import {ClientStorage} from '../utils/ClientStorage'
 
+export const GROUP_TREE_ROOT_NODE_ID = 0
+
 export type GroupTreeNode = {
     id: number,
     name: string,
@@ -22,8 +24,6 @@ export type AppStore = {
     activeModalId: string,
     activeGroupId: number
 }
-
-export const GROUP_TREE_ROOT_NODE_ID = 0
 
 export const defaultStoreInstance: AppStore = {
     groupTree: {
