@@ -2,7 +2,8 @@ package com.github.zametki.behavior.ajax;
 
 import com.github.zametki.Context;
 import com.github.zametki.UserSession;
-import com.github.zametki.event.GroupUpdateEvent;
+import com.github.zametki.event.GroupTreeChangeEvent;
+import com.github.zametki.event.GroupTreeChangeType;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
 import com.github.zametki.model.UserId;
@@ -15,13 +16,13 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.jetbrains.annotations.NotNull;
 
-public class RenameGroupAjaxCallback extends ZApiAjaxCallback {
+public class MoveGroupAjaxCallback extends ZApiAjaxCallback {
 
     @NotNull
     private final IModel<GroupId> activeGroupModel;
 
-    public RenameGroupAjaxCallback(@NotNull IModel<GroupId> activeGroupModel) {
-        super("renameGroup", new String[]{"groupId", "name"});
+    public MoveGroupAjaxCallback(@NotNull IModel<GroupId> activeGroupModel) {
+        super("moveGroup", new String[]{"groupId", "parentGroupId"});
         this.activeGroupModel = activeGroupModel;
     }
 
@@ -38,17 +39,16 @@ public class RenameGroupAjaxCallback extends ZApiAjaxCallback {
         if (group == null || !group.userId.equals(userId)) {
             return;
         }
-        String name = params.getParameterValue("name").toString();
-        //todo: check limits
-        if (name.isEmpty()) {
+        Group parentGroup = Context.getGroupsDbi().getById(new GroupId(params.getParameterValue("parentGroupId").toInt(-1)));
+        //todo: check if root?
+        if (parentGroup == null || !parentGroup.userId.equals(userId)) {
             return;
         }
-        group.name = name;
+        group.parentId = parentGroup.id;
         Context.getGroupsDbi().update(group);
 
         Page page = target.getPage();
-        page.send(page, Broadcast.BREADTH, new GroupUpdateEvent(target, userId, group.id));
+        page.send(page, Broadcast.BREADTH, new GroupTreeChangeEvent(target, userId, group.id, GroupTreeChangeType.GroupParentUpdated));
         WicketUtils.reactiveUpdate(activeGroupModel, group.id, target);
     }
-
 }

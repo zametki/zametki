@@ -32,12 +32,15 @@ class GroupSelector extends React.Component<OwnProps & StateProps, State> {
         return <Select value={this.state && this.state.selectedGroupId}
                        options={options}
                        onChange={this.onChange.bind(this)}
-                       optionRenderer={GroupSelector.renderOption}/>
+                       optionRenderer={GroupSelector.renderOption}
+                       autofocus={true}
+        />
     }
 
-    private onChange(id: number) {
-        this.setState({selectedGroupId: id})
-        this.props.onChange(id)
+    private onChange(option: GroupOption) {
+        const selectedGroupId = option && option.value as number
+        this.setState({selectedGroupId})
+        this.props.onChange(selectedGroupId)
     }
 
     private flattenGroupTree(nodeId: number, result: Array<GroupOption>, depth: number) {

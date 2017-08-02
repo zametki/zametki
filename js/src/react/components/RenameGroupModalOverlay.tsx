@@ -4,7 +4,7 @@ import * as ReactRedux from 'react-redux'
 import Modal from './Modal'
 import {AppStore} from '../Store'
 import {newHideModalAction} from '../Actions'
-import {renameGroup} from "../../utils/Client2Server";
+import {renameGroup} from "../../utils/Client2Server"
 
 type OwnProps = {}
 
@@ -60,10 +60,9 @@ class RenameGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
     rename(e?: React.FormEvent<any>) {
         e && e.preventDefault()
         const name = this.refs.nameInput.value
-        if (name.length == 0) {
-            return
+        if (name.length > 0 && name != this.props.currentGroupName) {
+            renameGroup(this.props.groupId, name)
         }
-        renameGroup(this.props.groupId, name);
         this.close()
     }
 }
