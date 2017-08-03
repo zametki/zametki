@@ -1,7 +1,7 @@
 /* Text sizes & alignments */
 
 .bld {
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .itl {
@@ -9,7 +9,7 @@
 }
 
 .fwn {
-    font-weight: normal;
+    font-weight: 400;
 }
 
 .txtr {

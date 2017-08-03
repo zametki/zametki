@@ -21,7 +21,7 @@
 
 /* Home page menu link */
 .hp-menu a {
-    font-weight: 100;
+    font-weight: 300;
     color: #888 !important;
     text-decoration: none;
 }
@@ -41,13 +41,13 @@
     margin-bottom: 0;
     letter-spacing: .15em;
     color: #ccc;
-    font-weight: 200;
+    font-weight: 300;
 }
 
 .hp-logo-block h1 {
     color: #fff;
     font-size: 13em;
-    font-weight: 200;
+    font-weight: 300;
     text-shadow: 0.025em 0.025em 0.025em rgba(0, 0, 0, 0.8);
     visibility: hidden;
     text-align: center;
@@ -91,7 +91,7 @@
     letter-spacing: 0.15em;
     color: #ccc;
     font-size: 1.25em;
-    font-weight: 200;
+    font-weight: 300;
     text-shadow: 0.1em 0.1em 0.1em rgba(0, 0, 0, 0.8);
     visibility: hidden;
     text-align: center;
