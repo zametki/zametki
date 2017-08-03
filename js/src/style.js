@@ -1,3 +1,4 @@
+require('./css/commons.css')
 require('./css/about-page.css')
 require('./css/back-top.css')
 require('./css/badges.css')
