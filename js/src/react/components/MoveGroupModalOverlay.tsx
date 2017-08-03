@@ -35,7 +35,7 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
                 <div className="z-modal-body" style={{overflow: "visible", height: "150px"}}>
                     <form className="mt10 mb10" onSubmit={this.move.bind(this)}>
                         <div>
-                            Переместить группу {this.props.groupName}
+                            Переместить группу «{this.props.groupName}»
                         </div>
                         <div className="mt10">
                             <GroupSelector groupToExclude={this.props.groupId} onChange={this.onChange.bind(this)} autofocus={true}/>

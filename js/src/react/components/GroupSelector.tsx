@@ -38,6 +38,7 @@ class GroupSelector extends React.Component<OwnProps & StateProps, State> {
                        options={options}
                        onChange={this.onChange.bind(this)}
                        optionRenderer={GroupSelector.renderOption}
+                       placeholder="Выбор группы"
                        autofocus={this.props.autofocus}/>
     }
 

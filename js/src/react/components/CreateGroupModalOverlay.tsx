@@ -33,7 +33,7 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
         if (!this.props.show) return null
         return (
             <Modal show={this.props.show} close={this.close.bind(this)}>
-                <div className="z-modal-body">
+                <div className="z-modal-body" style={{overflow: "visible", height: "210px"}}>
                     <form className="mt10 mb10" onSubmit={this.create.bind(this)}>
                         <div>Родительская группа</div>
                         <div className="mt10">
