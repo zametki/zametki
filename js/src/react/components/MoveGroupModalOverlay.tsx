@@ -38,8 +38,7 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
                             Переместить группу {this.props.groupName}
                         </div>
                         <div className="mt10">
-                            <GroupSelector groupToExclude={this.props.groupId} onChange={this.onChange.bind(this)}
-                            />
+                            <GroupSelector groupToExclude={this.props.groupId} onChange={this.onChange.bind(this)} autofocus={true}/>
                         </div>
                         <div className="float-right mt20">
                             <a onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</a>

@@ -4,7 +4,8 @@ import * as ReactRedux from 'react-redux'
 import Modal from './Modal'
 import {AppStore} from '../Store'
 import {newHideModalAction} from '../Actions'
-import {createGroup} from "../../utils/Client2Server";
+import {createGroup} from "../../utils/Client2Server"
+import GroupSelector from './GroupSelector'
 
 type OwnProps = {}
 
@@ -19,7 +20,11 @@ type DispatchProps = {
 
 export const CREATE_GROUP_MODAL_ID = 'create-group-modal'
 
-class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & DispatchProps, any> {
+type State = {
+    parentGroupId: number
+}
+
+class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & DispatchProps, State> {
     refs: {
         nameInput: HTMLInputElement
     }
@@ -30,6 +35,10 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
             <Modal show={this.props.show} close={this.close.bind(this)}>
                 <div className="z-modal-body">
                     <form className="mt10 mb10" onSubmit={this.create.bind(this)}>
+                        <div>Родительская группа</div>
+                        <div className="mt10">
+                            <GroupSelector selectedGroupId={this.props.parentGroupId} onChange={this.onParentChanged.bind(this)}/>
+                        </div>
                         <div>
                             Имя новой группы
                             <input ref="nameInput" className="form-control form-control-sm mt5" autoFocus={true}/>
@@ -44,18 +53,22 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
         )
     }
 
-    close() {
+    private close() {
         this.props.hideModal()
     }
 
-    create(e?: React.FormEvent<any>) {
+    private create(e?: React.FormEvent<any>) {
         e && e.preventDefault()
         const name = this.refs.nameInput.value
         if (name.length == 0) {
             return
         }
-        createGroup(this.props.parentGroupId, name);
+        createGroup(this.state.parentGroupId, name)
         this.close()
+    }
+
+    private onParentChanged(parentGroupId: number) {
+        this.setState({parentGroupId})
     }
 }
 

@@ -4,9 +4,14 @@ import * as Select from 'react-select'
 import {AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTree} from '../Store'
 
 type OwnProps = {
-    /** Subtree to exclude. If <=0 -> not used */
-    groupToExclude: number
     onChange: (id: number) => void
+
+    selectedGroupId?: number
+
+    /** Subtree to exclude. If <=0 -> not used */
+    groupToExclude?: number
+
+    autofocus?: boolean
 }
 
 type StateProps = {
@@ -29,12 +34,11 @@ class GroupSelector extends React.Component<OwnProps & StateProps, State> {
             .filter(id => this.props.groupTree.nodeById[id].parentId === GROUP_TREE_ROOT_NODE_ID)
             .forEach(id => this.flattenGroupTree(id, options, 1))
 
-        return <Select value={this.state && this.state.selectedGroupId}
+        return <Select value={(this.state || this.props).selectedGroupId}
                        options={options}
                        onChange={this.onChange.bind(this)}
                        optionRenderer={GroupSelector.renderOption}
-                       autofocus={true}
-        />
+                       autofocus={this.props.autofocus}/>
     }
 
     private onChange(option: GroupOption) {
