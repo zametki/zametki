@@ -39,12 +39,14 @@ public class MoveGroupAjaxCallback extends ZApiAjaxCallback {
         if (group == null || !group.userId.equals(userId)) {
             return;
         }
-        Group parentGroup = Context.getGroupsDbi().getById(new GroupId(params.getParameterValue("parentGroupId").toInt(-1)));
-        //todo: check if root?
-        if (parentGroup == null || !parentGroup.userId.equals(userId)) {
-            return;
+        GroupId parentGroupId = new GroupId(params.getParameterValue("parentGroupId").toInt(-1));
+        if (!parentGroupId.isRoot()) {
+            Group parentGroup = Context.getGroupsDbi().getById(parentGroupId);
+            if (parentGroup == null || !parentGroup.userId.equals(userId)) {
+                return;
+            }
         }
-        group.parentId = parentGroup.id;
+        group.parentId = parentGroupId;
         Context.getGroupsDbi().update(group);
 
         Page page = target.getPage();

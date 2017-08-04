@@ -41,8 +41,8 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
                             <GroupSelector groupToExclude={this.props.groupId} onChange={this.onChange.bind(this)} autofocus={true}/>
                         </div>
                         <div className="float-right mt20">
-                            <a onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</a>
-                            <a onClick={this.move.bind(this)} className="btn btn-sm btn-primary ml10">Переместить</a>
+                            <button type="button" onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</button>
+                            <button type="submit" className="btn btn-sm btn-primary ml10">Переместить</button>
                         </div>
                     </form>
                 </div>
@@ -60,7 +60,7 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
 
     move(e?: React.FormEvent<any>) {
         e && e.preventDefault()
-        if (this.state.newParentGroupId && this.state.newParentGroupId != this.props.currentParentId) {
+        if (this.state.newParentGroupId >= 0 && this.state.newParentGroupId != this.props.currentParentId) {
             moveGroup(this.props.groupId, this.state.newParentGroupId)
         }
         this.close()
