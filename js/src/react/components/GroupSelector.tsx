@@ -30,6 +30,7 @@ class GroupSelector extends React.Component<OwnProps & StateProps, State> {
 
     render() {
         const options: Array<GroupOption> = []
+        options.push({value: GROUP_TREE_ROOT_NODE_ID, label: "«без группы»", depth: 0})
         this.props.groupTree.nodeIds
             .filter(id => this.props.groupTree.nodeById[id].parentId === GROUP_TREE_ROOT_NODE_ID)
             .forEach(id => this.flattenGroupTree(id, options, 1))
