@@ -33,19 +33,19 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
         if (!this.props.show) return null
         return (
             <Modal show={this.props.show} close={this.close.bind(this)}>
-                <div className="z-modal-body" style={{overflow: "visible", height: "210px"}}>
+                <div className="z-modal-body" style={{overflow: "visible", height: "225px"}}>
                     <form className="mt10 mb10" onSubmit={this.create.bind(this)}>
                         <div>Родительская группа</div>
                         <div className="mt10">
                             <GroupSelector selectedGroupId={this.props.parentGroupId} onChange={this.onParentChanged.bind(this)}/>
                         </div>
-                        <div>
+                        <div className="mt10">
                             Имя новой группы
-                            <input ref="nameInput" className="form-control form-control-sm mt5" autoFocus={true}/>
+                            <input ref="nameInput" className="form-control form-control mt5" autoFocus={true} />
                         </div>
                         <div className="float-right mt20">
-                            <a onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</a>
-                            <a onClick={this.create.bind(this)} className="btn btn-sm btn-primary ml10">Создать</a>
+                            <button type="button" onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</button>
+                            <button type="submit" className="btn btn-sm btn-primary ml10">Создать</button>
                         </div>
                     </form>
                 </div>
@@ -58,12 +58,14 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
     }
 
     private create(e?: React.FormEvent<any>) {
+        console.log('create!')
         e && e.preventDefault()
         const name = this.refs.nameInput.value
         if (name.length == 0) {
             return
         }
-        createGroup(this.state.parentGroupId, name)
+        const parentGroupId = this.props.parentGroupId || this.state.parentGroupId
+        createGroup(parentGroupId, name)
         this.close()
     }
 

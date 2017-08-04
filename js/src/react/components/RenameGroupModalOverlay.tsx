@@ -35,17 +35,17 @@ class RenameGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
             <Modal show={this.props.show} close={this.close.bind(this)}>
                 <div className="z-modal-body">
                     <form className="mt10 mb10" onSubmit={this.rename.bind(this)}>
-                        <div>
+                        <div className="mt10">
                             Новое имя группы
                             <input ref="nameInput"
                                    defaultValue={this.props.currentGroupName}
-                                   className="form-control form-control-sm mt5"
+                                   className="form-control form-control mt5"
                                    autoFocus={true}
                             />
                         </div>
                         <div className="float-right mt20">
-                            <a onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</a>
-                            <a onClick={this.rename.bind(this)} className="btn btn-sm btn-primary ml10">Переименовать</a>
+                            <button type="button" onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</button>
+                            <button type="submit" className="btn btn-sm btn-primary ml10">Переименовать</button>
                         </div>
                     </form>
                 </div>
