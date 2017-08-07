@@ -26,37 +26,6 @@ type DispatchProps = {
 
 type AllProps = StateProps & DispatchProps & OwnProps
 
-/** Maps Store state to component props */
-const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
-    const node = state.groupTree.nodeById[ownProps.nodeId]
-    return {
-        name: node.name,
-        subGroups: node.children,
-        active: node.id === state.activeGroupId,
-        expanded: node.expanded,
-        level: node.level,
-        filterText: state.groupTree.filterText
-    }
-}
-
-// noinspection JSUnusedLocalSymbols
-function mapDispatchToProps(dispatch): DispatchProps {
-    return {
-        toggleExpandedState: (nodeId, expanded) => dispatch(newToggleGroupTreeNodeAction(nodeId, expanded))
-    }
-}
-
-function matchesByFilter(nodeId: number, filterText: string, nodeById: { [nodeId: number]: GroupTreeNode }): boolean {
-    if (filterText.length === 0) {
-        return true
-    }
-    const node = nodeById[nodeId]
-    if (node && node.name.toLowerCase().includes(filterText)) {
-        return true
-    }
-    return node.children.find(id => matchesByFilter(id, filterText, nodeById)) >= 0
-}
-
 class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
 
     constructor(props: AllProps, context: any) {
@@ -118,6 +87,37 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
         activateGroup(this.props.nodeId)
     }
 }
+
+/** Maps Store state to component props */
+const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
+    const node = state.groupTree.nodeById[ownProps.nodeId]
+    return {
+        name: node.name,
+        subGroups: node.children,
+        active: node.id === state.activeGroupId,
+        expanded: node.expanded,
+        level: node.level,
+        filterText: state.groupTree.filterText
+    }
+}
+
+function mapDispatchToProps(dispatch): DispatchProps {
+    return {
+        toggleExpandedState: (nodeId, expanded) => dispatch(newToggleGroupTreeNodeAction(nodeId, expanded))
+    }
+}
+
+function matchesByFilter(nodeId: number, filterText: string, nodeById: { [nodeId: number]: GroupTreeNode }): boolean {
+    if (filterText.length === 0) {
+        return true
+    }
+    const node = nodeById[nodeId]
+    if (node && node.name.toLowerCase().includes(filterText)) {
+        return true
+    }
+    return node.children.find(id => matchesByFilter(id, filterText, nodeById)) >= 0
+}
+
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/8787
 const GroupTreeNodePanel = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(GroupTreeNodePanelImpl) as React.ComponentClass<OwnProps>

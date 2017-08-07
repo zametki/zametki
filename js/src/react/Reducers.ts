@@ -3,7 +3,7 @@ import * as Redux from 'redux'
 import {AppStore, defaultStoreInstance} from './Store'
 import {
     ActionType,
-    ActivateGroupTreeNodeActionPayload,
+    ActivateGroupActionPayload,
     CreateGroupPayload,
     GroupTreeFilterUpdatePayload,
     MoveGroupPayload,
@@ -21,7 +21,7 @@ import {MOVE_GROUP_MODAL_ID} from './components/MoveGroupModalOverlay'
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
 REDUCERS[ActionType.ToggleGroupTreeNode] = toggleGroupTreeNode
-REDUCERS[ActionType.ActivateGroupTreeNode] = activateGroupTreeNode
+REDUCERS[ActionType.ActivateGroup] = activateGroup
 REDUCERS[ActionType.GroupTreeFilterUpdate] = updateGroupTreeFilter
 REDUCERS[ActionType.ToggleGroupTreeNodeMenu] = toggleGroupTreeNodeMenu
 REDUCERS[ActionType.CreateGroup] = handleCreateGroup
@@ -61,7 +61,7 @@ function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodeAction
     return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function activateGroupTreeNode(state: AppStore, payload: ActivateGroupTreeNodeActionPayload): AppStore {
+function activateGroup(state: AppStore, payload: ActivateGroupActionPayload): AppStore {
     const nodeById = state.groupTree.nodeById
 
     const n = nodeById[payload.nodeId]

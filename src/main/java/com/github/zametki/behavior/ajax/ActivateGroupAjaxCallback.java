@@ -28,10 +28,13 @@ public class ActivateGroupAjaxCallback extends ZApiAjaxCallback {
             return;
         }
         IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-        Group group = Context.getGroupsDbi().getById(new GroupId(params.getParameterValue("groupId").toInt(-1)));
-        if (group == null || !group.userId.equals(userId)) {
-            return;
+        GroupId groupId = new GroupId(params.getParameterValue("groupId").toInt(-1));
+        if (!groupId.isRoot()) {
+            Group group = Context.getGroupsDbi().getById(groupId);
+            if (group == null || !group.userId.equals(userId)) {
+                return;
+            }
         }
-        WicketUtils.reactiveUpdate(activeGroupModel, group.id, target);
+        WicketUtils.reactiveUpdate(activeGroupModel, groupId.isValid() ? groupId : null, target);
     }
 }

@@ -70,11 +70,11 @@ public class GroupHeader extends Panel {
         panel.add(nameLink);
 
         nameLink.add(new Label("name", LambdaModel.of((SerializableSupplier<String>) () -> {
-            GroupId id1 = activeGroupModel.getObject();
-            if (id1 == null) {
+            GroupId groupId = activeGroupModel.getObject();
+            if (groupId == null) {
                 return "Все заметки";
             }
-            Group c = Context.getGroupsDbi().getById(id1);
+            Group c = Context.getGroupsDbi().getById(groupId);
             return c == null ? "???" : c.name;
         })));
         nameLink.add(angleDownIcon);

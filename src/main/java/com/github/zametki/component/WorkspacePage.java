@@ -3,17 +3,11 @@ package com.github.zametki.component;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.behavior.ajax.ActivateGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.CreateGroupAjaxCallback;
-import com.github.zametki.behavior.ajax.RenameGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.MoveGroupAjaxCallback;
-import com.github.zametki.component.basic.ComponentFactory;
+import com.github.zametki.behavior.ajax.RenameGroupAjaxCallback;
 import com.github.zametki.component.basic.ContainerWithId;
-import com.github.zametki.component.bootstrap.BootstrapLazyModalLink;
-import com.github.zametki.component.bootstrap.BootstrapModal;
-import com.github.zametki.component.bootstrap.BootstrapModal.BodyMode;
-import com.github.zametki.component.group.GroupListPanel;
 import com.github.zametki.component.group.GroupTreePanel;
 import com.github.zametki.component.user.BaseUserPage;
-import com.github.zametki.component.user.UserProfileSettingsPage;
 import com.github.zametki.component.zametka.CreateZametkaPanel;
 import com.github.zametki.component.zametka.ZametkaPanel;
 import com.github.zametki.event.CreateZametkaFormToggleEvent;
@@ -33,7 +27,6 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
@@ -46,35 +39,37 @@ public class WorkspacePage extends BaseUserPage {
     private final WebMarkupContainer lenta = new ContainerWithId("lenta");
     public final WorkspacePageState state = new WorkspacePageState();
     private final LentaProvider provider = new LentaProvider(state);
-    private final BootstrapModal groupsModal;
+//    private final BootstrapModal groupsModal;
 
     public WorkspacePage(PageParameters pp) {
         super(pp);
 
-        UserSettings us = UserSettings.get();
-        state.activeGroupModel.setObject(us.lastShownGroup);
-
-        add(new LogoPanel("brand_logo"));
-        add(new BookmarkablePageLink("logout_link", LogoutPage.class));
-        add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
-        add(new LentaLink("lenta_link", state.activeGroupModel));
+//        UserSettings us = UserSettings.get();
+//        state.activeGroupModel.setObject(us.lastShownGroup);
+//
+//        add(new LogoPanel("brand_logo"));
+//        add(new BookmarkablePageLink("logout_link", LogoutPage.class));
+//        add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
+//        add(new LentaLink("lenta_link", state.activeGroupModel));
+//
         add(new ActivateGroupAjaxCallback(state.activeGroupModel));
         add(new CreateGroupAjaxCallback(state.activeGroupModel));
         add(new MoveGroupAjaxCallback(state.activeGroupModel));
         add(new RenameGroupAjaxCallback(state.activeGroupModel));
-
-        ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
-        groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
-        add(groupsModal);
-        add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
+//
+//        ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
+//        groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
+//        add(groupsModal);
+//        add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
 
         add(new GroupTreePanel("groups", state.activeGroupModel));
+        add(new NavbarPanel("navbar"));
 
         CreateZametkaPanel createPanel = new CreateZametkaPanel("create_panel", state.activeGroupModel);
         add(createPanel);
         add(lenta);
 
-        add(new AddZametkaLink("add_zametka_link", createPanel));
+//        add(new AddZametkaLink("add_zametka_link", createPanel));
 
         lenta.add(new GroupHeader("group_name", state.activeGroupModel));
 
@@ -104,7 +99,7 @@ public class WorkspacePage extends BaseUserPage {
         if (e.model == state.activeGroupModel) {
             provider.detach();
             e.target.add(lenta);
-            groupsModal.hide(e.target);
+//            groupsModal.hide(e.target);
 
             GroupId activeGroupId = state.activeGroupModel.getObject();
             UserSettings us = UserSettings.get();

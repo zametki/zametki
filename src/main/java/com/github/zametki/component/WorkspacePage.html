@@ -9,34 +9,36 @@
         document.getElementsByTagName("body")[0].setAttributeNode(cls);
     </script>
 
-    <nav class="navbar navbar-inverse fixed-top bg-inverse lp-navbar">
-        <div class="navbar-logo">
-            <a href="/">
-                <img src="/img/feather_32.png" style="filter: invert(0.97); margin-top: -4px;">
-                <wicket:panel wicket:id="brand_logo"/>
-            </a>
-        </div>
-        <div class="navbar-menu">
-            <div class="navbar-menu-item"><a wicket:id="add_zametka_link" id="add-zametka-button" class="btn btn-sm" title="Добавить заметку (A)"><img src="/img/plus.svg"></a></div>
-            <div class="navbar-menu-item"><a wicket:id="groups_popup_link" class="btn btn-sm" title="Группы"><img src="/img/tree.png" style="filter: invert(0);margin-left: 4px;"></a></div>
-            <div class="navbar-menu-item"><a wicket:id="lenta_link" class="btn btn-sm " title="Все заметки"><img src="/img/all.svg" style="transform: rotate(180deg);"></a></div>
-            <div class="navbar-menu-item">
-                <div class="dropdown">
-                    <a class="btn btn-sm dropdown-toggle" data-toggle="dropdown" title="Меню" style="margin-right:10px;">
-                        <i class="fa fa-sun-o bld f24px"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a wicket:id="settings_link" class="dropdown-item"><i class="fa fa-cogs f18px black mr5"></i> Настройки</a>
-                        <div class="dropdown-divider"></div>
-                        <a wicket:id="logout_link" class="dropdown-item"><img src="/img/log-out.svg" style="width: 20px;"> Выход</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!--<nav class="navbar navbar-inverse fixed-top bg-inverse lp-navbar">-->
+        <!--<div class="navbar-logo">-->
+            <!--<a href="/">-->
+                <!--<img src="/img/feather_32.png" style="filter: invert(0.97); margin-top: -4px;">-->
+                <!--<wicket:panel wicket:id="brand_logo"/>-->
+            <!--</a>-->
+        <!--</div>-->
+        <!--<div class="navbar-menu">-->
+            <!--<div class="navbar-menu-item"><a wicket:id="add_zametka_link" id="add-zametka-button" class="btn btn-sm" title="Добавить заметку (A)"><img src="/img/plus.svg"></a></div>-->
+            <!--<div class="navbar-menu-item"><a wicket:id="groups_popup_link" class="btn btn-sm" title="Группы"><img src="/img/tree.png" style="filter: invert(0);margin-left: 4px;"></a></div>-->
+            <!--<div class="navbar-menu-item"><a wicket:id="lenta_link" class="btn btn-sm " title="Все заметки"><img src="/img/all.svg" style="transform: rotate(180deg);"></a></div>-->
+            <!--<div class="navbar-menu-item">-->
+                <!--<div class="dropdown">-->
+                    <!--<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown" title="Меню" style="margin-right:10px;">-->
+                        <!--<i class="fa fa-sun-o bld f24px"></i>-->
+                    <!--</a>-->
+                    <!--<div class="dropdown-menu dropdown-menu-right">-->
+                        <!--<a wicket:id="settings_link" class="dropdown-item"><i class="fa fa-cogs f18px black mr5"></i> Настройки</a>-->
+                        <!--<div class="dropdown-divider"></div>-->
+                        <!--<a wicket:id="logout_link" class="dropdown-item"><img src="/img/log-out.svg" style="width: 20px;"> Выход</a>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</nav>-->
+
+    <wicket:container wicket:id="navbar"/>
 
     <div class="container-fluid">
-        <div wicket:id="groups_modal"></div>
+        <!--<div wicket:id="groups_modal"></div>-->
 
         <div class="row">
             <nav class="col-md-2 hidden-sm-down bg-faded sidebar">
@@ -49,7 +51,7 @@
                 <div wicket:id="lenta" class="mt-2">
                     <div wicket:id="group_name"></div>
                     <div wicket:id="zametka">
-                        <wicket:panel wicket:id="z"></wicket:panel>
+                        <wicket:container wicket:id="z"></wicket:container>
                     </div>
                 </div>
             </main>

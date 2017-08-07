@@ -8,9 +8,9 @@ export interface ZAction<T> extends Action {
 export class ActionType {
     static UpdateGroupTree = 'UpdateTreeAction'
     static ToggleGroupTreeNode = 'ToggleGroupTreeNode'
-    static ActivateGroupTreeNode = 'ActivateGroupTreeNode'
     static GroupTreeFilterUpdate = 'GroupTreeFilterUpdate'
     static ToggleGroupTreeNodeMenu = 'ToggleGroupTreeNodeMenu'
+    static ActivateGroup = 'ActivateGroup'
     static CreateGroup = 'CreateGroup'
     static RenameGroup = 'RenameGroup'
     static MoveGroup = 'MoveGroup'
@@ -19,10 +19,10 @@ export class ActionType {
 
 export type UpdateGroupTreeActionPayload = { nodes: GroupTreeNode[]; }
 export type ToggleGroupTreeNodeActionPayload = { nodeId: number, expanded: boolean; }
-export type ActivateGroupTreeNodeActionPayload = { nodeId: number }
 export type GroupTreeFilterUpdatePayload = { filterText: string }
 export type ToggleGroupTreeNodeMenuPayload = { nodeId: number, active: boolean }
 export type CreateGroupPayload = { parentNodeId: number }
+export type ActivateGroupActionPayload = { nodeId: number }
 export type RenameGroupPayload = { nodeId: number }
 export type MoveGroupPayload = { nodeId: number }
 export type HideModalPayload = {}
@@ -37,8 +37,8 @@ export const newToggleGroupTreeNodeAction = (nodeId: number, expanded: boolean):
     payload: {nodeId, expanded}
 })
 
-export const newActivateGroupTreeNodeAction = (nodeId: number): ZAction<ActivateGroupTreeNodeActionPayload> => ({
-    type: ActionType.ActivateGroupTreeNode,
+export const newActivateGroupAction = (nodeId: number): ZAction<ActivateGroupActionPayload> => ({
+    type: ActionType.ActivateGroup,
     payload: {nodeId}
 })
 

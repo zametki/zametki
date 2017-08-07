@@ -1,5 +1,6 @@
 import {ClientStorage} from '../utils/ClientStorage'
 
+export const GROUP_TREE_INVALID_ID = -1
 export const GROUP_TREE_ROOT_NODE_ID = 0
 
 export type GroupTreeNode = {
