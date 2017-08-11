@@ -10,9 +10,9 @@ public class Scripts {
 
     public static final HeaderItem SITE_JS = forUrl("/js/site.js?" + System.currentTimeMillis(), "site.js");
 
-    public static final HeaderItem TETHER_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"), "tether.js");
+//    public static final HeaderItem POPPER_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"), "popper.js");
 
-    public static final HeaderItem BOOTSTRAP_JS = forUrl(min("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"), "bootstrap.js");
+    public static final HeaderItem BOOTSTRAP_JS = forUrl(min("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"), "bootstrap.js");
 
     public static final HeaderItem PARSLEY_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.7.1/parsley.min.js"), "parsley.js");
 

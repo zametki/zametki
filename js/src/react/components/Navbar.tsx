@@ -22,7 +22,7 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
     render() {
         // noinspection HtmlUnknownTarget
         return (
-            <div className="navbar navbar-inverse fixed-top bg-inverse lp-navbar">
+            <div className="navbar navbar-dark fixed-top bg-dark lp-navbar">
                 <div className="navbar-logo">
                     <a href="/">
                         <img src="/img/feather_32.png" className="nav-feather-img"/>
@@ -50,7 +50,7 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
                     <div className="navbar-menu-item">
                         <div className="dropdown">
                             <a className="btn btn-sm dropdown-toggle nav-menu-link" data-toggle="dropdown" title="Меню">
-                                <i className="fa fa-sun-o bld f24px"></i>
+                                <i className="fa fa-sun-o bld f24px pr5 pt5"></i>
                             </a>
                             <div className="dropdown-menu dropdown-menu-right">
                                 <a href="/my/profile" className="dropdown-item">

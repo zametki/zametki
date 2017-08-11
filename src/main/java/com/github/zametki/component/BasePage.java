@@ -109,7 +109,7 @@ public abstract class BasePage extends WebPage implements IRequestablePage {
 
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
 
-        response.render(new PriorityHeaderItem(Scripts.TETHER_JS));
+//        response.render(new PriorityHeaderItem(Scripts.POPPER_JS));
         response.render(new PriorityHeaderItem(Scripts.BOOTSTRAP_JS));
         response.render(new PriorityHeaderItem(Scripts.PARSLEY_JS));
         response.render(new PriorityHeaderItem(Scripts.LETTERING_JS));

@@ -88,13 +88,23 @@ nav::-webkit-scrollbar-thumb {
     display: inline-block;
 }
 
+.bg-dark {
+    background-color: #292b2c !important;
+}
+
 .navbar-menu a.btn {
-    border-color: #292b2c !important;
     font-size: 20px !important;
     margin-left: 10px;
-    width: 40px;
+    margin-right: 5px;
+    min-width: 32px;
     padding: 2px;
     color: white;
+    height: 39px;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
 }
 
 .navbar-menu a.active-all {

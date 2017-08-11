@@ -24,35 +24,35 @@ type AllProps = DispatchProps & StateProps & OwnProps
 
 class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
 
-    constructor (props: AllProps, context: any) {
+    constructor(props: AllProps, context: any) {
         //noinspection TypeScriptValidateTypes
         super(props, context)
         this.showMenu = this.showMenu.bind(this)
         this.closeMenu = this.closeMenu.bind(this)
     }
 
-    componentDidMount (): void {
+    componentDidMount(): void {
         window.addEventListener('keydown', this.closeMenu)
         window.addEventListener('click', this.closeMenu)
     }
 
-    componentWillUnmount (): void {
+    componentWillUnmount(): void {
         window.removeEventListener('keydown', this.closeMenu)
         window.removeEventListener('click', this.closeMenu)
     }
 
-    shouldComponentUpdate (nextProps: Readonly<AllProps>, nextState: Readonly<{}>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<AllProps>, nextState: Readonly<{}>, nextContext: any): boolean {
         return this.props.menuVisible !== nextProps.menuVisible
     }
 
-    render () {
+    render() {
         return (
             <div className="tree-node-menu-block">
                 <div onClick={this.showMenu.bind(this)} className='tree-node-menu-link' title="Действия над группой">
                     <i className="fa fa-angle-down  f14px"/>
                 </div>
-                <div className={'dropdown' + (this.props.menuVisible ? ' show' : '')}>
-                    <div className="dropdown-menu dropdown-menu-right">
+                <div className='dropdown'>
+                    <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
                         <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(this.props.nodeId)}>
                             Новая группа
                         </div>
@@ -68,12 +68,12 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
         )
     }
 
-    private showMenu (e: MouseEvent<any>) {
+    private showMenu(e: MouseEvent<any>) {
         e.stopPropagation()
         this.props.toggleGroupTreeNodeMenu(this.props.nodeId, true)
     }
 
-    private closeMenu () {
+    private closeMenu() {
         if (this.props.menuVisible) {
             this.props.toggleGroupTreeNodeMenu(this.props.nodeId, false)
         }
@@ -87,7 +87,7 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
     }
 }
 
-function mapDispatchToProps (dispatch): DispatchProps {
+function mapDispatchToProps(dispatch): DispatchProps {
     return {
         toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => {
             if (active) {
