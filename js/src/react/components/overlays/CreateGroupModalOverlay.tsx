@@ -1,11 +1,11 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 
-import Modal from './Modal'
-import {AppStore} from '../Store'
-import {newHideModalAction} from '../Actions'
-import {createGroup} from "../../utils/Client2Server"
-import GroupSelector from './GroupSelector'
+import Modal from '../Modal'
+import {AppStore} from '../../Store'
+import {newHideModalAction} from '../../Actions'
+import {createGroup} from "../../../utils/Client2Server"
+import GroupSelector from '../GroupSelector'
 
 type OwnProps = {}
 

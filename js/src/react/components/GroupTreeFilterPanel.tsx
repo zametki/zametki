@@ -15,20 +15,6 @@ type DispatchProps = {
 
 type AllProps = StateProps & DispatchProps & OwnProps
 
-/** Maps Store state to component props */
-const mapStateToProps = (store: AppStore): StateProps => {
-    return {
-        filterText: store.groupTree.filterText
-    }
-}
-
-// noinspection JSUnusedLocalSymbols
-function mapDispatchToProps(dispatch): DispatchProps {
-    return {
-        updateFilterText: (filterText) => dispatch(newGroupTreeFilterUpdateAction(filterText))
-    }
-}
-
 class GroupTreeFilterPanel extends React.Component<AllProps, {}> {
     public refs: {
         inputElement: HTMLInputElement;
@@ -61,6 +47,19 @@ class GroupTreeFilterPanel extends React.Component<AllProps, {}> {
 
     handleTextChange() {
         this.props.updateFilterText(this.refs.inputElement.value)
+    }
+}
+
+/** Maps Store state to component props */
+const mapStateToProps = (store: AppStore): StateProps => {
+    return {
+        filterText: store.groupTree.filterText
+    }
+}
+
+function mapDispatchToProps(dispatch): DispatchProps {
+    return {
+        updateFilterText: (filterText) => dispatch(newGroupTreeFilterUpdateAction(filterText))
     }
 }
 

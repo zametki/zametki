@@ -5,9 +5,10 @@ import {AppStore, GROUP_TREE_ROOT_NODE_ID} from '../Store'
 import GroupTreeNodePanel from './GroupTreeNodePanel'
 import GroupTreeFilterPanel from './GroupTreeFilterPanel'
 import {appStore} from '../Reducers'
-import CreateGroupModalOverlay from './CreateGroupModalOverlay'
-import RenameGroupModalOverlay from "./RenameGroupModalOverlay"
-import MoveGroupModalOverlay from './MoveGroupModalOverlay'
+import CreateGroupModalOverlay from './overlays/CreateGroupModalOverlay'
+import RenameGroupModalOverlay from "./overlays/RenameGroupModalOverlay"
+import MoveGroupModalOverlay from './overlays/MoveGroupModalOverlay'
+import GroupNavigatorModalOverlay from './overlays/GroupNavigatorModalOverlay'
 
 type OwnProps = {}
 type StateProps = {
@@ -47,6 +48,7 @@ export function renderGroupTreeView(elementId: string) {
                 <CreateGroupModalOverlay/>
                 <RenameGroupModalOverlay/>
                 <MoveGroupModalOverlay/>
+                <GroupNavigatorModalOverlay/>
             </div>
         </ReactRedux.Provider>,
         document.getElementById(elementId)

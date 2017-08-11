@@ -15,6 +15,7 @@ export class ActionType {
     static RenameGroup = 'RenameGroup'
     static MoveGroup = 'MoveGroup'
     static HideModal = 'HideModal'
+    static ShowGroupNavigator = 'ShowGroupNavigator'
 }
 
 export type UpdateGroupTreeActionPayload = { nodes: GroupTreeNode[]; }
@@ -26,6 +27,7 @@ export type ActivateGroupActionPayload = { nodeId: number }
 export type RenameGroupPayload = { nodeId: number }
 export type MoveGroupPayload = { nodeId: number }
 export type HideModalPayload = {}
+export type ShowGroupNavigatorPayload = {}
 
 export const newUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreeActionPayload> => ({
     type: ActionType.UpdateGroupTree,
@@ -69,5 +71,10 @@ export const newShowMoveGroupAction = (nodeId: number): ZAction<MoveGroupPayload
 
 export const newHideModalAction = (): ZAction<HideModalPayload> => ({
     type: ActionType.HideModal,
+    payload: {}
+})
+
+export const newShowGroupNavigatorAction = (): ZAction<ShowGroupNavigatorPayload> => ({
+    type: ActionType.ShowGroupNavigator,
     payload: {}
 })

@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 
-import Modal from './Modal'
-import {AppStore} from '../Store'
-import {newHideModalAction} from '../Actions'
-import {renameGroup} from "../../utils/Client2Server"
+import Modal from '../Modal'
+import {AppStore} from '../../Store'
+import {newHideModalAction} from '../../Actions'
+import {renameGroup} from "../../../utils/Client2Server"
 
 type OwnProps = {}
 

@@ -3,16 +3,21 @@ import {render} from 'react-dom'
 import * as ReactRedux from 'react-redux'
 import {appStore} from '../Reducers'
 import LogoPanel from './LogoPanel'
-import {AppStore, GROUP_TREE_INVALID_ID, GROUP_TREE_ROOT_NODE_ID} from '../Store'
+import {AppStore, GROUP_TREE_INVALID_ID} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
+import {newShowGroupNavigatorAction} from '../Actions'
 
 type OwnProps = {}
+
+type DispatchProps = {
+    showGroupNavigator: () => void
+}
 
 type StateProps = {
     lentaMode: boolean
 }
 
-class NavbarImpl extends React.Component<StateProps & OwnProps, any> {
+class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, any> {
 
     render() {
         // noinspection HtmlUnknownTarget
@@ -31,12 +36,12 @@ class NavbarImpl extends React.Component<StateProps & OwnProps, any> {
                         {/*</a>*/}
                     </div>
                     <div className="navbar-menu-item">
-                        {/*<a wicket:id="groups_popup_link" className="btn btn-sm" title="Группы">*/}
-                        {/*<img src="/img/tree.png" style="filter: invert(0);margin-left: 4px;"/>*/}
-                        {/*</a>*/}
+                        <a onClick={this.onShowGroupSelectorClicked.bind(this)} className="btn btn-sm" title="Группы">
+                            <img src="/img/tree.png" style={{filter: "invert(0)", marginLeft: "4px"}}/>
+                        </a>
                     </div>
                     <div className="navbar-menu-item">
-                        <a onClick={this.onLentaClicked.bind(this)}
+                        <a onClick={() => activateGroup(GROUP_TREE_INVALID_ID)}
                            className={'btn btn-sm ' + (this.props.lentaMode ? "active-all" : "")}
                            title="Все заметки">
                             <img src="/img/all.svg" style={{transform: "rotate(180deg)"}}/>
@@ -61,17 +66,22 @@ class NavbarImpl extends React.Component<StateProps & OwnProps, any> {
         )
     }
 
-    onLentaClicked() {
-        activateGroup(GROUP_TREE_INVALID_ID)
+    onShowGroupSelectorClicked() {
+        this.props.showGroupNavigator()
     }
 }
 
 const mapStateToProps = (store: AppStore): StateProps => {
-    console.log('groupid: ' + store.activeGroupId)
     return {lentaMode: store.activeGroupId == GROUP_TREE_INVALID_ID}
 }
 
-export const Navbar = ReactRedux.connect(mapStateToProps, null)(NavbarImpl) as React.ComponentClass<OwnProps>
+function mapDispatchToProps(dispatch): DispatchProps {
+    return {
+        showGroupNavigator: () => dispatch(newShowGroupNavigatorAction())
+    }
+}
+
+export const Navbar = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NavbarImpl) as React.ComponentClass<OwnProps>
 
 export function renderNavbarView(elementId: string) {
     render(

@@ -22,9 +22,9 @@
 .z-modal {
     position: absolute;
     display: inline-block;
-    top: 50%;
+    top: 70px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
     background: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, .25);
     border-color: rgba(0, 0, 0, .75);
@@ -32,6 +32,7 @@
 }
 
 .z-modal-header-content {
+    padding: 5px;
 }
 
 .z-modal-header-close {

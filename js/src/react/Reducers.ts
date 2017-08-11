@@ -14,9 +14,10 @@ import {
     ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
-import {CREATE_GROUP_MODAL_ID} from './components/CreateGroupModalOverlay'
-import {RENAME_GROUP_MODAL_ID} from "./components/RenameGroupModalOverlay"
-import {MOVE_GROUP_MODAL_ID} from './components/MoveGroupModalOverlay'
+import {CREATE_GROUP_MODAL_ID} from './components/overlays/CreateGroupModalOverlay'
+import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverlay"
+import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
+import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
@@ -28,6 +29,7 @@ REDUCERS[ActionType.CreateGroup] = handleCreateGroup
 REDUCERS[ActionType.RenameGroup] = handleRenameGroup
 REDUCERS[ActionType.MoveGroup] = handleMoveGroup
 REDUCERS[ActionType.HideModal] = handleHideModal
+REDUCERS[ActionType.ShowGroupNavigator] = handleShowGroupNavigator
 
 function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
     if (!action || !action.type || !action.payload) {
@@ -119,6 +121,11 @@ function handleMoveGroup(state: AppStore, payload: MoveGroupPayload): AppStore {
 function handleHideModal(state: AppStore): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: null}
+}
+
+function handleShowGroupNavigator(state: AppStore): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeModalId: GROUP_NAVIGATOR_MODAL_ID}
 }
 
 // todo: do not export, use listeners!!
