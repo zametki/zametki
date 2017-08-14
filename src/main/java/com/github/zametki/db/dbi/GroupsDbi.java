@@ -22,4 +22,6 @@ public interface GroupsDbi {
 
     @Nullable
     Group getByName(@NotNull UserId userId, @NotNull String name);
+
+    void removeEmptyGroup(@NotNull Group group);
 }

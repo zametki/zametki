@@ -4,7 +4,7 @@ import {AppStore, defaultStoreInstance} from './Store'
 import {
     ActionType,
     ActivateGroupActionPayload,
-    CreateGroupPayload,
+    CreateGroupPayload, DeleteGroupPayload,
     GroupTreeFilterUpdatePayload,
     MoveGroupPayload,
     RenameGroupPayload,
@@ -18,6 +18,7 @@ import {CREATE_GROUP_MODAL_ID} from './components/overlays/CreateGroupModalOverl
 import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverlay"
 import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
 import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
+import {deleteGroup} from "../utils/Client2Server"
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
@@ -30,6 +31,7 @@ REDUCERS[ActionType.RenameGroup] = handleRenameGroup
 REDUCERS[ActionType.MoveGroup] = handleMoveGroup
 REDUCERS[ActionType.HideModal] = handleHideModal
 REDUCERS[ActionType.ShowGroupNavigator] = handleShowGroupNavigator
+REDUCERS[ActionType.DeleteGroup] = handleDeleteGroup
 
 function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
     if (!action || !action.type || !action.payload) {
@@ -128,6 +130,11 @@ function handleShowGroupNavigator(state: AppStore): AppStore {
     return {...state, activeModalId: GROUP_NAVIGATOR_MODAL_ID}
 }
 
+function handleDeleteGroup(state: AppStore, payload: DeleteGroupPayload): AppStore {
+    deleteGroup(payload.nodeId)
+    return state
+}
+
 // todo: do not export, use listeners!!
 //noinspection TsLint
 export const appStore: Redux.Store<AppStore> = window['appStore'] = Redux.createStore(
@@ -136,3 +143,4 @@ export const appStore: Redux.Store<AppStore> = window['appStore'] = Redux.create
     window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
     // Redux.applyMiddleware(thunk),
 )
+

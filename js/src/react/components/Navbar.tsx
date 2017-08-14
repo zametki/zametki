@@ -31,9 +31,9 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
                 </div>
                 <div className="navbar-menu">
                     <div className="navbar-menu-item">
-                        {/*<a wicket:id="add_zametka_link" id="add-zametka-button" className="btn btn-sm" title="Добавить заметку (A)">*/}
-                        {/*<img src="/img/plus.svg"/>*/}
-                        {/*</a>*/}
+                        {/*TODO: color for pushed state!*/}
+                        {/*<a wicket:id="add_zametka_link" id="add-zametka-button" className="btn btn-sm" title="Добавить заметку (A)"><img src="/img/plus.svg"/></a>*/}
+                        {/*<a onClick={} className="btn btn-sm" title="Добавить заметку (A)"><img src="/img/plus.svg"/></a>*/}
                     </div>
                     <div className="navbar-menu-item">
                         <a onClick={this.onShowGroupSelectorClicked.bind(this)} className="btn btn-sm" title="Группы">

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
-import {newShowCreateGroupAction, newToggleGroupTreeNodeMenuAction, newShowRenameGroupAction, newShowMoveGroupAction} from '../Actions'
+import {newShowCreateGroupAction, newToggleGroupTreeNodeMenuAction, newShowRenameGroupAction, newShowMoveGroupAction, newDeleteGroupAction} from '../Actions'
 import {AppStore} from '../Store'
 import {activateGroup} from '../../utils/Client2Server'
 
@@ -11,6 +11,7 @@ type OwnProps = {
 
 type StateProps = {
     menuVisible: boolean
+    isEmpty: boolean
 }
 
 type DispatchProps = {
@@ -18,6 +19,7 @@ type DispatchProps = {
     showCreateGroupDialog: (nodeId: number) => void
     showRenameGroupDialog: (nodeId: number) => void
     showMoveGroupDialog: (nodeId: number) => void
+    deleteGroup: (nodeId: number) => void
 }
 
 type AllProps = DispatchProps & StateProps & OwnProps
@@ -53,15 +55,10 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
                 </div>
                 <div className='dropdown'>
                     <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
-                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(this.props.nodeId)}>
-                            Новая группа
-                        </div>
-                        <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(this.props.nodeId)}>
-                            Переименовать
-                        </div>
-                        <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(this.props.nodeId)}>
-                            Переместить
-                        </div>
+                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(this.props.nodeId)}>Новая группа</div>
+                        <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(this.props.nodeId)}>Переименовать</div>
+                        <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(this.props.nodeId)}>Переместить</div>
+                        {this.props.isEmpty ? <div className="dropdown-item" onClick={() => this.props.deleteGroup(this.props.nodeId)}>Удалить</div> : null}
                     </div>
                 </div>
             </div>
@@ -82,8 +79,11 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
 
 /** Maps Store state to component props */
 const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
+    const node = state.groupTree.nodeById[ownProps.nodeId]
+    const isEmpty = node && node.children.length == 0 && node.entriesCount == 0
     return {
-        menuVisible: state.activeGroupId === ownProps.nodeId && state.groupTree.contextMenuIsActive
+        menuVisible: state.activeGroupId === ownProps.nodeId && state.groupTree.contextMenuIsActive,
+        isEmpty
     }
 }
 
@@ -97,7 +97,8 @@ function mapDispatchToProps(dispatch): DispatchProps {
         },
         showCreateGroupDialog: nodeId => dispatch(newShowCreateGroupAction(nodeId)),
         showRenameGroupDialog: nodeId => dispatch(newShowRenameGroupAction(nodeId)),
-        showMoveGroupDialog: nodeId => dispatch(newShowMoveGroupAction(nodeId))
+        showMoveGroupDialog: nodeId => dispatch(newShowMoveGroupAction(nodeId)),
+        deleteGroup: nodeId => dispatch(newDeleteGroupAction(nodeId))
     }
 }
 

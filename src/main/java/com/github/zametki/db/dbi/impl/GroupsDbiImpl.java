@@ -73,4 +73,11 @@ public class GroupsDbiImpl extends AbstractDbi implements GroupsDbi {
         return null;
     }
 
+    @Override
+    public void removeEmptyGroup(@NotNull Group group) {
+        sql.delete(group.id);
+        cc().remove(group.id);
+        cc().remove(group.userId);
+    }
+
 }

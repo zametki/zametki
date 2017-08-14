@@ -1,10 +1,7 @@
 package com.github.zametki.component;
 
 import com.github.zametki.annotation.MountPath;
-import com.github.zametki.behavior.ajax.ActivateGroupAjaxCallback;
-import com.github.zametki.behavior.ajax.CreateGroupAjaxCallback;
-import com.github.zametki.behavior.ajax.MoveGroupAjaxCallback;
-import com.github.zametki.behavior.ajax.RenameGroupAjaxCallback;
+import com.github.zametki.behavior.ajax.*;
 import com.github.zametki.component.basic.ContainerWithId;
 import com.github.zametki.component.group.GroupTreePanel;
 import com.github.zametki.component.user.BaseUserPage;
@@ -56,6 +53,7 @@ public class WorkspacePage extends BaseUserPage {
         add(new CreateGroupAjaxCallback(state.activeGroupModel));
         add(new MoveGroupAjaxCallback(state.activeGroupModel));
         add(new RenameGroupAjaxCallback(state.activeGroupModel));
+        add(new DeleteGroupAjaxCallback(state.activeGroupModel));
 //
 //        ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
 //        groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
