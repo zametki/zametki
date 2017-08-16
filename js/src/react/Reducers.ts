@@ -10,7 +10,7 @@ import {
     RenameGroupPayload,
     ToggleGroupTreeNodeActionPayload,
     ToggleGroupTreeNodeMenuPayload,
-    UpdateGroupTreeActionPayload,
+    UpdateGroupTreeActionPayload, UpdateNotesListPayload,
     ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
@@ -32,6 +32,7 @@ REDUCERS[ActionType.MoveGroup] = handleMoveGroup
 REDUCERS[ActionType.HideModal] = handleHideModal
 REDUCERS[ActionType.ShowGroupNavigator] = handleShowGroupNavigator
 REDUCERS[ActionType.DeleteGroup] = handleDeleteGroup
+REDUCERS[ActionType.UpdateNotesList] = handleUpdateNotesList
 
 function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
     if (!action || !action.type || !action.payload) {
@@ -134,6 +135,12 @@ function handleDeleteGroup(state: AppStore, payload: DeleteGroupPayload): AppSto
     deleteGroup(payload.nodeId)
     return state
 }
+
+function handleUpdateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {... state, notes: payload.notes}
+}
+
 
 // todo: do not export, use listeners!!
 //noinspection TsLint

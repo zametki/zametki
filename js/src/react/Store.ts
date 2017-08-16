@@ -20,10 +20,18 @@ export type GroupTree = {
     contextMenuIsActive: boolean
 }
 
+export type Note = {
+    id: number,
+    group: number,
+    body: string,
+    dateText: string
+}
+
 export type AppStore = {
     groupTree: GroupTree,
     activeModalId: string,
-    activeGroupId: number
+    activeGroupId: number,
+    notes: Note[]
 }
 
 export const defaultStoreInstance: AppStore = {
@@ -34,5 +42,8 @@ export const defaultStoreInstance: AppStore = {
         contextMenuIsActive: false
     },
     activeModalId: null,
-    activeGroupId: -1
+    activeGroupId: -1,
+    notes: []
+
 }
+

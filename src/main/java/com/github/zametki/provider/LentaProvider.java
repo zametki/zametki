@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class LentaProvider extends AbstractListProvider<ZametkaId> {
 
     @NotNull
-    private final WorkspacePageState state;
+    public final WorkspacePageState state;
 
     public LentaProvider(@NotNull WorkspacePageState state) {
         this.state = state;

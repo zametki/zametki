@@ -1,4 +1,4 @@
-import {GroupTreeNode} from './Store'
+import {GroupTreeNode, Note} from './Store'
 import {Action} from 'redux'
 
 export interface ZAction<T> extends Action {
@@ -17,6 +17,7 @@ export class ActionType {
     static HideModal = 'HideModal'
     static ShowGroupNavigator = 'ShowGroupNavigator'
     static DeleteGroup = 'DeleteGroup'
+    static UpdateNotesList = 'UpdateNotesList'
 }
 
 export type UpdateGroupTreeActionPayload = { nodes: GroupTreeNode[]; }
@@ -30,6 +31,7 @@ export type MoveGroupPayload = { nodeId: number }
 export type HideModalPayload = {}
 export type ShowGroupNavigatorPayload = {}
 export type DeleteGroupPayload = { nodeId: number }
+export type UpdateNotesListPayload = { notes: Note[] }
 
 export const newUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreeActionPayload> => ({
     type: ActionType.UpdateGroupTree,
@@ -81,8 +83,12 @@ export const newShowGroupNavigatorAction = (): ZAction<ShowGroupNavigatorPayload
     payload: {}
 })
 
-
 export const newDeleteGroupAction = (nodeId: number): ZAction<ShowGroupNavigatorPayload> => ({
     type: ActionType.DeleteGroup,
     payload: {nodeId}
+})
+
+export const newUpdateNotesListAction = (notes: Note[]): ZAction<UpdateNotesListPayload> => ({
+    type: ActionType.UpdateNotesList,
+    payload: {notes}
 })
