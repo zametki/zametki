@@ -1,12 +1,18 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
-import {newShowCreateGroupAction, newToggleGroupTreeNodeMenuAction, newShowRenameGroupAction, newShowMoveGroupAction, newDeleteGroupAction} from '../Actions'
+import {
+    newActivateGroupAction,
+    newDeleteGroupAction,
+    newShowCreateGroupAction,
+    newShowMoveGroupAction,
+    newShowRenameGroupAction,
+    newToggleGroupTreeNodeMenuAction
+} from '../Actions'
 import {AppStore} from '../Store'
-import {activateGroup} from '../../utils/Client2Server'
 
 type OwnProps = {
-    nodeId: number
+    groupId: number
 }
 
 type StateProps = {
@@ -48,6 +54,7 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
     }
 
     render() {
+        let groupId = this.props.groupId
         return (
             <div className="tree-node-menu-block">
                 <div onClick={this.showMenu.bind(this)} className='tree-node-menu-link' title="Действия над группой">
@@ -55,10 +62,10 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
                 </div>
                 <div className='dropdown'>
                     <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
-                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(this.props.nodeId)}>Новая группа</div>
-                        <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(this.props.nodeId)}>Переименовать</div>
-                        <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(this.props.nodeId)}>Переместить</div>
-                        {this.props.isEmpty ? <div className="dropdown-item" onClick={() => this.props.deleteGroup(this.props.nodeId)}>Удалить</div> : null}
+                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(groupId)}>Новая группа</div>
+                        <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(groupId)}>Переименовать</div>
+                        <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(groupId)}>Переместить</div>
+                        {this.props.isEmpty ? <div className="dropdown-item" onClick={() => this.props.deleteGroup(groupId)}>Удалить</div> : null}
                     </div>
                 </div>
             </div>
@@ -67,38 +74,38 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
 
     private showMenu(e: MouseEvent<any>) {
         e.stopPropagation()
-        this.props.toggleGroupTreeNodeMenu(this.props.nodeId, true)
+        this.props.toggleGroupTreeNodeMenu(this.props.groupId, true)
     }
 
     private closeMenu() {
         if (this.props.menuVisible) {
-            this.props.toggleGroupTreeNodeMenu(this.props.nodeId, false)
+            this.props.toggleGroupTreeNodeMenu(this.props.groupId, false)
         }
     }
 }
 
 /** Maps Store state to component props */
 const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
-    const node = state.groupTree.nodeById[ownProps.nodeId]
+    const node = state.groupTree.nodeById[ownProps.groupId]
     const isEmpty = node && node.children.length == 0 && node.entriesCount == 0
     return {
-        menuVisible: state.activeGroupId === ownProps.nodeId && state.groupTree.contextMenuIsActive,
+        menuVisible: state.activeGroupId === ownProps.groupId && state.groupTree.contextMenuIsActive,
         isEmpty
     }
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        toggleGroupTreeNodeMenu: (nodeId: number, active: boolean) => {
+        toggleGroupTreeNodeMenu: (groupId: number, active: boolean) => {
             if (active) {
-                activateGroup(nodeId)
+                dispatch(newActivateGroupAction(groupId))
             }
-            dispatch(newToggleGroupTreeNodeMenuAction(nodeId, active))
+            dispatch(newToggleGroupTreeNodeMenuAction(groupId, active))
         },
-        showCreateGroupDialog: nodeId => dispatch(newShowCreateGroupAction(nodeId)),
-        showRenameGroupDialog: nodeId => dispatch(newShowRenameGroupAction(nodeId)),
-        showMoveGroupDialog: nodeId => dispatch(newShowMoveGroupAction(nodeId)),
-        deleteGroup: nodeId => dispatch(newDeleteGroupAction(nodeId))
+        showCreateGroupDialog: groupId => dispatch(newShowCreateGroupAction(groupId)),
+        showRenameGroupDialog: groupId => dispatch(newShowRenameGroupAction(groupId)),
+        showMoveGroupDialog: groupId => dispatch(newShowMoveGroupAction(groupId)),
+        deleteGroup: groupId => dispatch(newDeleteGroupAction(groupId))
     }
 }
 

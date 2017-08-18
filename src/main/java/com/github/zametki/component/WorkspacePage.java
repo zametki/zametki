@@ -1,9 +1,9 @@
 package com.github.zametki.component;
 
 import com.github.zametki.annotation.MountPath;
-import com.github.zametki.behavior.ajax.ActivateGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.CreateGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.DeleteGroupAjaxCallback;
+import com.github.zametki.behavior.ajax.GetNotesListAjaxCallback;
 import com.github.zametki.behavior.ajax.MoveGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.RenameGroupAjaxCallback;
 import com.github.zametki.component.group.GroupTreePanel;
@@ -34,11 +34,11 @@ public class WorkspacePage extends BaseUserPage {
 //        add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
 //        add(new LentaLink("lenta_link", state.activeGroupModel));
 //
-        add(new ActivateGroupAjaxCallback(state.activeGroupModel));
         add(new CreateGroupAjaxCallback(state.activeGroupModel));
         add(new MoveGroupAjaxCallback(state.activeGroupModel));
         add(new RenameGroupAjaxCallback(state.activeGroupModel));
         add(new DeleteGroupAjaxCallback(state.activeGroupModel));
+        add(new GetNotesListAjaxCallback());
 //
 //        ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
 //        groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);

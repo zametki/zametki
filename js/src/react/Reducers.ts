@@ -3,14 +3,14 @@ import * as Redux from 'redux'
 import {AppStore, defaultStoreInstance} from './Store'
 import {
     ActionType,
-    ActivateGroupActionPayload,
+    ActivateGroupPayload,
     CreateGroupPayload, DeleteGroupPayload,
     GroupTreeFilterUpdatePayload,
     MoveGroupPayload,
     RenameGroupPayload,
-    ToggleGroupTreeNodeActionPayload,
+    ToggleGroupTreeNodePayload,
     ToggleGroupTreeNodeMenuPayload,
-    UpdateGroupTreeActionPayload, UpdateNotesListPayload,
+    UpdateGroupTreePayload, UpdateNotesListPayload,
     ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
@@ -42,7 +42,7 @@ function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any
     return reducer ? reducer(state, action.payload) : state
 }
 
-function updateGroupTree(state: AppStore, payload: UpdateGroupTreeActionPayload): AppStore {
+function updateGroupTree(state: AppStore, payload: UpdateGroupTreePayload): AppStore {
     const nodeById = {}
     const nodeIds = []
     payload.nodes.map(n => {
@@ -55,9 +55,9 @@ function updateGroupTree(state: AppStore, payload: UpdateGroupTreeActionPayload)
     return {...state, groupTree: {...state.groupTree, nodeById, nodeIds}}
 }
 
-function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodeActionPayload): AppStore {
+function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodePayload): AppStore {
     const nodeById = state.groupTree.nodeById
-    const n = nodeById[payload.nodeId]
+    const n = nodeById[payload.groupId]
     if (n) {
         n.expanded = payload.expanded
         ClientStorage.setNodeExpanded(n.id, n.expanded)
@@ -66,10 +66,10 @@ function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodeAction
     return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function activateGroup(state: AppStore, payload: ActivateGroupActionPayload): AppStore {
+function activateGroup(state: AppStore, payload: ActivateGroupPayload): AppStore {
     const nodeById = state.groupTree.nodeById
 
-    const n = nodeById[payload.nodeId]
+    const n = nodeById[payload.groupId]
     if (!n) {
         return state
     }
@@ -84,7 +84,7 @@ function activateGroup(state: AppStore, payload: ActivateGroupActionPayload): Ap
         parentNode = nodeById[parentNode.parentId]
     }
     // noinspection TypeScriptValidateTypes
-    return {...state, activeGroupId: payload.nodeId}
+    return {...state, activeGroupId: payload.groupId}
 }
 
 function updateGroupTreeFilter(state: AppStore, payload: GroupTreeFilterUpdatePayload): AppStore {
@@ -96,9 +96,9 @@ function updateGroupTreeFilter(state: AppStore, payload: GroupTreeFilterUpdatePa
 function toggleGroupTreeNodeMenu(state: AppStore, payload: ToggleGroupTreeNodeMenuPayload): AppStore {
     if (payload.active) {
         // noinspection TypeScriptValidateTypes
-        return {...state, activeGroupId: payload.nodeId, groupTree: {...state.groupTree, contextMenuIsActive: true}}
+        return {...state, activeGroupId: payload.groupId, groupTree: {...state.groupTree, contextMenuIsActive: true}}
     }
-    if (state.activeGroupId === payload.nodeId) {
+    if (state.activeGroupId === payload.groupId) {
         // noinspection TypeScriptValidateTypes
         return {...state, groupTree: {...state.groupTree, contextMenuIsActive: false}}
     }
@@ -107,17 +107,17 @@ function toggleGroupTreeNodeMenu(state: AppStore, payload: ToggleGroupTreeNodeMe
 
 function handleCreateGroup(state: AppStore, payload: CreateGroupPayload): AppStore {
     // noinspection TypeScriptValidateTypes
-    return {...state, activeModalId: CREATE_GROUP_MODAL_ID, activeGroupId: payload.parentNodeId}
+    return {...state, activeModalId: CREATE_GROUP_MODAL_ID, activeGroupId: payload.parentGroupId}
 }
 
 function handleRenameGroup(state: AppStore, payload: RenameGroupPayload): AppStore {
     // noinspection TypeScriptValidateTypes
-    return {...state, activeModalId: RENAME_GROUP_MODAL_ID, activeGroupId: payload.nodeId}
+    return {...state, activeModalId: RENAME_GROUP_MODAL_ID, activeGroupId: payload.groupId}
 }
 
 function handleMoveGroup(state: AppStore, payload: MoveGroupPayload): AppStore {
     // noinspection TypeScriptValidateTypes
-    return {...state, activeModalId: MOVE_GROUP_MODAL_ID, activeGroupId: payload.nodeId}
+    return {...state, activeModalId: MOVE_GROUP_MODAL_ID, activeGroupId: payload.groupId}
 }
 
 
@@ -132,7 +132,7 @@ function handleShowGroupNavigator(state: AppStore): AppStore {
 }
 
 function handleDeleteGroup(state: AppStore, payload: DeleteGroupPayload): AppStore {
-    deleteGroup(payload.nodeId)
+    deleteGroup(payload.groupId)
     return state
 }
 

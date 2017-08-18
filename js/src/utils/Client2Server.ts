@@ -1,6 +1,5 @@
 /** Set of callbacks for Wicket */
 type ServerInterface = {
-    activateGroup(groupId: number),
     createGroup(parentGroupId: number, name: string)
     renameGroup(groupId: number, name: string)
     moveGroup(groupId: number, parentGroupId: number)
@@ -8,15 +7,10 @@ type ServerInterface = {
 }
 
 const Server: ServerInterface = {
-    activateGroup: undefined,
     createGroup: undefined,
     renameGroup: undefined,
     moveGroup: undefined,
     deleteGroup: undefined
-}
-
-export function activateGroup(groupId: number) {
-    Server.activateGroup(groupId)
 }
 
 export function createGroup(parentGroupId: number, name: string) {

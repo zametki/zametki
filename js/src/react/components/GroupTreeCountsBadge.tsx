@@ -3,7 +3,7 @@ import {AppStore} from '../Store'
 import * as ReactRedux from 'react-redux'
 
 type OwnProps = {
-    nodeId: number
+    groupId: number
 }
 
 type StateProps = {
@@ -32,7 +32,7 @@ class GroupTreeCountsBadge extends React.Component<AllProps, {}> {
 
 /** Maps Store state to component props */
 const mapStateToProps = (store: AppStore, ownProps: OwnProps): StateProps => {
-    const node = store.groupTree.nodeById[ownProps.nodeId]
+    const node = store.groupTree.nodeById[ownProps.groupId]
     return {
         entriesCount: node.entriesCount
     }

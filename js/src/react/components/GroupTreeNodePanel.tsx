@@ -1,8 +1,7 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore, GroupTreeNode} from '../Store'
-import {activateGroup} from '../../utils/Client2Server'
-import {newToggleGroupTreeNodeAction} from '../Actions'
+import {newActivateGroupAction, newToggleGroupTreeNodeAction} from '../Actions'
 import GroupTreeCountsBadge from './GroupTreeCountsBadge'
 import GroupTreeNodeMenu from './GroupTreeNodeMenu'
 import {appStore} from '../Reducers'
@@ -21,6 +20,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
+    activateGroup: (groupId: number) => void
     toggleExpandedState: (nodeId: number, expanded: boolean) => void
 }
 
@@ -32,16 +32,15 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
         //noinspection TypeScriptValidateTypes
         super(props, context)
         this.onToggleExpandedState = this.onToggleExpandedState.bind(this)
-        this.activateGroup = this.activateGroup.bind(this)
     }
 
     render() {
-        const {nodeId, name, subGroups, active, expanded, level, filterText} = this.props
+        const {nodeId: groupId, name, subGroups, active, expanded, level, filterText} = this.props
         if (!name) {
             // console.error(`Node not found: ${this.props}`)
             return null
         }
-        const filtered = !matchesByFilter(nodeId, filterText.toLowerCase(), appStore.getState().groupTree.nodeById)
+        const filtered = !matchesByFilter(groupId, filterText.toLowerCase(), appStore.getState().groupTree.nodeById)
         const node = filtered ? null :
             (
                 <div className={'tree-node' + (active ? ' tree-node-active' : '')}>
@@ -55,9 +54,9 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
                                 </td>
                                 <td>
                                     <div className='tree-content'>
-                                        <a className='tree-node-group-link' onClick={this.activateGroup}>
-                                            <GroupTreeNodeMenu nodeId={nodeId}/>
-                                            <GroupTreeCountsBadge nodeId={nodeId}/>
+                                        <a className='tree-node-group-link' onClick={() => this.props.activateGroup(groupId)}>
+                                            <GroupTreeNodeMenu groupId={groupId}/>
+                                            <GroupTreeCountsBadge groupId={groupId}/>
                                             <span>{name}</span>
                                         </a>
                                     </div>
@@ -83,9 +82,6 @@ class GroupTreeNodePanelImpl extends React.Component<AllProps, {}> {
         this.props.toggleExpandedState(this.props.nodeId, !this.props.expanded)
     }
 
-    private activateGroup() {
-        activateGroup(this.props.nodeId)
-    }
 }
 
 /** Maps Store state to component props */
@@ -103,6 +99,7 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
+        activateGroup: (groupId: number) => dispatch(newActivateGroupAction(groupId)),
         toggleExpandedState: (nodeId, expanded) => dispatch(newToggleGroupTreeNodeAction(nodeId, expanded))
     }
 }

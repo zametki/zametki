@@ -4,12 +4,12 @@ import * as ReactRedux from 'react-redux'
 import {appStore} from '../Reducers'
 import LogoPanel from './LogoPanel'
 import {AppStore, GROUP_TREE_INVALID_ID} from '../Store'
-import {activateGroup} from '../../utils/Client2Server'
-import {newShowGroupNavigatorAction} from '../Actions'
+import {newActivateGroupAction, newShowGroupNavigatorAction} from '../Actions'
 
 type OwnProps = {}
 
 type DispatchProps = {
+    activateGroup: (groupId: number) => void
     showGroupNavigator: () => void
 }
 
@@ -41,7 +41,7 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
                         </a>
                     </div>
                     <div className="navbar-menu-item">
-                        <a onClick={() => activateGroup(GROUP_TREE_INVALID_ID)}
+                        <a onClick={() => this.props.activateGroup(GROUP_TREE_INVALID_ID)}
                            className={'btn btn-sm ' + (this.props.lentaMode ? "active-all" : "")}
                            title="Все заметки">
                             <img src="/img/all.svg" style={{transform: "rotate(180deg)"}}/>
@@ -77,7 +77,8 @@ const mapStateToProps = (store: AppStore): StateProps => {
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        showGroupNavigator: () => dispatch(newShowGroupNavigatorAction())
+        showGroupNavigator: () => dispatch(newShowGroupNavigatorAction()),
+        activateGroup: (groupId: number) => dispatch(newActivateGroupAction(groupId))
     }
 }
 

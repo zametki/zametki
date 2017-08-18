@@ -3,8 +3,7 @@ import * as ReactRedux from 'react-redux'
 import {AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTree, GroupTreeNode} from '../../Store'
 import Modal from '../Modal'
 import GroupTreeCountsBadge from '../GroupTreeCountsBadge'
-import {activateGroup} from '../../../utils/Client2Server'
-import {newHideModalAction} from '../../Actions'
+import {newActivateGroupAction, newHideModalAction} from '../../Actions'
 
 type OwnProps = {}
 
@@ -14,7 +13,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
-    // activateGroup: (nodeId: number) => void
+    activateGroup: (groupId: number) => void
     hideModal: () => void
 }
 
@@ -50,8 +49,8 @@ class GroupNavigatorModalOverlay extends React.Component<OwnProps & StateProps &
         )
     }
 
-    private flattenTree(nodeId: number, depth: number, result: Array<FlatTreeNode>) {
-        const node = this.props.groupTree.nodeById[nodeId]
+    private flattenTree(groupId: number, depth: number, result: Array<FlatTreeNode>) {
+        const node = this.props.groupTree.nodeById[groupId]
         if (!node) {
             return null
         }
@@ -64,12 +63,12 @@ class GroupNavigatorModalOverlay extends React.Component<OwnProps & StateProps &
             <li className="nav-item" key={'group-navigator-' + n.node.id}>
                 <a onClick={() => {
                     this.props.hideModal()
-                    activateGroup(n.node.id)
+                    this.props.activateGroup(n.node.id)
                 }}
                    className="nav-link"
                    style={{padding: "0.3em 0.2em"}}
                 >
-                    <GroupTreeCountsBadge nodeId={n.node.id}/>
+                    <GroupTreeCountsBadge groupId={n.node.id}/>
                     <span style={{paddingLeft: 15 * n.depth + 'px'}}>{n.node.name}</span>
                 </a>
             </li>
@@ -85,7 +84,7 @@ function mapStateToProps(store: AppStore): StateProps {
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
         hideModal: () => dispatch(newHideModalAction()),
-        // activateGroup: (groupId: number) => dispatch(newActivateGroupAction(groupId))
+        activateGroup: (groupId: number) => dispatch(newActivateGroupAction(groupId))
     }
 }
 

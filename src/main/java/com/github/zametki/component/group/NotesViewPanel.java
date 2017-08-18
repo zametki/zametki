@@ -22,6 +22,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.zametki.behavior.ajax.GetNotesListAjaxCallback.toJSON;
+
 public class NotesViewPanel extends Panel {
 
     @NotNull
@@ -78,15 +80,4 @@ public class NotesViewPanel extends Panel {
         return "$site.Server2Client.dispatchUpdateNotesListAction(" + notes.toString() + ");";
     }
 
-    private static final ZDateFormat DF = ZDateFormat.getInstance("dd MMMM yyyy", Constants.MOSCOW_TZ);
-
-    @NotNull
-    private JSONObject toJSON(@NotNull Zametka z) {
-        JSONObject json = new JSONObject();
-        json.put("id", z.id.intValue);
-        json.put("group", z.groupId.intValue);
-        json.put("body", z.content);
-        json.put("dateText", DF.format(z.creationDate));
-        return json;
-    }
 }
