@@ -10,13 +10,14 @@ export class ActionType {
     static ToggleGroupTreeNode = 'ToggleGroupTreeNode'
     static GroupTreeFilterUpdate = 'GroupTreeFilterUpdate'
     static ToggleGroupTreeNodeMenu = 'ToggleGroupTreeNodeMenu'
-    static ActivateGroup = 'ActivateGroup'
+    static ChangeGroup = 'ChangeGroup'
     static CreateGroup = 'CreateGroup'
     static RenameGroup = 'RenameGroup'
     static MoveGroup = 'MoveGroup'
     static HideModal = 'HideModal'
     static ShowGroupNavigator = 'ShowGroupNavigator'
     static DeleteGroup = 'DeleteGroup'
+    static StartUpdateNotesList = 'StartUpdateNotesList'
     static UpdateNotesList = 'UpdateNotesList'
 }
 
@@ -25,12 +26,13 @@ export type ToggleGroupTreeNodePayload = { groupId: number, expanded: boolean; }
 export type GroupTreeFilterUpdatePayload = { filterText: string }
 export type ToggleGroupTreeNodeMenuPayload = { groupId: number, active: boolean }
 export type CreateGroupPayload = { parentGroupId: number }
-export type ActivateGroupPayload = { groupId: number }
+export type ChangeGroupPayload = { groupId: number }
 export type RenameGroupPayload = { groupId: number }
 export type MoveGroupPayload = { groupId: number }
 export type HideModalPayload = {}
 export type ShowGroupNavigatorPayload = {}
 export type DeleteGroupPayload = { groupId: number }
+export type StartUpdateNotesListPayload = { groupId: number }
 export type UpdateNotesListPayload = { notes: Note[] }
 
 export const newUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreePayload> => ({
@@ -43,8 +45,8 @@ export const newToggleGroupTreeNodeAction = (groupId: number, expanded: boolean)
     payload: {groupId, expanded}
 })
 
-export const newActivateGroupAction = (groupId: number): ZAction<ActivateGroupPayload> => ({
-    type: ActionType.ActivateGroup,
+export const newChangeGroupAction = (groupId: number): ZAction<ChangeGroupPayload> => ({
+    type: ActionType.ChangeGroup,
     payload: {groupId}
 })
 
@@ -85,6 +87,11 @@ export const newShowGroupNavigatorAction = (): ZAction<ShowGroupNavigatorPayload
 
 export const newDeleteGroupAction = (groupId: number): ZAction<ShowGroupNavigatorPayload> => ({
     type: ActionType.DeleteGroup,
+    payload: {groupId}
+})
+
+export const newStartUpdateNotesListAction = (groupId: number): ZAction<StartUpdateNotesListPayload> => ({
+    type: ActionType.StartUpdateNotesList,
     payload: {groupId}
 })
 

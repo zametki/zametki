@@ -34,7 +34,7 @@ export type AppStore = {
     notes: Note[]
 }
 
-export const defaultStoreInstance: AppStore = {
+export const storeInitialState: AppStore = {
     groupTree: {
         nodeById: {},
         nodeIds: [],

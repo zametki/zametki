@@ -1,9 +1,11 @@
 /** Set of callbacks for Wicket */
+import {Note} from '../react/Store'
+
 type ServerInterface = {
     createGroup(parentGroupId: number, name: string)
     renameGroup(groupId: number, name: string)
     moveGroup(groupId: number, parentGroupId: number)
-    deleteGroup(groupId: number)
+    deleteGroup(groupId: number),
 }
 
 const Server: ServerInterface = {
@@ -30,3 +32,4 @@ export function deleteGroup(groupId: number) {
 }
 
 export default Server
+

@@ -3,7 +3,7 @@
  */
 import {GroupTreeNode, Note} from '../react/Store'
 import {renderGroupTreeView} from '../react/components/GroupTreeView'
-import {newActivateGroupAction, newUpdateGroupTreeAction, newUpdateNotesListAction} from '../react/Actions'
+import {newChangeGroupAction, newUpdateGroupTreeAction, newUpdateNotesListAction} from '../react/Actions'
 import {appStore} from '../react/Reducers'
 import {renderNavbarView} from '../react/components/Navbar'
 import {renderNotesView} from '../react/components/NotesView'
@@ -13,7 +13,7 @@ function dispatchUpdateGroupTreeAction(rootNode: GroupTreeNode[]) {
 }
 
 function dispatchActivateGroupNodeAction(nodeId: number) {
-    appStore.dispatch(newActivateGroupAction(nodeId))
+    appStore.dispatch(newChangeGroupAction(nodeId))
 }
 
 function dispatchUpdateNotesListAction(notes: Note[]) {

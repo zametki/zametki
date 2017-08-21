@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore, GroupTreeNode} from '../Store'
-import {newActivateGroupAction, newToggleGroupTreeNodeAction} from '../Actions'
+import {newChangeGroupAction, newToggleGroupTreeNodeAction} from '../Actions'
 import GroupTreeCountsBadge from './GroupTreeCountsBadge'
 import GroupTreeNodeMenu from './GroupTreeNodeMenu'
 import {appStore} from '../Reducers'
@@ -99,7 +99,7 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        activateGroup: (groupId: number) => dispatch(newActivateGroupAction(groupId)),
+        activateGroup: (groupId: number) => dispatch(newChangeGroupAction(groupId)),
         toggleExpandedState: (nodeId, expanded) => dispatch(newToggleGroupTreeNodeAction(nodeId, expanded))
     }
 }

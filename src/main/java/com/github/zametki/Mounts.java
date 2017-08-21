@@ -1,5 +1,6 @@
 package com.github.zametki;
 
+import com.github.zametki.ajax.GetNotesListAjaxCall;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.InternalErrorPage;
 import com.github.zametki.component.LogoutPage;
@@ -30,7 +31,10 @@ public class Mounts {
                 UserProfileSettingsPage.class,
 
                 // Public resources
-                AboutPage.class
+                AboutPage.class,
+
+                // Ajax
+                GetNotesListAjaxCall.class
         );
     }
 

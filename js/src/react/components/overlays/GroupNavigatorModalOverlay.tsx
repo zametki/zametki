@@ -3,7 +3,7 @@ import * as ReactRedux from 'react-redux'
 import {AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTree, GroupTreeNode} from '../../Store'
 import Modal from '../Modal'
 import GroupTreeCountsBadge from '../GroupTreeCountsBadge'
-import {newActivateGroupAction, newHideModalAction} from '../../Actions'
+import {newChangeGroupAction, newHideModalAction} from '../../Actions'
 
 type OwnProps = {}
 
@@ -84,7 +84,7 @@ function mapStateToProps(store: AppStore): StateProps {
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
         hideModal: () => dispatch(newHideModalAction()),
-        activateGroup: (groupId: number) => dispatch(newActivateGroupAction(groupId))
+        activateGroup: (groupId: number) => dispatch(newChangeGroupAction(groupId))
     }
 }
 

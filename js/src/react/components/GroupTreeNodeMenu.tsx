@@ -2,7 +2,7 @@ import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
 import {
-    newActivateGroupAction,
+    newChangeGroupAction,
     newDeleteGroupAction,
     newShowCreateGroupAction,
     newShowMoveGroupAction,
@@ -98,7 +98,7 @@ function mapDispatchToProps(dispatch): DispatchProps {
     return {
         toggleGroupTreeNodeMenu: (groupId: number, active: boolean) => {
             if (active) {
-                dispatch(newActivateGroupAction(groupId))
+                dispatch(newChangeGroupAction(groupId))
             }
             dispatch(newToggleGroupTreeNodeMenuAction(groupId, active))
         },

@@ -1,16 +1,23 @@
 ///<reference path="Actions.ts"/>
 import * as Redux from 'redux'
-import {AppStore, defaultStoreInstance} from './Store'
+import thunk from 'redux-thunk'
+
+import {AppStore, GROUP_TREE_INVALID_ID, storeInitialState} from './Store'
 import {
     ActionType,
-    ActivateGroupPayload,
-    CreateGroupPayload, DeleteGroupPayload,
+    ChangeGroupPayload,
+    CreateGroupPayload,
+    DeleteGroupPayload,
     GroupTreeFilterUpdatePayload,
     MoveGroupPayload,
+    newStartUpdateNotesListAction,
+    newUpdateNotesListAction,
     RenameGroupPayload,
-    ToggleGroupTreeNodePayload,
+    StartUpdateNotesListPayload,
     ToggleGroupTreeNodeMenuPayload,
-    UpdateGroupTreePayload, UpdateNotesListPayload,
+    ToggleGroupTreeNodePayload,
+    UpdateGroupTreePayload,
+    UpdateNotesListPayload,
     ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
@@ -19,11 +26,12 @@ import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverl
 import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
 import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
 import {deleteGroup} from "../utils/Client2Server"
+import {ReducersMapObject} from 'redux'
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
 REDUCERS[ActionType.ToggleGroupTreeNode] = toggleGroupTreeNode
-REDUCERS[ActionType.ActivateGroup] = activateGroup
+REDUCERS[ActionType.ChangeGroup] = handleChangeGroup
 REDUCERS[ActionType.GroupTreeFilterUpdate] = updateGroupTreeFilter
 REDUCERS[ActionType.ToggleGroupTreeNodeMenu] = toggleGroupTreeNodeMenu
 REDUCERS[ActionType.CreateGroup] = handleCreateGroup
@@ -32,9 +40,10 @@ REDUCERS[ActionType.MoveGroup] = handleMoveGroup
 REDUCERS[ActionType.HideModal] = handleHideModal
 REDUCERS[ActionType.ShowGroupNavigator] = handleShowGroupNavigator
 REDUCERS[ActionType.DeleteGroup] = handleDeleteGroup
+REDUCERS[ActionType.StartUpdateNotesList] = handleStartUpdateNotesList
 REDUCERS[ActionType.UpdateNotesList] = handleUpdateNotesList
 
-function allReducers(state: AppStore = defaultStoreInstance, action: ZAction<any>): AppStore {
+function allReducers(state: AppStore = storeInitialState, action: ZAction<any>): AppStore {
     if (!action || !action.type || !action.payload) {
         return state
     }
@@ -66,23 +75,25 @@ function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodePayloa
     return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function activateGroup(state: AppStore, payload: ActivateGroupPayload): AppStore {
+function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload): AppStore {
     const nodeById = state.groupTree.nodeById
-
     const n = nodeById[payload.groupId]
-    if (!n) {
+    if (n) {
+        // expand all parent nodes to make new node visible.
+        let parentNode = nodeById[n.parentId]
+        while (parentNode) {
+            if (!parentNode.expanded) {
+                parentNode.expanded = true
+                ClientStorage.setNodeExpanded(parentNode.id, true)
+            }
+            parentNode = nodeById[parentNode.parentId]
+        }
+    } else if (payload.groupId !== GROUP_TREE_INVALID_ID) {
         return state
     }
-
-    // expand all parent nodes to make new node visible.
-    let parentNode = nodeById[n.parentId]
-    while (parentNode) {
-        if (!parentNode.expanded) {
-            parentNode.expanded = true
-            ClientStorage.setNodeExpanded(parentNode.id, true)
-        }
-        parentNode = nodeById[parentNode.parentId]
-    }
+    setTimeout(function () {
+        appStore.dispatch(newStartUpdateNotesListAction(payload.groupId))
+    }, 10)
     // noinspection TypeScriptValidateTypes
     return {...state, activeGroupId: payload.groupId}
 }
@@ -136,18 +147,27 @@ function handleDeleteGroup(state: AppStore, payload: DeleteGroupPayload): AppSto
     return state
 }
 
-function handleUpdateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
-    // noinspection TypeScriptValidateTypes
-    return {... state, notes: payload.notes}
+function handleStartUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayload): AppStore {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `/ajax/notes/${payload.groupId}`, true)
+    xhr.responseType = 'json';
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateNotesListAction(xhr.response.notes))
+        }
+    }
+    xhr.send()
+    return state
 }
 
+function handleUpdateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, notes: payload.notes}
+}
+
+const composeWithEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || Redux.compose
+const createStoreWithMiddleware = composeWithEnhancers(Redux.applyMiddleware(thunk))(Redux.createStore)
 
 // todo: do not export, use listeners!!
-//noinspection TsLint
-export const appStore: Redux.Store<AppStore> = window['appStore'] = Redux.createStore(
-    allReducers,
-    defaultStoreInstance,
-    window['__REDUX_DEVTOOLS_EXTENSION__'] && window['__REDUX_DEVTOOLS_EXTENSION__']()
-    // Redux.applyMiddleware(thunk),
-)
+export const appStore: Redux.Store<AppStore> = window['appStore'] = createStoreWithMiddleware(allReducers, storeInitialState)
 

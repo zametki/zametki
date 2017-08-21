@@ -1,8 +1,6 @@
 package com.github.zametki.component.group;
 
 import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-import com.github.zametki.Constants;
 import com.github.zametki.Context;
 import com.github.zametki.component.WorkspacePageState;
 import com.github.zametki.component.basic.ContainerWithId;
@@ -14,7 +12,6 @@ import com.github.zametki.event.dispatcher.OnPayload;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.provider.LentaProvider;
-import com.github.zametki.util.ZDateFormat;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -22,7 +19,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.github.zametki.behavior.ajax.GetNotesListAjaxCallback.toJSON;
+import static com.github.zametki.ajax.GetNotesListAjaxCall.toJSON;
+
 
 public class NotesViewPanel extends Panel {
 
