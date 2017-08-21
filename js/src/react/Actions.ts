@@ -2,7 +2,8 @@ import {GroupTreeNode, Note} from './Store'
 import {Action} from 'redux'
 
 export interface ZAction<T> extends Action {
-    payload: T
+    payload: T,
+    asyncDispatch?: (newAction: ZAction<any>) => void
 }
 
 export class ActionType {

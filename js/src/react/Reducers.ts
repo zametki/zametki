@@ -1,6 +1,5 @@
-///<reference path="Actions.ts"/>
 import * as Redux from 'redux'
-import thunk from 'redux-thunk'
+import asyncDispatchMiddleware from './AsyncDispatchMiddleware'
 
 import {AppStore, GROUP_TREE_INVALID_ID, storeInitialState} from './Store'
 import {
@@ -26,7 +25,6 @@ import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverl
 import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
 import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
 import {deleteGroup} from "../utils/Client2Server"
-import {ReducersMapObject} from 'redux'
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
@@ -43,12 +41,17 @@ REDUCERS[ActionType.DeleteGroup] = handleDeleteGroup
 REDUCERS[ActionType.StartUpdateNotesList] = handleStartUpdateNotesList
 REDUCERS[ActionType.UpdateNotesList] = handleUpdateNotesList
 
+type AsyncDispatch = (newAction: ZAction<any>) => void
+
 function allReducers(state: AppStore = storeInitialState, action: ZAction<any>): AppStore {
     if (!action || !action.type || !action.payload) {
         return state
     }
+    let asyncDispatch = (newAction: ZAction<any>) => {
+        action.asyncDispatch && action.asyncDispatch(newAction)
+    }
     const reducer = REDUCERS[action.type]
-    return reducer ? reducer(state, action.payload) : state
+    return reducer ? reducer(state, action.payload, asyncDispatch) : state
 }
 
 function updateGroupTree(state: AppStore, payload: UpdateGroupTreePayload): AppStore {
@@ -75,7 +78,7 @@ function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodePayloa
     return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload): AppStore {
+function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload, asyncDispatch: AsyncDispatch): AppStore {
     const nodeById = state.groupTree.nodeById
     const n = nodeById[payload.groupId]
     if (n) {
@@ -91,9 +94,9 @@ function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload): AppSto
     } else if (payload.groupId !== GROUP_TREE_INVALID_ID) {
         return state
     }
-    setTimeout(function () {
-        appStore.dispatch(newStartUpdateNotesListAction(payload.groupId))
-    }, 10)
+
+    asyncDispatch(newStartUpdateNotesListAction(payload.groupId))
+
     // noinspection TypeScriptValidateTypes
     return {...state, activeGroupId: payload.groupId}
 }
@@ -150,7 +153,7 @@ function handleDeleteGroup(state: AppStore, payload: DeleteGroupPayload): AppSto
 function handleStartUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayload): AppStore {
     const xhr = new XMLHttpRequest()
     xhr.open('GET', `/ajax/notes/${payload.groupId}`, true)
-    xhr.responseType = 'json';
+    xhr.responseType = 'json'
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             appStore.dispatch(newUpdateNotesListAction(xhr.response.notes))
@@ -165,8 +168,9 @@ function handleUpdateNotesList(state: AppStore, payload: UpdateNotesListPayload)
     return {...state, notes: payload.notes}
 }
 
+
 const composeWithEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || Redux.compose
-const createStoreWithMiddleware = composeWithEnhancers(Redux.applyMiddleware(thunk))(Redux.createStore)
+const createStoreWithMiddleware = composeWithEnhancers(Redux.applyMiddleware(asyncDispatchMiddleware))(Redux.createStore)
 
 // todo: do not export, use listeners!!
 export const appStore: Redux.Store<AppStore> = window['appStore'] = createStoreWithMiddleware(allReducers, storeInitialState)
