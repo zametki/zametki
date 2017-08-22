@@ -1,89 +1,93 @@
 package com.github.zametki.component;
 
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.github.zametki.Context;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.behavior.ajax.CreateGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.DeleteGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.MoveGroupAjaxCallback;
 import com.github.zametki.behavior.ajax.RenameGroupAjaxCallback;
-import com.github.zametki.component.group.GroupTreePanel;
-import com.github.zametki.component.group.NotesViewPanel;
+import com.github.zametki.component.basic.ContainerWithId;
+import com.github.zametki.component.group.GroupTreeModel;
+import com.github.zametki.component.group.GroupTreeNode;
 import com.github.zametki.component.user.BaseUserPage;
-import com.github.zametki.event.dispatcher.ModelUpdateAjaxEvent;
-import com.github.zametki.event.dispatcher.OnModelUpdate;
+import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
-import com.github.zametki.model.UserSettings;
+import com.github.zametki.util.WebUtils;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @MountPath("/my")
 public class WorkspacePage extends BaseUserPage {
 
     public final WorkspacePageState state = new WorkspacePageState();
 
+    private final ContainerWithId navbarView = new ContainerWithId("navbar");
+    private final ContainerWithId groupsView = new ContainerWithId("groups");
+    private final ContainerWithId notesView = new ContainerWithId("notes");
+
     public WorkspacePage(PageParameters pp) {
         super(pp);
 
-//        UserSettings us = UserSettings.get();
-//        state.activeGroupModel.setObject(us.lastShownGroup);
-//
-//        add(new LogoPanel("brand_logo"));
-//        add(new BookmarkablePageLink("logout_link", LogoutPage.class));
-//        add(new BookmarkablePageLink("settings_link", UserProfileSettingsPage.class));
-//        add(new LentaLink("lenta_link", state.activeGroupModel));
-//
+        //todo: rework all callbacks to pure AJAX
         add(new CreateGroupAjaxCallback(state.activeGroupModel));
         add(new MoveGroupAjaxCallback(state.activeGroupModel));
         add(new RenameGroupAjaxCallback(state.activeGroupModel));
         add(new DeleteGroupAjaxCallback(state.activeGroupModel));
 
-//        ComponentFactory f = markupId -> new GroupListPanel(markupId, state.activeGroupModel);
-//        groupsModal = new BootstrapModal("groups_modal", "Выбор группы", f, BodyMode.Lazy, BootstrapModal.FooterMode.Show);
-//        add(groupsModal);
-//        add(new BootstrapLazyModalLink("groups_popup_link", groupsModal));
-
-        add(new GroupTreePanel("groups", state.activeGroupModel));
-        add(new NotesViewPanel("notes", state));
-        add(new NavbarPanel("navbar"));
-
-/*        CreateZametkaPanel createPanel = new CreateZametkaPanel("create_panel", state.activeGroupModel);
-        add(createPanel);
-        add(lenta);
-
-//        add(new AddZametkaLink("add_zametka_link", createPanel));
-
-        lenta.add(new GroupHeader("group_name", state.activeGroupModel));
-
-        //todo: move to separate component
-        lenta.add(new DataView<ZametkaId>("zametka", provider) {
-            @Override
-            protected void populateItem(Item<ZametkaId> item) {
-                ZametkaId id = item.getModelObject();
-                ZametkaPanel.Settings settings = new ZametkaPanel.Settings();
-                settings.showCategory = state.activeGroupModel.getObject() == null;
-                item.add(new ZametkaPanel("z", id, settings));
-            }
-        });*/
-    }
-
-    @OnModelUpdate
-    public void onModelUpdate(@NotNull ModelUpdateAjaxEvent e) {
-        if (e.model == state.activeGroupModel) {
-//            groupsModal.hide(e.target);
-
-            GroupId activeGroupId = state.activeGroupModel.getObject();
-            UserSettings us = UserSettings.get();
-            us.lastShownGroup = activeGroupId;
-            UserSettings.set(us);
-
-            e.target.appendJavaScript("$site.Server2Client.dispatchActivateGroupNodeAction(" + (activeGroupId == null ? null : activeGroupId.intValue) + ")");
-        }
+        add(navbarView);
+        add(groupsView);
+        add(notesView);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(OnDomReadyHeaderItem.forScript("$site.Shortcuts.bindWorkspacePageKeys()"));
+        response.render(OnDomReadyHeaderItem.forScript(getInitScript()));
+    }
+
+    @NotNull
+    public String getInitScript() {
+        GroupTreeModel treeModel = GroupTreeModel.build(WebUtils.getUserOrRedirectHome());
+        JSONArray groups = new JSONArray();
+        treeModel.flatList().forEach(n -> groups.put(toJSON(n)));
+
+        JSONObject initContext = new JSONObject();
+        initContext.put("groups", groups);
+        initContext.put("notesViewId", notesView.getMarkupId());
+        initContext.put("navbarViewId", navbarView.getMarkupId());
+        initContext.put("groupsViewId", groupsView.getMarkupId());
+        return "$site.Server2Client.init(" + initContext.toString() + ");";
+    }
+
+    private static final Group ROOT_GROUP = new Group();
+    static {
+        ROOT_GROUP.name = "root";
+    }
+
+    @Nullable
+    private JSONObject toJSON(@NotNull GroupTreeNode node) {
+        JSONObject json = new JSONObject();
+        GroupId groupId = node.getGroupId();
+        Group g = groupId.isRoot() ? ROOT_GROUP : Context.getGroupsDbi().getById(groupId);
+        if (g == null) {
+            return null;
+        }
+        json.put("id", g.id == null ? 0 : g.id.intValue);
+        json.put("name", g.name);
+        json.put("parentId", g.parentId.intValue);
+        json.put("level", node.getLevel());
+        json.put("entriesCount", Context.getZametkaDbi().countByGroup(g.userId, groupId));
+        JSONArray children = new JSONArray();
+        for (int i = 0, n = node.getChildCount(); i < n; i++) {
+            GroupTreeNode childNode = (GroupTreeNode) node.getChildAt(i);
+            children.put(childNode.getGroupId().intValue);
+        }
+        json.put("children", children);
+        return json;
     }
 }

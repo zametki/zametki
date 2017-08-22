@@ -1,5 +1,4 @@
 /** Set of callbacks for Wicket */
-import {Note} from '../react/Store'
 
 type ServerInterface = {
     createGroup(parentGroupId: number, name: string)

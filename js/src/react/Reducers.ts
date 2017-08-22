@@ -95,6 +95,7 @@ function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload, asyncDi
         return state
     }
 
+    ClientStorage.setLastUsedGroupId(payload.groupId)
     asyncDispatch(newStartUpdateNotesListAction(payload.groupId))
 
     // noinspection TypeScriptValidateTypes

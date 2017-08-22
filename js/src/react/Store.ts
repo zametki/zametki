@@ -35,14 +35,17 @@ export type AppStore = {
 }
 
 export const storeInitialState: AppStore = {
+    //todo: start with a valid group tree!
     groupTree: {
         nodeById: {},
         nodeIds: [],
+        //todo: cross client data?
         filterText: ClientStorage.getGroupFilterText(),
         contextMenuIsActive: false
     },
     activeModalId: null,
-    activeGroupId: -1,
+    //todo: validation?
+    activeGroupId: ClientStorage.getLastUsedGroupId(),
     notes: []
 
 }

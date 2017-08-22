@@ -1,31 +1,35 @@
 /**
  * Interface used by server code to trigger client actions.
  */
-import {GroupTreeNode, Note} from '../react/Store'
+import {GroupTreeNode} from '../react/Store'
 import {renderGroupTreeView} from '../react/components/GroupTreeView'
-import {newChangeGroupAction, newUpdateGroupTreeAction, newUpdateNotesListAction} from '../react/Actions'
+import {newStartUpdateNotesListAction, newUpdateGroupTreeAction} from '../react/Actions'
 import {appStore} from '../react/Reducers'
 import {renderNavbarView} from '../react/components/Navbar'
 import {renderNotesView} from '../react/components/NotesView'
+import Shortcuts from './Shortcuts'
 
-function dispatchUpdateGroupTreeAction(rootNode: GroupTreeNode[]) {
-    appStore.dispatch(newUpdateGroupTreeAction(rootNode))
+interface InitContext {
+    groups: GroupTreeNode[],
+    groupsViewId: string,
+    navbarViewId: string
+    notesViewId: string
 }
 
-function dispatchActivateGroupNodeAction(nodeId: number) {
-    appStore.dispatch(newChangeGroupAction(nodeId))
-}
+function init(ctx: InitContext) {
+    // populate store with initial state
+    appStore.dispatch(newUpdateGroupTreeAction(ctx.groups))
+    appStore.dispatch(newStartUpdateNotesListAction(appStore.getState().activeGroupId))
 
-function dispatchUpdateNotesListAction(notes: Note[]) {
-    appStore.dispatch(newUpdateNotesListAction(notes))
+    // render all components
+    renderNotesView(ctx.notesViewId)
+    renderNavbarView(ctx.navbarViewId)
+    renderGroupTreeView(ctx.groupsViewId)
+
+    Shortcuts.bindWorkspacePageKeys()
 }
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-    renderGroupTreeView,
-    renderNavbarView,
-    renderNotesView,
-    dispatchUpdateGroupTreeAction,
-    dispatchActivateGroupNodeAction,
-    dispatchUpdateNotesListAction
+    init
 }
