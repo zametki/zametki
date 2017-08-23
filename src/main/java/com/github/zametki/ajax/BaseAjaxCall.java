@@ -2,6 +2,7 @@ package com.github.zametki.ajax;
 
 
 import com.github.openjson.JSONObject;
+import com.github.zametki.util.UserSessionUtils;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
@@ -15,7 +16,7 @@ public abstract class BaseAjaxCall extends WebPage {
     private static final Logger log = LoggerFactory.getLogger(BaseAjaxCall.class);
 
     public BaseAjaxCall() {
-
+        UserSessionUtils.initializeSession();
         getRequestCycle().scheduleRequestHandlerAfterCurrent(new IRequestHandler() {
 
             public void detach(IRequestCycle requestCycle) {
