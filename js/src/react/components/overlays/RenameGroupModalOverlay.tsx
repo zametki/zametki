@@ -3,8 +3,7 @@ import * as ReactRedux from 'react-redux'
 
 import Modal from '../Modal'
 import {AppStore} from '../../Store'
-import {newHideModalAction} from '../../Actions'
-import {renameGroup} from "../../../utils/Client2Server"
+import {newHideModalAction, newRenameGroupAction} from '../../Actions'
 
 type OwnProps = {}
 
@@ -16,6 +15,7 @@ type StateProps = {
 
 type DispatchProps = {
     hideModal: () => void
+    renameGroup: (groupId: number, name: string) => void
 }
 
 export const RENAME_GROUP_MODAL_ID = 'rename-group-modal'
@@ -61,7 +61,7 @@ class RenameGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
         e && e.preventDefault()
         const name = this.refs.nameInput.value
         if (name.length > 0 && name != this.props.currentGroupName) {
-            renameGroup(this.props.groupId, name)
+            this.props.renameGroup(this.props.groupId, name)
         }
         this.close()
     }
@@ -79,7 +79,10 @@ function mapStateToProps(store: AppStore): StateProps {
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
-    return {hideModal: () => dispatch(newHideModalAction())}
+    return {
+        hideModal: () => dispatch(newHideModalAction()),
+        renameGroup: (groupId: number, name: string) => dispatch(newRenameGroupAction(groupId, name))
+    }
 }
 
 

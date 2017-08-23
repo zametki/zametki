@@ -3,7 +3,7 @@ package com.github.zametki.component.group;
 import com.github.zametki.Context;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
-import com.github.zametki.model.User;
+import com.github.zametki.model.UserId;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +31,14 @@ public class GroupTreeModel extends DefaultTreeModel {
     }
 
     @NotNull
-    public static GroupTreeModel build(@NotNull User user) {
-        List<Group> groups = Context.getGroupsDbi().getByUser(user.id).stream()
+    public static GroupTreeModel build(@NotNull UserId userId) {
+        List<Group> groups = Context.getGroupsDbi().getByUser(userId).stream()
                 .map(groupId -> Context.getGroupsDbi().getById(groupId))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         Map<GroupId, GroupTreeNode> nodeById = new HashMap<>();
-        GroupTreeNode rootNode = nodeById.computeIfAbsent(GroupId.UNDEFINED, GroupTreeNode::new);
+        GroupTreeNode rootNode = nodeById.computeIfAbsent(GroupId.ROOT, GroupTreeNode::new);
         for (Group g : groups) {
             GroupTreeNode n = nodeById.computeIfAbsent(g.id, i -> new GroupTreeNode(g.id));
             GroupTreeNode parentNode = nodeById.computeIfAbsent(g.parentId, u -> new GroupTreeNode(g.parentId));

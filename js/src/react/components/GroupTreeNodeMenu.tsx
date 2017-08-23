@@ -5,7 +5,7 @@ import {
     newChangeGroupAction,
     newDeleteGroupAction,
     newShowCreateGroupAction,
-    newShowMoveGroupAction,
+    newShowMoveGroupDialogAction,
     newShowRenameGroupAction,
     newToggleGroupTreeNodeMenuAction
 } from '../Actions'
@@ -104,7 +104,7 @@ function mapDispatchToProps(dispatch): DispatchProps {
         },
         showCreateGroupDialog: groupId => dispatch(newShowCreateGroupAction(groupId)),
         showRenameGroupDialog: groupId => dispatch(newShowRenameGroupAction(groupId)),
-        showMoveGroupDialog: groupId => dispatch(newShowMoveGroupAction(groupId)),
+        showMoveGroupDialog: groupId => dispatch(newShowMoveGroupDialogAction(groupId)),
         deleteGroup: groupId => dispatch(newDeleteGroupAction(groupId))
     }
 }

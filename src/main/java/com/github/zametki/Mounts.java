@@ -1,11 +1,15 @@
 package com.github.zametki;
 
+import com.github.zametki.ajax.CreateGroupAjaxCall;
+import com.github.zametki.ajax.DeleteGroupAjaxCall;
 import com.github.zametki.ajax.GetNotesListAjaxCall;
+import com.github.zametki.ajax.MoveGroupAjaxCall;
+import com.github.zametki.ajax.RenameGroupAjaxCall;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.InternalErrorPage;
 import com.github.zametki.component.LogoutPage;
-import com.github.zametki.component.WorkspacePage;
 import com.github.zametki.component.PageNotFoundPage;
+import com.github.zametki.component.WorkspacePage;
 import com.github.zametki.component.help.AboutPage;
 import com.github.zametki.component.signin.ForgotPasswordPage;
 import com.github.zametki.component.signin.ResetPasswordPage;
@@ -34,7 +38,11 @@ public class Mounts {
                 AboutPage.class,
 
                 // Ajax
-                GetNotesListAjaxCall.class
+                CreateGroupAjaxCall.class,
+                DeleteGroupAjaxCall.class,
+                GetNotesListAjaxCall.class,
+                MoveGroupAjaxCall.class,
+                RenameGroupAjaxCall.class
         );
     }
 

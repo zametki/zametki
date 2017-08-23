@@ -50,6 +50,11 @@ public abstract class BaseAjaxCall extends WebPage {
     }
 
     @NotNull
+    public String permissionError() {
+        return error("Permission denied");
+    }
+
+    @NotNull
     public String success() {
         return new JSONObject().put("success", true).toString();
     }

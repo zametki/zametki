@@ -11,7 +11,7 @@ public class Group extends Identifiable<GroupId> {
     public static final int MAX_NAME_LEN = 48;
 
     @NotNull
-    public GroupId parentId = GroupId.UNDEFINED;
+    public GroupId parentId = GroupId.ROOT;
 
     @NotNull
     public UserId userId = UserId.INVALID_ID;

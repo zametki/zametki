@@ -8,13 +8,9 @@ import com.github.zametki.UserSession;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
-import com.github.zametki.model.UserId;
 import com.github.zametki.model.Zametka;
 import com.github.zametki.model.ZametkaId;
 import com.github.zametki.util.ZDateFormat;
-import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,22 +21,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @MountPath("/ajax/notes/${groupId}")
-public class GetNotesListAjaxCall extends BaseAjaxCall {
+public class GetNotesListAjaxCall extends BaseGroupActionAjaxCall {
 
     @NotNull
     @Override
-    protected String getResponseText() throws Exception {
-        //todo: common subclass to check user auth status
-        UserId userId = UserSession.get().getUserId();
-        if (userId == null) {
-            return "todo";
-        }
-        PageParameters pp = getPageParameters();
-        Group group = Context.getGroupsDbi().getById(new GroupId(pp.get("groupId").toInt(-1)));
-        //todo: common utils to check user rights
-        if (group != null && !group.userId.equals(userId)) {
-            return "todo";
-        }
+    protected String getResponseText(@Nullable Group group) throws Exception {
         List<ZametkaId> noteIds = getList(group == null ? null : group.id);
         JSONArray notesArray = new JSONArray();
         for (ZametkaId id : noteIds) {

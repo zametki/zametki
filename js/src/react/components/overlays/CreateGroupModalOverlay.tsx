@@ -3,8 +3,7 @@ import * as ReactRedux from 'react-redux'
 
 import Modal from '../Modal'
 import {AppStore} from '../../Store'
-import {newHideModalAction} from '../../Actions'
-import {createGroup} from "../../../utils/Client2Server"
+import {newCreateGroupAction, newHideModalAction} from '../../Actions'
 import GroupSelector from '../GroupSelector'
 
 type OwnProps = {}
@@ -15,7 +14,8 @@ type StateProps = {
 }
 
 type DispatchProps = {
-    hideModal: () => void
+    hideModal: () => void,
+    createGroup: (groupId: number, name: string) => void
 }
 
 export const CREATE_GROUP_MODAL_ID = 'create-group-modal'
@@ -41,7 +41,7 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
                         </div>
                         <div className="mt10">
                             Имя новой группы
-                            <input ref="nameInput" className="form-control form-control mt5" autoFocus={true} />
+                            <input ref="nameInput" className="form-control form-control mt5" autoFocus={true}/>
                         </div>
                         <div className="float-right mt20">
                             <button type="button" onClick={this.close.bind(this)} className="btn btn-sm btn-secondary">Отмена</button>
@@ -65,7 +65,7 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
             return
         }
         const parentGroupId = this.props.parentGroupId || this.state.parentGroupId
-        createGroup(parentGroupId, name)
+        this.props.createGroup(parentGroupId, name)
         this.close()
     }
 
@@ -82,7 +82,10 @@ function mapStateToProps(store: AppStore): StateProps {
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
-    return {hideModal: () => dispatch(newHideModalAction())}
+    return {
+        hideModal: () => dispatch(newHideModalAction()),
+        createGroup: (groupId: number, name: string) => dispatch(newCreateGroupAction(groupId, name))
+    }
 }
 
 

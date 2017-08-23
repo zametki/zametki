@@ -47,6 +47,5 @@ export const storeInitialState: AppStore = {
     //todo: validation?
     activeGroupId: ClientStorage.getLastUsedGroupId(),
     notes: []
-
 }
 

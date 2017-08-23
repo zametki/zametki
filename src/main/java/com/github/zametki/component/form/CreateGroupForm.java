@@ -54,7 +54,7 @@ public class CreateGroupForm extends Panel {
                 }
                 Group group = new Group();
                 GroupId parentId = groupSelector.getConvertedInput();
-                group.parentId = parentId != null ? parentId : GroupId.UNDEFINED;
+                group.parentId = parentId != null ? parentId : GroupId.ROOT;
                 group.name = newName;
                 group.userId = userId;
                 Context.getGroupsDbi().create(group);

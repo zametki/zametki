@@ -14,7 +14,7 @@ import com.github.zametki.event.GroupTreeChangeType;
 import com.github.zametki.event.GroupUpdateEvent;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
-import com.github.zametki.model.User;
+import com.github.zametki.model.UserId;
 import com.github.zametki.util.JsUtils;
 import com.github.zametki.util.WebUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,13 +30,12 @@ public class EditGroupPanel extends Panel {
         super(id);
 
         GroupId groupId = group.id;
-        User user = WebUtils.getUserOrRedirectHome();
 
         Form form = new Form("form");
         form.setOutputMarkupId(true);
         add(form);
 
-        ParentGroupSelector parentGroupSelector = new ParentGroupSelector("parent_group_field", group, GroupTreeModel.build(user));
+        ParentGroupSelector parentGroupSelector = new ParentGroupSelector("parent_group_field", group, GroupTreeModel.build(group.userId));
         form.add(parentGroupSelector);
         WebMarkupContainer parentGroupError = new ContainerWithId("parent_group_error");
         form.add(parentGroupError);
@@ -55,7 +54,7 @@ public class EditGroupPanel extends Panel {
         ValidatingJsAjaxSubmitLink saveLink = new ValidatingJsAjaxSubmitLink("save_link", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                User user = WebUtils.getUserOrRedirectHome();
+                UserId userId = WebUtils.getUserIdOrRedirectHome();
                 if (groupId.isRoot()) { // can't edit root category.
                     doneCallback.callback(target);
                     return;
@@ -69,7 +68,7 @@ public class EditGroupPanel extends Panel {
 
                 GroupTreeNode newParentNode = parentGroupSelector.getConvertedInput();
                 GroupId newParentId = newParentNode == null ? null : newParentNode.getGroupId();
-                GroupTreeModel tree = GroupTreeModel.build(user);
+                GroupTreeModel tree = GroupTreeModel.build(userId);
                 if (newParentId == null || !tree.canBeParent(newParentId, groupId)) {
                     ParsleyUtils.addParsleyError(target, parentGroupError, "Некорректная родительская группа");
                     JsUtils.focus(target, parentGroupSelector);
@@ -82,7 +81,7 @@ public class EditGroupPanel extends Panel {
                     return;
                 }
                 boolean nameChanged = !newName.equals(group.name);
-                Group sameNameGroup = nameChanged ? Context.getGroupsDbi().getByName(user.id, newName) : null;
+                Group sameNameGroup = nameChanged ? Context.getGroupsDbi().getByName(userId, newName) : null;
                 if (sameNameGroup != null) {
                     ParsleyUtils.addParsleyError(target, groupNameError, "Группа с таким именем уже существует");
                     JsUtils.focus(target, groupNameField);
@@ -92,9 +91,9 @@ public class EditGroupPanel extends Panel {
                     group.name = newName;
                     group.parentId = newParentId;
                     Context.getGroupsDbi().update(group);
-                    send(getPage(), Broadcast.BREADTH, new GroupUpdateEvent(target, user.id, groupId));
+                    send(getPage(), Broadcast.BREADTH, new GroupUpdateEvent(target, userId, groupId));
                     if (parentChanged) {
-                        send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, user.id, groupId, GroupTreeChangeType.GroupParentUpdated));
+                        send(getPage(), Broadcast.BREADTH, new GroupTreeChangeEvent(target, userId, groupId, GroupTreeChangeType.GroupParentUpdated));
                     }
                 }
                 doneCallback.callback(target);

@@ -80,4 +80,13 @@ public class GroupsDbiImpl extends AbstractDbi implements GroupsDbi {
         cc().remove(group.userId);
     }
 
+    @NotNull
+    @Override
+    public List<GroupId> getSubgroups(@Nullable GroupId id) {
+        if (id == null || !id.isValid()) {
+            return Collections.emptyList();
+        }
+        return sql.getSubgroups(id);
+    }
+
 }

@@ -7,14 +7,19 @@ import {
     ChangeGroupPayload,
     CreateGroupPayload,
     DeleteGroupPayload,
-    GroupTreeFilterUpdatePayload,
     MoveGroupPayload,
+    newChangeGroupAction,
     newStartUpdateNotesListAction,
+    newUpdateGroupTreeAction,
     newUpdateNotesListAction,
     RenameGroupPayload,
+    ShowCreateGroupDialogPayload,
+    ShowMoveGroupDialogPayload,
+    ShowRenameGroupDialogPayload,
     StartUpdateNotesListPayload,
     ToggleGroupTreeNodeMenuPayload,
     ToggleGroupTreeNodePayload,
+    UpdateGroupTreeFilterPayload,
     UpdateGroupTreePayload,
     UpdateNotesListPayload,
     ZAction
@@ -24,22 +29,24 @@ import {CREATE_GROUP_MODAL_ID} from './components/overlays/CreateGroupModalOverl
 import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverlay"
 import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
 import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
-import {deleteGroup} from "../utils/Client2Server"
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
 REDUCERS[ActionType.ToggleGroupTreeNode] = toggleGroupTreeNode
-REDUCERS[ActionType.ChangeGroup] = handleChangeGroup
-REDUCERS[ActionType.GroupTreeFilterUpdate] = updateGroupTreeFilter
+REDUCERS[ActionType.ChangeGroup] = changeGroup
+REDUCERS[ActionType.UpdateGroupTreeFilter] = updateGroupTreeFilter
 REDUCERS[ActionType.ToggleGroupTreeNodeMenu] = toggleGroupTreeNodeMenu
-REDUCERS[ActionType.CreateGroup] = handleCreateGroup
-REDUCERS[ActionType.RenameGroup] = handleRenameGroup
-REDUCERS[ActionType.MoveGroup] = handleMoveGroup
-REDUCERS[ActionType.HideModal] = handleHideModal
-REDUCERS[ActionType.ShowGroupNavigator] = handleShowGroupNavigator
-REDUCERS[ActionType.DeleteGroup] = handleDeleteGroup
-REDUCERS[ActionType.StartUpdateNotesList] = handleStartUpdateNotesList
-REDUCERS[ActionType.UpdateNotesList] = handleUpdateNotesList
+REDUCERS[ActionType.ShowCreateGroupDialog] = showCreateGroupDialog
+REDUCERS[ActionType.CreateGroup] = createGroup
+REDUCERS[ActionType.ShowRenameGroupDialog] = showRenameGroupDialog
+REDUCERS[ActionType.RenameGroup] = renameGroup
+REDUCERS[ActionType.ShowMoveGroupDialog] = showMoveGroupDialog
+REDUCERS[ActionType.MoveGroup] = moveGroup
+REDUCERS[ActionType.HideModal] = hideModal
+REDUCERS[ActionType.ShowGroupNavigator] = showGroupNavigator
+REDUCERS[ActionType.DeleteGroup] = deleteGroup
+REDUCERS[ActionType.StartUpdateNotesList] = startUpdateNotesList
+REDUCERS[ActionType.UpdateNotesList] = updateNotesList
 
 type AsyncDispatch = (newAction: ZAction<any>) => void
 
@@ -78,7 +85,7 @@ function toggleGroupTreeNode(state: AppStore, payload: ToggleGroupTreeNodePayloa
     return {...state, groupTree: {...state.groupTree, nodeById}}
 }
 
-function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload, asyncDispatch: AsyncDispatch): AppStore {
+function changeGroup(state: AppStore, payload: ChangeGroupPayload, asyncDispatch: AsyncDispatch): AppStore {
     const nodeById = state.groupTree.nodeById
     const n = nodeById[payload.groupId]
     if (n) {
@@ -102,7 +109,7 @@ function handleChangeGroup(state: AppStore, payload: ChangeGroupPayload, asyncDi
     return {...state, activeGroupId: payload.groupId}
 }
 
-function updateGroupTreeFilter(state: AppStore, payload: GroupTreeFilterUpdatePayload): AppStore {
+function updateGroupTreeFilter(state: AppStore, payload: UpdateGroupTreeFilterPayload): AppStore {
     ClientStorage.setGroupFilterText(payload.filterText)
     // noinspection TypeScriptValidateTypes
     return {...state, groupTree: {...state.groupTree, filterText: payload.filterText}}
@@ -120,38 +127,92 @@ function toggleGroupTreeNodeMenu(state: AppStore, payload: ToggleGroupTreeNodeMe
     return state
 }
 
-function handleCreateGroup(state: AppStore, payload: CreateGroupPayload): AppStore {
+function showCreateGroupDialog(state: AppStore, payload: ShowCreateGroupDialogPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: CREATE_GROUP_MODAL_ID, activeGroupId: payload.parentGroupId}
 }
 
-function handleRenameGroup(state: AppStore, payload: RenameGroupPayload): AppStore {
+function createGroup(state: AppStore, payload: CreateGroupPayload): AppStore {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `/ajax/create-group/${payload.parentGroupId}/${payload.name}`, true)
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+        }
+    }
+    xhr.send()
+    return state
+}
+
+function showRenameGroupDialog(state: AppStore, payload: ShowRenameGroupDialogPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: RENAME_GROUP_MODAL_ID, activeGroupId: payload.groupId}
 }
 
-function handleMoveGroup(state: AppStore, payload: MoveGroupPayload): AppStore {
+function renameGroup(state: AppStore, payload: RenameGroupPayload): AppStore {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `/ajax/rename-group/${payload.groupId}/${payload.name}`, true)
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+        }
+    }
+    xhr.send()
+    return state
+}
+
+function showMoveGroupDialog(state: AppStore, payload: ShowMoveGroupDialogPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: MOVE_GROUP_MODAL_ID, activeGroupId: payload.groupId}
 }
 
+function moveGroup(state: AppStore, payload: MoveGroupPayload): AppStore {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `/ajax/move-group/${payload.groupId}/${payload.parentId}`, true)
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+        }
+    }
+    xhr.send()
+    return state
+}
 
-function handleHideModal(state: AppStore): AppStore {
+
+function hideModal(state: AppStore): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: null}
 }
 
-function handleShowGroupNavigator(state: AppStore): AppStore {
+function showGroupNavigator(state: AppStore): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, activeModalId: GROUP_NAVIGATOR_MODAL_ID}
 }
 
-function handleDeleteGroup(state: AppStore, payload: DeleteGroupPayload): AppStore {
-    deleteGroup(payload.groupId)
+function deleteGroup(state: AppStore, payload: DeleteGroupPayload): AppStore {
+    const group = state.groupTree.nodeById[payload.groupId]
+    if (!group) {
+        return
+    }
+    const newActiveGroupId = group.parentId
+
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `/ajax/delete-group/${payload.groupId}`, true)
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newChangeGroupAction(newActiveGroupId))
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+        }
+    }
+    xhr.send()
     return state
 }
 
-function handleStartUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayload): AppStore {
+function startUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayload): AppStore {
     const xhr = new XMLHttpRequest()
     xhr.open('GET', `/ajax/notes/${payload.groupId}`, true)
     xhr.responseType = 'json'
@@ -164,7 +225,7 @@ function handleStartUpdateNotesList(state: AppStore, payload: StartUpdateNotesLi
     return state
 }
 
-function handleUpdateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
+function updateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, notes: payload.notes}
 }

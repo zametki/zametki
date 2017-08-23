@@ -9,11 +9,14 @@ export interface ZAction<T> extends Action {
 export class ActionType {
     static UpdateGroupTree = 'UpdateTreeAction'
     static ToggleGroupTreeNode = 'ToggleGroupTreeNode'
-    static GroupTreeFilterUpdate = 'GroupTreeFilterUpdate'
+    static UpdateGroupTreeFilter = 'UpdateGroupTreeFilter'
     static ToggleGroupTreeNodeMenu = 'ToggleGroupTreeNodeMenu'
     static ChangeGroup = 'ChangeGroup'
+    static ShowCreateGroupDialog = 'ShowCreateGroupDialog'
     static CreateGroup = 'CreateGroup'
+    static ShowRenameGroupDialog = 'ShowRenameGroupDialog'
     static RenameGroup = 'RenameGroup'
+    static ShowMoveGroupDialog = 'ShowMoveGroupDialog'
     static MoveGroup = 'MoveGroup'
     static HideModal = 'HideModal'
     static ShowGroupNavigator = 'ShowGroupNavigator'
@@ -24,12 +27,15 @@ export class ActionType {
 
 export type UpdateGroupTreePayload = { nodes: GroupTreeNode[]; }
 export type ToggleGroupTreeNodePayload = { groupId: number, expanded: boolean; }
-export type GroupTreeFilterUpdatePayload = { filterText: string }
+export type UpdateGroupTreeFilterPayload = { filterText: string }
 export type ToggleGroupTreeNodeMenuPayload = { groupId: number, active: boolean }
-export type CreateGroupPayload = { parentGroupId: number }
+export type ShowCreateGroupDialogPayload = { parentGroupId: number }
+export type CreateGroupPayload = { parentGroupId: number, name: string }
 export type ChangeGroupPayload = { groupId: number }
-export type RenameGroupPayload = { groupId: number }
-export type MoveGroupPayload = { groupId: number }
+export type ShowRenameGroupDialogPayload = { groupId: number }
+export type RenameGroupPayload = { groupId: number, name: string }
+export type ShowMoveGroupDialogPayload = { groupId: number }
+export type MoveGroupPayload = { groupId: number, parentId: number }
 export type HideModalPayload = {}
 export type ShowGroupNavigatorPayload = {}
 export type DeleteGroupPayload = { groupId: number }
@@ -51,8 +57,8 @@ export const newChangeGroupAction = (groupId: number): ZAction<ChangeGroupPayloa
     payload: {groupId}
 })
 
-export const newGroupTreeFilterUpdateAction = (filterText: string): ZAction<GroupTreeFilterUpdatePayload> => ({
-    type: ActionType.GroupTreeFilterUpdate,
+export const newGroupTreeFilterUpdateAction = (filterText: string): ZAction<UpdateGroupTreeFilterPayload> => ({
+    type: ActionType.UpdateGroupTreeFilter,
     payload: {filterText}
 })
 
@@ -61,19 +67,34 @@ export const newToggleGroupTreeNodeMenuAction = (groupId: number, active: boolea
     payload: {groupId, active}
 })
 
-export const newShowCreateGroupAction = (parentGroupId: number): ZAction<CreateGroupPayload> => ({
-    type: ActionType.CreateGroup,
+export const newShowCreateGroupAction = (parentGroupId: number): ZAction<ShowCreateGroupDialogPayload> => ({
+    type: ActionType.ShowCreateGroupDialog,
     payload: {parentGroupId}
 })
 
-export const newShowRenameGroupAction = (groupId: number): ZAction<RenameGroupPayload> => ({
-    type: ActionType.RenameGroup,
+export const newCreateGroupAction = (parentGroupId: number, name: string): ZAction<CreateGroupPayload> => ({
+    type: ActionType.CreateGroup,
+    payload: {parentGroupId, name}
+})
+
+export const newShowRenameGroupAction = (groupId: number): ZAction<ShowRenameGroupDialogPayload> => ({
+    type: ActionType.ShowRenameGroupDialog,
     payload: {groupId}
 })
 
-export const newShowMoveGroupAction = (groupId: number): ZAction<MoveGroupPayload> => ({
-    type: ActionType.MoveGroup,
+export const newRenameGroupAction = (groupId: number, name: string): ZAction<RenameGroupPayload> => ({
+    type: ActionType.RenameGroup,
+    payload: {groupId, name}
+})
+
+export const newShowMoveGroupDialogAction = (groupId: number): ZAction<ShowMoveGroupDialogPayload> => ({
+    type: ActionType.ShowMoveGroupDialog,
     payload: {groupId}
+})
+
+export const newMoveGroupAction = (groupId: number, parentId: number): ZAction<MoveGroupPayload> => ({
+    type: ActionType.MoveGroup,
+    payload: {groupId, parentId}
 })
 
 export const newHideModalAction = (): ZAction<HideModalPayload> => ({

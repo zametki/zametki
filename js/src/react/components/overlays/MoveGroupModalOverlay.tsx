@@ -3,9 +3,8 @@ import * as ReactRedux from 'react-redux'
 
 import Modal from '../Modal'
 import {AppStore} from '../../Store'
-import {newHideModalAction} from '../../Actions'
+import {newHideModalAction, newMoveGroupAction} from '../../Actions'
 import GroupSelector from '../GroupSelector'
-import {moveGroup} from '../../../utils/Client2Server'
 
 type OwnProps = {}
 
@@ -17,7 +16,8 @@ type StateProps = {
 }
 
 type DispatchProps = {
-    hideModal: () => void
+    hideModal: () => void,
+    moveGroup: (groupId: number, parentId: number) => void
 }
 
 export const MOVE_GROUP_MODAL_ID = 'move-group-modal'
@@ -61,7 +61,7 @@ class MoveGroupModalOverlay extends React.Component<OwnProps & StateProps & Disp
     move(e?: React.FormEvent<any>) {
         e && e.preventDefault()
         if (this.state.newParentGroupId >= 0 && this.state.newParentGroupId != this.props.currentParentId) {
-            moveGroup(this.props.groupId, this.state.newParentGroupId)
+            this.props.moveGroup(this.props.groupId, this.state.newParentGroupId)
         }
         this.close()
     }
@@ -77,7 +77,10 @@ function mapStateToProps(store: AppStore): StateProps {
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
-    return {hideModal: () => dispatch(newHideModalAction())}
+    return {
+        hideModal: () => dispatch(newHideModalAction()),
+        moveGroup: (groupId: number, parentId: number) => dispatch(newMoveGroupAction(groupId, parentId))
+    }
 }
 
 

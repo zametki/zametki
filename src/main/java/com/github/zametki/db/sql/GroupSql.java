@@ -33,4 +33,7 @@ public interface GroupSql {
 
     @Sql("UPDATE groups SET parent_id = :parentId, name = :name WHERE id = :id")
     void update(@NotNull @BindBean Group c);
+
+    @Sql("SELECT id FROM groups WHERE parent_id = :id")
+    List<GroupId> getSubgroups(@NotNull @Bind("id") GroupId id);
 }
