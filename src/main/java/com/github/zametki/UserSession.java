@@ -20,9 +20,6 @@ public class UserSession extends WebSession {
     @Nullable
     private UserId userId;
 
-    @Nullable
-    private String userLogin;
-
     private boolean initialized;
 
     @Nullable
@@ -48,7 +45,6 @@ public class UserSession extends WebSession {
 
     public void setUser(@NotNull User user) {
         this.userId = user.id;
-        this.userLogin = user.login;
     }
 
     public boolean isInitialized() {
@@ -61,22 +57,14 @@ public class UserSession extends WebSession {
 
     public void cleanOnLogout() {
         userId = null;
-        userLogin = null;
         setInitialized(false);
         getAttributeNames().forEach(this::removeAttribute);
         clear();
     }
 
-    @SuppressWarnings("unused")
     @Nullable
     public UserId getUserId() {
         return userId;
-    }
-
-    @SuppressWarnings("unused")
-    @Nullable
-    public String getUserLogin() {
-        return userLogin;
     }
 
     public String toString() {
@@ -89,12 +77,6 @@ public class UserSession extends WebSession {
         return res;
     }
 
-    @Nullable
-    public String getUserEmail() {
-        User user = getUser();
-        return user == null ? null : user.email;
-    }
-
 
     public void touch() {
         HttpServletRequest request = ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest());
@@ -102,6 +84,7 @@ public class UserSession extends WebSession {
         touch(httpSession);
     }
 
+    @SuppressWarnings("JavaReflectionMemberAccess")
     private static void touch(HttpSession session) {
         try {
             Field f = session.getClass().getDeclaredField("session");

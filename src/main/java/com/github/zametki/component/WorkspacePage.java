@@ -15,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 @MountPath("/my")
 public class WorkspacePage extends BaseUserPage {
 
-    public final WorkspacePageState state = new WorkspacePageState();
-
     private final ContainerWithId navbarView = new ContainerWithId("navbar");
     private final ContainerWithId groupsView = new ContainerWithId("groups");
     private final ContainerWithId notesView = new ContainerWithId("notes");
