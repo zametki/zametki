@@ -19,6 +19,7 @@ import {
     StartUpdateNotesListPayload,
     ToggleGroupTreeNodeMenuPayload,
     ToggleGroupTreeNodePayload,
+    ToggleNoteMenuPayload,
     UpdateGroupTreeFilterPayload,
     UpdateGroupTreePayload,
     UpdateNotesListPayload,
@@ -47,6 +48,7 @@ REDUCERS[ActionType.ShowGroupNavigator] = showGroupNavigator
 REDUCERS[ActionType.DeleteGroup] = deleteGroup
 REDUCERS[ActionType.StartUpdateNotesList] = startUpdateNotesList
 REDUCERS[ActionType.UpdateNotesList] = updateNotesList
+REDUCERS[ActionType.ToggleNoteMenu] = toggleNoteMenu
 
 type AsyncDispatch = (newAction: ZAction<any>) => void
 
@@ -226,8 +228,19 @@ function startUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayl
 }
 
 function updateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
+    const noteById = {}
+    const noteIds = []
+    payload.notes.forEach(n => {
+        noteById[n.id] = n
+        noteIds.push(n.id)
+    })
     // noinspection TypeScriptValidateTypes
-    return {...state, notes: payload.notes}
+    return {...state, noteIds, noteById}
+}
+
+function toggleNoteMenu(state: AppStore, payload: ToggleNoteMenuPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, notesViewState: {...state.notesViewState, noteMenuNoteId: payload.active ? payload.noteId : undefined}}
 }
 
 

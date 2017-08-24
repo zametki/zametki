@@ -31,7 +31,11 @@ export type AppStore = {
     groupTree: GroupTree,
     activeModalId: string,
     activeGroupId: number,
-    notes: Note[]
+    noteIds: number[],
+    noteById: { [noteId: number]: Note }
+    notesViewState: {
+        noteMenuNoteId: number
+    }
 }
 
 export const storeInitialState: AppStore = {
@@ -46,6 +50,10 @@ export const storeInitialState: AppStore = {
     activeModalId: null,
     //todo: validation?
     activeGroupId: ClientStorage.getLastUsedGroupId(),
-    notes: []
+    noteIds: [],
+    noteById: {},
+    notesViewState: {
+        noteMenuNoteId: undefined
+    }
 }
 
