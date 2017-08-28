@@ -34,6 +34,7 @@ export type AppStore = {
     noteIds: number[],
     noteById: { [noteId: number]: Note }
     notesViewState: {
+        lastActionNoteId: number
         noteMenuNoteId: number
     }
 }
@@ -53,6 +54,7 @@ export const storeInitialState: AppStore = {
     noteIds: [],
     noteById: {},
     notesViewState: {
+        lastActionNoteId: undefined,
         noteMenuNoteId: undefined
     }
 }

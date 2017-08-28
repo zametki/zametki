@@ -24,6 +24,8 @@ export class ActionType {
     static StartUpdateNotesList = 'StartUpdateNotesList'
     static UpdateNotesList = 'UpdateNotesList'
     static DeleteNote = 'DeleteNote'
+    static ShowMoveNoteDialog = 'ShowMoveNoteDialog'
+    static MoveNote = 'MoveNote'
     static ToggleNoteMenu = 'ToggleNoteMenu'
 }
 
@@ -44,6 +46,8 @@ export type DeleteGroupPayload = { groupId: number }
 export type StartUpdateNotesListPayload = { groupId: number }
 export type UpdateNotesListPayload = { notes: Note[] }
 export type DeleteNotePayload = { noteId: number }
+export type ShowMoveNoteDialogPayload = { noteId: number }
+export type MoveNotePayload = { noteId: number, groupId: number }
 export type ToggleNoteMenuPayload = { noteId: number, active: boolean }
 
 export const newUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreePayload> => ({
@@ -129,6 +133,16 @@ export const newUpdateNotesListAction = (notes: Note[]): ZAction<UpdateNotesList
 export const newDeleteNoteAction = (noteId: number): ZAction<DeleteNotePayload> => ({
     type: ActionType.DeleteNote,
     payload: {noteId}
+})
+
+export const newShowMoveNoteDialogAction = (noteId: number): ZAction<ShowMoveNoteDialogPayload> => ({
+    type: ActionType.ShowMoveNoteDialog,
+    payload: {noteId}
+})
+
+export const newMoveNoteAction = (noteId: number, groupId: number): ZAction<MoveNotePayload> => ({
+    type: ActionType.MoveNote,
+    payload: {noteId, groupId}
 })
 
 export const newToggleNoteMenuAction = (noteId: number, active: boolean): ZAction<ToggleNoteMenuPayload> => ({

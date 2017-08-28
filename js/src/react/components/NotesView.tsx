@@ -76,7 +76,9 @@ export const NotesView = ReactRedux.connect(mapStateToProps, mapDispatchToProps)
 export function renderNotesView(elementId: string) {
     render(
         <ReactRedux.Provider store={appStore}>
-            <NotesView/>
+            <div>
+                <NotesView/>
+            </div>
         </ReactRedux.Provider>,
         document.getElementById(elementId)
     )

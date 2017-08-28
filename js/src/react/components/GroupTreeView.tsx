@@ -9,6 +9,7 @@ import CreateGroupModalOverlay from './overlays/CreateGroupModalOverlay'
 import RenameGroupModalOverlay from "./overlays/RenameGroupModalOverlay"
 import MoveGroupModalOverlay from './overlays/MoveGroupModalOverlay'
 import GroupNavigatorModalOverlay from './overlays/GroupNavigatorModalOverlay'
+import MoveNoteModalOverlay from './overlays/MoveNoteModalOverlay'
 
 type OwnProps = {}
 type StateProps = {
@@ -49,6 +50,7 @@ export function renderGroupTreeView(elementId: string) {
                 <RenameGroupModalOverlay/>
                 <MoveGroupModalOverlay/>
                 <GroupNavigatorModalOverlay/>
+                <MoveNoteModalOverlay/>
             </div>
         </ReactRedux.Provider>,
         document.getElementById(elementId)

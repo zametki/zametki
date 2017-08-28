@@ -4,6 +4,7 @@ import com.github.zametki.ajax.CreateGroupAjaxCall;
 import com.github.zametki.ajax.DeleteGroupAjaxCall;
 import com.github.zametki.ajax.GetNotesListAjaxCall;
 import com.github.zametki.ajax.MoveGroupAjaxCall;
+import com.github.zametki.ajax.MoveNoteAjaxCall;
 import com.github.zametki.ajax.RenameGroupAjaxCall;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.InternalErrorPage;
@@ -42,8 +43,9 @@ public class Mounts {
                 DeleteGroupAjaxCall.class,
                 GetNotesListAjaxCall.class,
                 MoveGroupAjaxCall.class,
-                RenameGroupAjaxCall.class
-        );
+                RenameGroupAjaxCall.class,
+                MoveNoteAjaxCall.class
+                );
     }
 
     @Nullable

@@ -8,6 +8,7 @@ import {
     CreateGroupPayload,
     DeleteGroupPayload,
     MoveGroupPayload,
+    MoveNotePayload,
     newChangeGroupAction,
     newStartUpdateNotesListAction,
     newUpdateGroupTreeAction,
@@ -15,6 +16,7 @@ import {
     RenameGroupPayload,
     ShowCreateGroupDialogPayload,
     ShowMoveGroupDialogPayload,
+    ShowMoveNoteDialogPayload,
     ShowRenameGroupDialogPayload,
     StartUpdateNotesListPayload,
     ToggleGroupTreeNodeMenuPayload,
@@ -30,6 +32,7 @@ import {CREATE_GROUP_MODAL_ID} from './components/overlays/CreateGroupModalOverl
 import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverlay"
 import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
 import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
+import {MOVE_NOTE_MODAL_ID} from './components/overlays/MoveNoteModalOverlay'
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
@@ -49,6 +52,8 @@ REDUCERS[ActionType.DeleteGroup] = deleteGroup
 REDUCERS[ActionType.StartUpdateNotesList] = startUpdateNotesList
 REDUCERS[ActionType.UpdateNotesList] = updateNotesList
 REDUCERS[ActionType.ToggleNoteMenu] = toggleNoteMenu
+REDUCERS[ActionType.ShowMoveNoteDialog] = showMoveNoteDialog
+REDUCERS[ActionType.MoveNote] = moveNote
 
 type AsyncDispatch = (newAction: ZAction<any>) => void
 
@@ -241,6 +246,25 @@ function updateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppS
 function toggleNoteMenu(state: AppStore, payload: ToggleNoteMenuPayload): AppStore {
     // noinspection TypeScriptValidateTypes
     return {...state, notesViewState: {...state.notesViewState, noteMenuNoteId: payload.active ? payload.noteId : undefined}}
+}
+
+function showMoveNoteDialog(state: AppStore, payload: ShowMoveNoteDialogPayload): AppStore {
+    // noinspection TypeScriptValidateTypes
+    return {...state, activeModalId: MOVE_NOTE_MODAL_ID, notesViewState: {...state.notesViewState, lastActionNoteId: payload.noteId}}
+}
+
+function moveNote(state: AppStore, payload: MoveNotePayload): AppStore {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `/ajax/move-note/${payload.noteId}/${payload.groupId}`, true)
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+            appStore.dispatch(newUpdateNotesListAction(xhr.response.notes))
+        }
+    }
+    xhr.send()
+    return state
 }
 
 

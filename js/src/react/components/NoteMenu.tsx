@@ -2,7 +2,7 @@ import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from '../Store'
-import {newDeleteNoteAction, newToggleNoteMenuAction} from '../Actions'
+import {newDeleteNoteAction, newShowMoveNoteDialogAction, newToggleNoteMenuAction} from '../Actions'
 
 type OwnProps = {
     noteId: number
@@ -15,6 +15,7 @@ type StateProps = {
 type DispatchProps = {
     toggleNoteMenu: (noteId: number, active: boolean) => void
     deleteNote: (noteId: number) => void
+    moveNote: (noteId: number) => void
 }
 
 type AllProps = DispatchProps & StateProps & OwnProps
@@ -51,6 +52,7 @@ class NoteMenu extends React.Component<AllProps, {}> {
                 </div>
                 <div className='dropdown'>
                     <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
+                        <div className="dropdown-item f14px" onClick={() => this.props.moveNote(noteId)}>Переместить</div>
                         <div className="dropdown-item f14px" onClick={() => this.props.deleteNote(noteId)}>Удалить</div>
                     </div>
                 </div>
@@ -79,10 +81,9 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        toggleNoteMenu: (noteId: number, active: boolean) => {
-            dispatch(newToggleNoteMenuAction(noteId, active))
-        },
-        deleteNote: noteId => dispatch(newDeleteNoteAction(noteId))
+        toggleNoteMenu: (noteId: number, active: boolean) => dispatch(newToggleNoteMenuAction(noteId, active)),
+        deleteNote: noteId => dispatch(newDeleteNoteAction(noteId)),
+        moveNote: noteId => dispatch(newShowMoveNoteDialogAction(noteId))
     }
 }
 

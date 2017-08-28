@@ -11,7 +11,9 @@ type OwnProps = {
     /** Subtree to exclude. If <=0 -> not used */
     groupToExclude?: number
 
-    autofocus?: boolean
+    autofocus?: boolean,
+
+    hideRoot?: boolean
 }
 
 type StateProps = {
@@ -30,10 +32,13 @@ class GroupSelector extends React.Component<OwnProps & StateProps, State> {
 
     render() {
         const options: Array<GroupOption> = []
-        options.push({value: GROUP_TREE_ROOT_NODE_ID, label: "«без группы»", depth: 0})
+        if (!this.props.hideRoot) {
+            options.push({value: GROUP_TREE_ROOT_NODE_ID, label: "«без группы»", depth: 0})
+        }
+        const startDepth = this.props.hideRoot ? 0 : 1
         this.props.groupTree.nodeIds
             .filter(id => this.props.groupTree.nodeById[id].parentId === GROUP_TREE_ROOT_NODE_ID)
-            .forEach(id => this.flattenGroupTree(id, options, 1))
+            .forEach(id => this.flattenGroupTree(id, options, startDepth))
 
         return <Select value={(this.state || this.props).selectedGroupId}
                        options={options}
