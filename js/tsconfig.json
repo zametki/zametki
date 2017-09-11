@@ -2,7 +2,12 @@
   "compilerOptions": {
     "module": "commonjs",
     "jsx": "react",
-    "target": "es6"
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "forceConsistentCasingInFileNames": true
   },
   "files": [
     "src/types/tsd.d.ts",

@@ -5,6 +5,7 @@ import * as ReactRedux from 'react-redux'
 import {appStore} from '../Reducers'
 import {AppStore, Note} from '../Store'
 import NoteMenu from './NoteMenu'
+import NewNoteEditorPanel from './NewNoteEditorPanel'
 
 type DispatchProps = {}
 
@@ -23,6 +24,7 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 <div className="text-center">
                     <div className="group-header">{this.props.activeGroupName}</div>
                 </div>
+                <NewNoteEditorPanel/>
                 <div>
                     {notes}
                 </div>
