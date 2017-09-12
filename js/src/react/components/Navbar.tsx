@@ -4,17 +4,19 @@ import * as ReactRedux from 'react-redux'
 import {appStore} from '../Reducers'
 import LogoPanel from './LogoPanel'
 import {AppStore, GROUP_TREE_INVALID_ID} from '../Store'
-import {newChangeGroupAction, newShowGroupNavigatorAction} from '../Actions'
+import {newChangeGroupAction, newShowGroupNavigatorAction, newToggleAddNoteAction} from '../Actions'
 
 type OwnProps = {}
 
 type DispatchProps = {
     resetActiveGroup: () => void
     showGroupNavigator: () => void
+    toggleAddNote: () => void
 }
 
 type StateProps = {
-    lentaMode: boolean
+    lentaMode: boolean,
+    addNoteIsActive: boolean
 }
 
 class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, any> {
@@ -31,9 +33,12 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
                 </div>
                 <div className="navbar-menu">
                     <div className="navbar-menu-item">
-                        {/*TODO: color for pushed state!*/}
-                        {/*<a wicket:id="add_zametka_link" id="add-zametka-button" className="btn btn-sm" title="Добавить заметку (A)"><img src="/img/plus.svg"/></a>*/}
-                        {/*<a onClick={} className="btn btn-sm" title="Добавить заметку (A)"><img src="/img/plus.svg"/></a>*/}
+                        {/* TODO: Shortcut? */}
+                        <a onClick={this.onAddNoteLinkClicked.bind(this)}
+                           className={"btn btn-sm" + (this.props.addNoteIsActive ? " active-create" : "")}
+                           title="Добавить заметку (A)">
+                            <img src="/img/plus.svg"/>
+                        </a>
                     </div>
                     <div className="navbar-menu-item">
                         <a onClick={this.onShowGroupSelectorClicked.bind(this)} className="btn btn-sm" title="Группы">
@@ -69,17 +74,26 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
     onShowGroupSelectorClicked() {
         this.props.showGroupNavigator()
     }
+
+    onAddNoteLinkClicked() {
+        this.props.toggleAddNote()
+    }
 }
 
 const mapStateToProps = (store: AppStore): StateProps => {
-    return {lentaMode: store.activeGroupId == GROUP_TREE_INVALID_ID}
+    return {
+        lentaMode: store.activeGroupId == GROUP_TREE_INVALID_ID,
+        addNoteIsActive: store.addNoteIsActive
+    }
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
         showGroupNavigator: () => dispatch(newShowGroupNavigatorAction()),
-        resetActiveGroup: () => dispatch(newChangeGroupAction(GROUP_TREE_INVALID_ID))
+        resetActiveGroup: () => dispatch(newChangeGroupAction(GROUP_TREE_INVALID_ID)),
+        toggleAddNote: () => dispatch(newToggleAddNoteAction())
     }
+
 }
 
 export const Navbar = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NavbarImpl) as React.ComponentClass<OwnProps>

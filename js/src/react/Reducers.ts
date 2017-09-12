@@ -54,6 +54,7 @@ REDUCERS[ActionType.UpdateNotesList] = updateNotesList
 REDUCERS[ActionType.ToggleNoteMenu] = toggleNoteMenu
 REDUCERS[ActionType.ShowMoveNoteDialog] = showMoveNoteDialog
 REDUCERS[ActionType.MoveNote] = moveNote
+REDUCERS[ActionType.ToggleAddNote] = toggleAddNote
 
 type AsyncDispatch = (newAction: ZAction<any>) => void
 
@@ -267,6 +268,11 @@ function moveNote(state: AppStore, payload: MoveNotePayload): AppStore {
     return state
 }
 
+function toggleAddNote(state: AppStore): AppStore {
+    const addNoteIsActive = !state.addNoteIsActive
+    // noinspection TypeScriptValidateTypes
+    return {...state, addNoteIsActive}
+}
 
 const composeWithEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || Redux.compose
 const createStoreWithMiddleware = composeWithEnhancers(Redux.applyMiddleware(asyncDispatchMiddleware))(Redux.createStore)

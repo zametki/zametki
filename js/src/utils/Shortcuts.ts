@@ -1,4 +1,6 @@
 import * as $ from 'jquery'
+import {appStore} from '../react/Reducers'
+import {newToggleAddNoteAction} from '../react/Actions'
 
 function isModalOpen(): boolean {
     return $('.modal.show').length > 0
@@ -17,21 +19,13 @@ function bindWorkspacePageKeys() {
             return
         }
         const element = event.srcElement
-        if (isInInput(element)) {
-            if (event.which === 27) { // todo: rework this part. Make it work for editing existing entries too
-                const elementId = element.getAttribute('id')
-                if (elementId === 'create-zametka-text-area') {
-                    setTimeout(() => $('#create-zametka-cancel-button').click(), 100)
+        if (!isInInput(element)) { // when 'a' is pressed -> show 'Add Note' input
+            if (event.which === 65 || event.which === 97) {
+                if (!appStore.getState().addNoteIsActive) {
+                    event.preventDefault()
+                    appStore.dispatch(newToggleAddNoteAction())
                 }
             }
-            return
-        }
-        if (event.which === 65 || event.which === 97) {
-            const $btn = $('#add-zametka-button')
-            if ($btn.hasClass('active-create')) {
-                return
-            }
-            $btn.click()
         }
     })
 }

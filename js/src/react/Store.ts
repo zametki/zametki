@@ -32,6 +32,7 @@ export type AppStore = {
     activeModalId: string,
     activeGroupId: number,
     noteIds: number[],
+    addNoteIsActive: boolean,
     noteById: { [noteId: number]: Note }
     notesViewState: {
         lastActionNoteId: number
@@ -48,6 +49,7 @@ export const storeInitialState: AppStore = {
         filterText: ClientStorage.getGroupFilterText(),
         contextMenuIsActive: false
     },
+    addNoteIsActive: false,
     activeModalId: null,
     //todo: validation?
     activeGroupId: ClientStorage.getLastUsedGroupId(),
