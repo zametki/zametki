@@ -1,6 +1,5 @@
 package com.github.zametki.ajax;
 
-import com.github.openjson.JSONObject;
 import com.github.zametki.Context;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.model.Group;
@@ -28,9 +27,6 @@ public class MoveNoteAjaxCall extends BaseGroupActionAjaxCall {
             z.groupId = group.id;
             Context.getZametkaDbi().update(z);
         }
-        return new JSONObject()
-                .put("groups", AjaxApiUtils.getGroups(userId))
-                .put("notes", AjaxApiUtils.getNotes(oldGroupId))
-                .toString();
+        return AjaxApiUtils.getNotesAndGroupsAsResponse(userId, oldGroupId);
     }
 }

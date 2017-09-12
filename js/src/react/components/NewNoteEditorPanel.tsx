@@ -2,14 +2,16 @@ import * as React from 'react'
 import {SyntheticEvent} from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from '../Store'
-import {newToggleAddNoteAction} from '../Actions'
+import {newCreateNoteAction, newToggleAddNoteAction} from '../Actions'
 
 type StateProps = {
-    active: boolean
+    active: boolean,
+    groupId: number
 }
 
 type DispatchProps = {
     toggleAddNote: () => void
+    createNote: (groupId: number, text: string) => void
 }
 
 type State = {
@@ -27,6 +29,7 @@ class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, Sta
     }
 
     constructor(props: StateProps & DispatchProps, ctx: any) {
+        // noinspection TypeScriptValidateTypes
         super(props, ctx)
         this.validate()
         this.state = this.validate()
@@ -34,7 +37,10 @@ class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, Sta
 
     validate(): State {
         const validationResult = {hasErrors: false, errorMessage: ''}
-        if (!this.refs || !this.refs.textArea) {
+        if (this.props.groupId <= 0) {
+            validationResult.hasErrors = true
+            validationResult.errorMessage = 'Не выбрана группа'
+        } else if (!this.refs || !this.refs.textArea) {
             validationResult.hasErrors = true
         } else {
             const text = this.refs.textArea.value
@@ -72,7 +78,9 @@ class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, Sta
                                   autoFocus={true}/>
                         <span ref="textAreaFeedback" className={"form-element-feedback" + (v.hasErrors ? ' form-element-feedback-active' : '')}>{v.errorMessage}</span>
                         <div className="mt-2">
-                            <a onClick={this.onCancelClicked.bind(this)} className="btn btn-sm btn-secondary mr-1" title="Отменить (Escape)">Отменить</a>
+                            <a onClick={this.onCancelClicked.bind(this)}
+                               className="btn btn-sm btn-secondary mr-1"
+                               title="Отменить (Escape)">Отменить</a>
                             <a onClick={this.onCreateClicked.bind(this)}
                                className={'btn btn-sm btn-primary' + (v.hasErrors ? ' disabled' : '')}
                                title="Сохранить (Ctrl+Enter)">Добавить</a>
@@ -91,6 +99,10 @@ class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, Sta
         const e = se.nativeEvent as KeyboardEvent
         if (e.target == this.refs.textArea && e.keyCode == 27) {
             this.props.toggleAddNote()
+        } else if (e.ctrlKey && e.keyCode == 13) {
+            if (!this.state.validationResult.hasErrors) {
+                this.onCreateClicked();
+            }
         }
     }
 
@@ -99,20 +111,27 @@ class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, Sta
     }
 
     onCreateClicked() {
-        this.validate()
-        alert('Save! Has errors: ' + this.state.validationResult.hasErrors)
+        if (this.state.validationResult.hasErrors) {
+            console.error('Validation error: ' + this.state.validationResult.errorMessage)
+            return
+        }
+        this.props.createNote(this.props.groupId, this.refs.textArea.value)
     }
 
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        toggleAddNote: () => dispatch(newToggleAddNoteAction())
+        toggleAddNote: () => dispatch(newToggleAddNoteAction()),
+        createNote: (groupId: number, text: string) => dispatch(newCreateNoteAction(groupId, text))
     }
 }
 
 function mapStateToProps(state: AppStore): StateProps {
-    return {active: state.addNoteIsActive}
+    return {
+        active: state.addNoteIsActive,
+        groupId: state.activeGroupId
+    }
 }
 
 

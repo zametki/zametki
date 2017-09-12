@@ -63,6 +63,17 @@ public class AjaxApiUtils {
     }
 
     @NotNull
+    public static String getNotesListAsResponse(@Nullable Group group) {
+        return AjaxApiUtils.getNotesListAsResponse(group == null ? null : group.id);
+    }
+
+    @NotNull
+    public static String getNotesListAsResponse(@Nullable GroupId groupId) {
+        JSONArray notesArray = AjaxApiUtils.getNotes(groupId);
+        return new JSONObject().put("notes", notesArray).toString();
+    }
+
+    @NotNull
     public static JSONArray getNotes(@Nullable GroupId groupId) {
         List<ZametkaId> noteIds = AjaxApiUtils.getList(groupId);
         JSONArray notesArray = new JSONArray();
@@ -74,6 +85,13 @@ public class AjaxApiUtils {
             notesArray.put(toJSON(z));
         }
         return notesArray;
+    }
+
+    public static String getNotesAndGroupsAsResponse(@NotNull UserId userId, @NotNull GroupId groupId) {
+        return new JSONObject()
+                .put("groups", AjaxApiUtils.getGroups(userId))
+                .put("notes", AjaxApiUtils.getNotes(groupId))
+                .toString();
     }
 
     private static List<ZametkaId> getList(@Nullable GroupId groupId) {

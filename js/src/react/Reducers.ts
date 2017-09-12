@@ -6,11 +6,14 @@ import {
     ActionType,
     ChangeGroupPayload,
     CreateGroupPayload,
+    CreateNotePayload,
     DeleteGroupPayload,
+    DeleteNotePayload,
     MoveGroupPayload,
     MoveNotePayload,
     newChangeGroupAction,
     newStartUpdateNotesListAction,
+    newToggleAddNoteAction,
     newUpdateGroupTreeAction,
     newUpdateNotesListAction,
     RenameGroupPayload,
@@ -55,6 +58,8 @@ REDUCERS[ActionType.ToggleNoteMenu] = toggleNoteMenu
 REDUCERS[ActionType.ShowMoveNoteDialog] = showMoveNoteDialog
 REDUCERS[ActionType.MoveNote] = moveNote
 REDUCERS[ActionType.ToggleAddNote] = toggleAddNote
+REDUCERS[ActionType.CreateNote] = createNote
+REDUCERS[ActionType.DeleteNote] = deleteNote
 
 type AsyncDispatch = (newAction: ZAction<any>) => void
 
@@ -142,14 +147,15 @@ function showCreateGroupDialog(state: AppStore, payload: ShowCreateGroupDialogPa
 
 function createGroup(state: AppStore, payload: CreateGroupPayload): AppStore {
     const xhr = new XMLHttpRequest()
-    xhr.open('GET', `/ajax/create-group/${payload.parentGroupId}/${payload.name}`, true)
+    xhr.open('POST', '/ajax/create-group', true)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xhr.responseType = 'json'
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
         }
     }
-    xhr.send()
+    xhr.send(`groupId=${payload.parentGroupId}&name=${payload.name}`)
     return state
 }
 
@@ -274,9 +280,44 @@ function toggleAddNote(state: AppStore): AppStore {
     return {...state, addNoteIsActive}
 }
 
+function createNote(state: AppStore, payload: CreateNotePayload): AppStore {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', '/ajax/create-note', true)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+            appStore.dispatch(newUpdateNotesListAction(xhr.response.notes))
+            //todo: add edit session id
+            if (appStore.getState().addNoteIsActive) {
+                appStore.dispatch(newToggleAddNoteAction())
+            }
+        }
+    }
+    xhr.send(`groupId=${payload.groupId}&text=${payload.text}`)
+    return state
+}
+
+function deleteNote(state: AppStore, payload: DeleteNotePayload) {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', '/ajax/delete-note', true)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
+            appStore.dispatch(newUpdateNotesListAction(xhr.response.notes))
+        }
+    }
+    xhr.send(`noteId=${payload.noteId}`)
+    return state
+}
+
 const composeWithEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || Redux.compose
 const createStoreWithMiddleware = composeWithEnhancers(Redux.applyMiddleware(asyncDispatchMiddleware))(Redux.createStore)
 
 // todo: do not export, use listeners!!
 export const appStore: Redux.Store<AppStore> = window['appStore'] = createStoreWithMiddleware(allReducers, storeInitialState)
+
 

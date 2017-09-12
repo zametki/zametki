@@ -1,7 +1,9 @@
 package com.github.zametki;
 
 import com.github.zametki.ajax.CreateGroupAjaxCall;
+import com.github.zametki.ajax.CreateNoteAjaxCall;
 import com.github.zametki.ajax.DeleteGroupAjaxCall;
+import com.github.zametki.ajax.DeleteNoteAjaxCall;
 import com.github.zametki.ajax.GetNotesListAjaxCall;
 import com.github.zametki.ajax.MoveGroupAjaxCall;
 import com.github.zametki.ajax.MoveNoteAjaxCall;
@@ -44,8 +46,10 @@ public class Mounts {
                 GetNotesListAjaxCall.class,
                 MoveGroupAjaxCall.class,
                 RenameGroupAjaxCall.class,
-                MoveNoteAjaxCall.class
-                );
+                MoveNoteAjaxCall.class,
+                CreateNoteAjaxCall.class,
+                DeleteNoteAjaxCall.class
+        );
     }
 
     @Nullable
