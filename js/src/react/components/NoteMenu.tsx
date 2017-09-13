@@ -2,7 +2,7 @@ import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from '../Store'
-import {newDeleteNoteAction, newShowMoveNoteDialogAction, newToggleNoteMenuAction} from '../Actions'
+import {newDeleteNoteAction, newShowMoveNoteDialogAction, newStartEditNoteAction, newToggleNoteMenuAction} from '../Actions'
 
 type OwnProps = {
     noteId: number
@@ -14,6 +14,7 @@ type StateProps = {
 
 type DispatchProps = {
     toggleNoteMenu: (noteId: number, active: boolean) => void
+    startEditNote: (noteId: number) => void
     deleteNote: (noteId: number) => void
     moveNote: (noteId: number) => void
 }
@@ -26,17 +27,19 @@ class NoteMenu extends React.Component<AllProps, {}> {
         //noinspection TypeScriptValidateTypes
         super(props, context)
         this.showMenu = this.showMenu.bind(this)
-        this.closeMenu = this.closeMenu.bind(this)
+        this.onKeyDown = this.onKeyDown.bind(this)
+        this.onClick = this.onClick.bind(this)
     }
 
     componentDidMount(): void {
-        window.addEventListener('keydown', this.closeMenu)
-        window.addEventListener('click', this.closeMenu)
+        //todo:
+        window.addEventListener('keydown', this.onKeyDown)
+        window.addEventListener('click', this.onClick)
     }
 
     componentWillUnmount(): void {
-        window.removeEventListener('keydown', this.closeMenu)
-        window.removeEventListener('click', this.closeMenu)
+        window.removeEventListener('keydown', this.onKeyDown)
+        window.removeEventListener('click', this.onClick)
     }
 
     shouldComponentUpdate(nextProps: Readonly<AllProps>, nextState: Readonly<{}>, nextContext: any): boolean {
@@ -44,7 +47,6 @@ class NoteMenu extends React.Component<AllProps, {}> {
     }
 
     render() {
-        let noteId = this.props.noteId
         return (
             <div>
                 <div onClick={this.showMenu.bind(this)} className='note-menu-link' title="Действия над заметкой">
@@ -52,12 +54,33 @@ class NoteMenu extends React.Component<AllProps, {}> {
                 </div>
                 <div className='dropdown'>
                     <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
-                        <div className="dropdown-item f14px" onClick={() => this.props.moveNote(noteId)}>Переместить</div>
-                        <div className="dropdown-item f14px" onClick={() => this.props.deleteNote(noteId)}>Удалить</div>
+                        <div className="dropdown-item f14px" onClick={this.onEditNoteClicked.bind(this)}>Редактировать</div>
+                        <div className="dropdown-item f14px" onClick={this.onMoveNoteClicked.bind(this)}>Переместить</div>
+                        <div className="dropdown-item f14px" onClick={this.onDeleteNoteClicked.bind(this)}>Удалить</div>
                     </div>
                 </div>
             </div>
         )
+    }
+
+    private onKeyDown() {
+        this.closeMenu()
+    }
+
+    private onClick() {
+        this.closeMenu()
+    }
+
+    private onEditNoteClicked() {
+        this.props.startEditNote(this.props.noteId)
+    }
+
+    private onMoveNoteClicked() {
+        this.props.moveNote(this.props.noteId)
+    }
+
+    private onDeleteNoteClicked() {
+        this.props.deleteNote(this.props.noteId)
     }
 
     private showMenu(e: MouseEvent<any>) {
@@ -82,6 +105,7 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
         toggleNoteMenu: (noteId: number, active: boolean) => dispatch(newToggleNoteMenuAction(noteId, active)),
+        startEditNote: noteId => dispatch(newStartEditNoteAction(noteId)),
         deleteNote: noteId => dispatch(newDeleteNoteAction(noteId)),
         moveNote: noteId => dispatch(newShowMoveNoteDialogAction(noteId))
     }

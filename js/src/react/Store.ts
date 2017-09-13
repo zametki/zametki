@@ -34,6 +34,7 @@ export type AppStore = {
     noteIds: number[],
     addNoteIsActive: boolean,
     noteById: { [noteId: number]: Note }
+    editedNoteIds: number[],
     notesViewState: {
         lastActionNoteId: number
         noteMenuNoteId: number
@@ -55,6 +56,7 @@ export const storeInitialState: AppStore = {
     activeGroupId: ClientStorage.getLastUsedGroupId(),
     noteIds: [],
     noteById: {},
+    editedNoteIds: [],
     notesViewState: {
         lastActionNoteId: undefined,
         noteMenuNoteId: undefined

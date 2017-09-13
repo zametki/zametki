@@ -3,6 +3,7 @@ import {SyntheticEvent} from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore} from '../Store'
 import {newCreateNoteAction, newToggleAddNoteAction} from '../Actions'
+import {ValidationResult} from './NoteEditor'
 
 type StateProps = {
     active: boolean,
@@ -18,12 +19,7 @@ type State = {
     validationResult: ValidationResult
 }
 
-type ValidationResult = {
-    hasErrors: boolean,
-    errorMessage: string
-}
-
-class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, State> {
+class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
     refs: {
         textArea: HTMLTextAreaElement,
     }
@@ -98,7 +94,7 @@ class NewNoteEditorPanel extends React.Component<StateProps & DispatchProps, Sta
     onKeyDown(se: SyntheticEvent<any>) {
         const e = se.nativeEvent as KeyboardEvent
         if (e.target == this.refs.textArea && e.keyCode == 27) {
-            this.props.toggleAddNote()
+            this.onCancelClicked()
         } else if (e.ctrlKey && e.keyCode == 13) {
             if (!this.state.validationResult.hasErrors) {
                 this.onCreateClicked();
@@ -135,4 +131,4 @@ function mapStateToProps(state: AppStore): StateProps {
 }
 
 
-export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NewNoteEditorPanel) as React.ComponentClass<{}>
+export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NoteEditor) as React.ComponentClass<{}>

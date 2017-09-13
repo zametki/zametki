@@ -33,7 +33,7 @@
     "react": "next",
     "react-dom": "next",
     "react-redux": "5.0.6",
-    "react-select": "1.0.0-rc.5",
+    "react-select": "1.0.0-rc.10",
     "redux": "3.7.2",
     "store": "2.0.12"
   },

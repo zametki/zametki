@@ -8,6 +8,7 @@ import com.github.zametki.ajax.GetNotesListAjaxCall;
 import com.github.zametki.ajax.MoveGroupAjaxCall;
 import com.github.zametki.ajax.MoveNoteAjaxCall;
 import com.github.zametki.ajax.RenameGroupAjaxCall;
+import com.github.zametki.ajax.UpdateNoteAjaxCall;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.component.InternalErrorPage;
 import com.github.zametki.component.LogoutPage;
@@ -48,6 +49,7 @@ public class Mounts {
                 RenameGroupAjaxCall.class,
                 MoveNoteAjaxCall.class,
                 CreateNoteAjaxCall.class,
+                UpdateNoteAjaxCall.class,
                 DeleteNoteAjaxCall.class
         );
     }

@@ -5,7 +5,8 @@ import * as ReactRedux from 'react-redux'
 import {appStore} from '../Reducers'
 import {AppStore, Note} from '../Store'
 import NoteMenu from './NoteMenu'
-import NewNoteEditorPanel from './NewNoteEditorPanel'
+import NoteEditor from './NoteEditor'
+import NewNoteEditor from './NewNoteEditor'
 
 type DispatchProps = {}
 
@@ -13,6 +14,7 @@ type StateProps = {
     activeGroupName: string,
     noteIds: number[]
     noteById: { [noteId: number]: Note }
+    editedNoteIds: number[]
 }
 
 class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
@@ -24,7 +26,7 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 <div className="text-center">
                     <div className="group-header">{this.props.activeGroupName}</div>
                 </div>
-                <NewNoteEditorPanel/>
+                <NewNoteEditor/>
                 <div>
                     {notes}
                 </div>
@@ -42,6 +44,9 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
     }
 
     private createNoteElement(z: Note): JSX.Element {
+        if (this.props.editedNoteIds.indexOf(z.id) >= 0) {
+            return <NoteEditor noteId={z.id}/>
+        }
         return <div key={'zametka-' + z.id} className="zametka-panel">
             <div>
                 <table>
@@ -66,6 +71,7 @@ const mapStateToProps = (store: AppStore): StateProps => {
         activeGroupName,
         noteIds: store.noteIds,
         noteById: store.noteById,
+        editedNoteIds: store.editedNoteIds
     }
 }
 

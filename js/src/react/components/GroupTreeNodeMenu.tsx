@@ -40,6 +40,7 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
     }
 
     componentDidMount(): void {
+        //todo:
         window.addEventListener('keydown', this.closeMenu)
         window.addEventListener('click', this.closeMenu)
     }

@@ -24,13 +24,17 @@ export class ActionType {
     static StartUpdateNotesList = 'StartUpdateNotesList'
     static UpdateNotesList = 'UpdateNotesList'
     static DeleteNote = 'DeleteNote'
+    static StartEditNote = 'StartEditNote'
+    static CancelEditNote = 'CancelEditNote'
     static ShowMoveNoteDialog = 'ShowMoveNoteDialog'
     static MoveNote = 'MoveNote'
     static ToggleNoteMenu = 'ToggleNoteMenu'
     static ToggleAddNote = 'ToggleAddNote'
     static CreateNote = 'CreateNote'
+    static UpdateNote = 'UpdateNote'
 }
 
+// TODO: use common payload for groupId or noteId only payloads.
 export type UpdateGroupTreePayload = { nodes: GroupTreeNode[]; }
 export type ToggleGroupTreeNodePayload = { groupId: number, expanded: boolean; }
 export type UpdateGroupTreeFilterPayload = { filterText: string }
@@ -47,12 +51,15 @@ export type ShowGroupNavigatorPayload = {}
 export type DeleteGroupPayload = { groupId: number }
 export type StartUpdateNotesListPayload = { groupId: number }
 export type UpdateNotesListPayload = { notes: Note[] }
+export type StartEditNotePayload = { noteId: number }
+export type CancelEditNotePayload = { noteId: number }
 export type DeleteNotePayload = { noteId: number }
 export type ShowMoveNoteDialogPayload = { noteId: number }
 export type MoveNotePayload = { noteId: number, groupId: number }
 export type ToggleNoteMenuPayload = { noteId: number, active: boolean }
 export type ToggleAddNotePayload = {}
 export type CreateNotePayload = { groupId: number, text: string }
+export type UpdateNotePayload = { noteId: number, text: string }
 
 export const newUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreePayload> => ({
     type: ActionType.UpdateGroupTree,
@@ -139,6 +146,16 @@ export const newDeleteNoteAction = (noteId: number): ZAction<DeleteNotePayload> 
     payload: {noteId}
 })
 
+export const newStartEditNoteAction = (noteId: number): ZAction<StartEditNotePayload> => ({
+    type: ActionType.StartEditNote,
+    payload: {noteId}
+})
+
+export const newCancelEditNoteAction = (noteId: number): ZAction<CancelEditNotePayload> => ({
+    type: ActionType.CancelEditNote,
+    payload: {noteId}
+})
+
 export const newShowMoveNoteDialogAction = (noteId: number): ZAction<ShowMoveNoteDialogPayload> => ({
     type: ActionType.ShowMoveNoteDialog,
     payload: {noteId}
@@ -162,4 +179,9 @@ export const newToggleAddNoteAction = (): ZAction<ToggleAddNotePayload> => ({
 export const newCreateNoteAction = (groupId: number, text: string): ZAction<CreateNotePayload> => ({
     type: ActionType.CreateNote,
     payload: {groupId, text}
+})
+
+export const newUpdateNoteAction = (noteId: number, text: string): ZAction<UpdateNotePayload> => ({
+    type: ActionType.UpdateNote,
+    payload: {noteId, text}
 })

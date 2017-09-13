@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import * as ReactSelect from 'react-select'
+import ReactSelectFixed from './ReactSelectFixed'
 import {AppStore, GROUP_TREE_ROOT_NODE_ID, GroupTree} from '../Store'
 
 type OwnProps = {
@@ -40,7 +41,7 @@ class GroupSelector extends React.Component<OwnProps & StateProps, State> {
             .filter(id => this.props.groupTree.nodeById[id].parentId === GROUP_TREE_ROOT_NODE_ID)
             .forEach(id => this.flattenGroupTree(id, options, startDepth))
 
-        return <ReactSelect value={(this.state || this.props).selectedGroupId}
+        return <ReactSelectFixed value={(this.state || this.props).selectedGroupId}
                        options={options}
                        onChange={this.onChange.bind(this)}
                        optionRenderer={GroupSelector.renderOption}
