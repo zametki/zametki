@@ -27,7 +27,6 @@ class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
     constructor(props: StateProps & DispatchProps, ctx: any) {
         // noinspection TypeScriptValidateTypes
         super(props, ctx)
-        this.validate()
         this.state = this.validate()
     }
 

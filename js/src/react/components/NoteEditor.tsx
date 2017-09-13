@@ -34,32 +34,26 @@ class NoteEditor extends React.Component<OwnProps & StateProps & DispatchProps, 
     constructor(props: OwnProps & StateProps & DispatchProps, ctx: any) {
         // noinspection TypeScriptValidateTypes
         super(props, ctx)
-        this.validate()
-        this.state = this.validate()
+        this.state = this.validate(props.origNoteText)
     }
 
-    validate(): State {
+    validate(text: string): State {
         const validationResult = {hasErrors: false, errorMessage: ''}
-        if (!this.refs || !this.refs.textArea) {
+        if (text.length < 1) {
             validationResult.hasErrors = true
-        } else {
-            const text = this.refs.textArea.value
-            if (text.length < 1) {
-                validationResult.hasErrors = true
-            }
-            if (text.length > 50000) {
-                validationResult.hasErrors = true
-                validationResult.errorMessage = 'Имя заметки не может превышать 50000 символов'
-            }
+        }
+        if (text.length > 50000) {
+            validationResult.hasErrors = true
+            validationResult.errorMessage = 'Имя заметки не может превышать 50000 символов'
         }
         return {...this.state, validationResult}
     }
 
 
     shouldComponentUpdate(nextProps: Readonly<StateProps & DispatchProps>, nextState: Readonly<State>): boolean {
-        const v1 = this.state.validationResult
-        const v2 = nextState.validationResult
-        return v1.errorMessage !== v2.errorMessage || v1.hasErrors !== v2.hasErrors
+        const vr1 = this.state.validationResult
+        const vr2 = nextState.validationResult
+        return vr1.errorMessage !== vr2.errorMessage || vr1.hasErrors !== vr2.hasErrors
     }
 
     render() {
@@ -90,7 +84,7 @@ class NoteEditor extends React.Component<OwnProps & StateProps & DispatchProps, 
     }
 
     onChange() {
-        this.setState(this.validate())
+        this.setState(this.validate(this.refs.textArea.value))
     }
 
     onKeyDown(se: SyntheticEvent<any>) {

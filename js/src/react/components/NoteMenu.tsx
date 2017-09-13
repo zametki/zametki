@@ -72,14 +72,17 @@ class NoteMenu extends React.Component<AllProps, {}> {
     }
 
     private onEditNoteClicked() {
+        this.closeMenu()
         this.props.startEditNote(this.props.noteId)
     }
 
     private onMoveNoteClicked() {
+        this.closeMenu()
         this.props.moveNote(this.props.noteId)
     }
 
     private onDeleteNoteClicked() {
+        this.closeMenu()
         this.props.deleteNote(this.props.noteId)
     }
 
@@ -89,9 +92,7 @@ class NoteMenu extends React.Component<AllProps, {}> {
     }
 
     private closeMenu() {
-        if (this.props.menuVisible) {
-            this.props.toggleNoteMenu(this.props.noteId, false)
-        }
+        this.props.toggleNoteMenu(this.props.noteId, false)
     }
 }
 
