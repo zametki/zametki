@@ -14,7 +14,7 @@ public class Scripts {
 
     public static final HeaderItem BOOTSTRAP_JS = forUrl(min("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"), "bootstrap.js");
 
-    public static final HeaderItem PARSLEY_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.7.1/parsley.min.js"), "parsley.js");
+    public static final HeaderItem PARSLEY_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.8.0/parsley.min.js"), "parsley.js");
 
     public static final JavaScriptUrlReferenceHeaderItem AUTOSIZE_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.17/autosize.min.js"), "autosize.js");
 

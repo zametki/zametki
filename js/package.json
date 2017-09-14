@@ -29,7 +29,7 @@
   "dependencies": {
     "bootstrap": "4.0.0-beta",
     "jquery": "3.2.1",
-    "parsleyjs": "2.7.2",
+    "parsleyjs": "2.8.0",
     "react": "next",
     "react-dom": "next",
     "react-redux": "5.0.6",
