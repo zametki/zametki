@@ -1,8 +1,54 @@
-.nav-feather-img {
-    filter: invert(0.97);
-    margin-top: -4px;
+.navbar-logo {
+    padding-top: 4px;
+    display: inline-block;
 }
 
-.nav-menu-link {
-    margin-right: 10px;
+.navbar-menu {
+    width: 240px;
+    position: fixed;
+    right: 0;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.navbar-menu-item {
+    display: inline-block;
+}
+
+.navbar-menu a.btn {
+    font-size: 20px !important;
+    margin-left: 10px;
+    margin-right: 5px;
+    min-width: 32px;
+    padding: 2px;
+    color: white;
+    height: 39px;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+.navbar-menu a.active-all {
+    background-color: #2c5144;
+}
+
+.navbar-menu a.active-create {
+    background-color: #435360;
+}
+
+.navbar-menu a.btn:hover {
+    border-color: #67696a !important;
+    color: #eee;
+}
+
+.navbar-menu a.btn img {
+    filter: invert(1);
+    width: 32px;
+    height: 32px;
+}
+
+.navbar-menu .dropdown-toggle::after {
+    margin-left: 0;
 }

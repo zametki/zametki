@@ -24,7 +24,7 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
     render() {
         // noinspection HtmlUnknownTarget
         return (
-            <div className="navbar navbar-dark fixed-top bg-dark lp-navbar">
+            <div className="navbar navbar-dark fixed-top lp-navbar">
                 <div className="navbar-logo">
                     <a href="/">
                         <img src="/img/feather_32.png" className="nav-feather-img"/>
