@@ -13,7 +13,6 @@
         <tracking-mode>COOKIE</tracking-mode>
     </session-config>
 
-
     <filter>
         <filter-name>Zametki</filter-name>
         <filter-class>
