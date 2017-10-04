@@ -10,7 +10,9 @@
 
     <session-config>
         <session-timeout>360</session-timeout>
+        <tracking-mode>COOKIE</tracking-mode>
     </session-config>
+
 
     <filter>
         <filter-name>Zametki</filter-name>
