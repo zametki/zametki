@@ -5,8 +5,8 @@ import com.github.zametki.component.group.GroupTreeModel;
 import com.github.zametki.component.group.GroupTreeNode;
 import com.github.zametki.model.Group;
 import com.github.zametki.model.GroupId;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
@@ -26,7 +26,7 @@ public class ParentGroupSelector extends DropDownChoice<GroupTreeNode> {
         setEnabled(!getChoices().isEmpty());
         setNullValid(false);
         GroupId rootId = ((GroupTreeNode) treeModel.getRoot()).getGroupId();
-        setChoiceRenderer(new ChoiceRenderer<GroupTreeNode>() {
+        setChoiceRenderer(new ChoiceRenderer<>() {
             @Override
             public Object getDisplayValue(GroupTreeNode node) {
                 GroupId id = node.getGroupId();

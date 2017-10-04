@@ -12,6 +12,7 @@ public class TextUtils {
         return v == null || v.isEmpty();
     }
 
+    @SuppressWarnings("unused")
     public static String limit(@Nullable String t, int maxLen) {
         if (t == null || t.length() <= maxLen) {
             return t;
@@ -35,6 +36,7 @@ public class TextUtils {
         return o == null ? defaultValue : o.toString();
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     public static String suffix(int size) {
         int rem = size % 10;
@@ -54,6 +56,7 @@ public class TextUtils {
         return text == null ? defaultValue : text;
     }
 
+    @SuppressWarnings("unused")
     public static void addSeparator(@NotNull StringBuilder res, @NotNull String separator) {
         if (res.length() != 0) {
             res.append(separator);

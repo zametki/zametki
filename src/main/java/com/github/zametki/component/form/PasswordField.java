@@ -8,11 +8,6 @@ import org.apache.wicket.model.IModel;
  */
 public class PasswordField extends PasswordTextField {
 
-    public PasswordField(String id) {
-        super(id);
-        setRequired(false);
-    }
-
     public PasswordField(String id, IModel<String> model) {
         super(id, model);
         setRequired(false);

@@ -17,7 +17,7 @@ public class GroupSelector extends DropDownChoice<GroupId> {
 
         setNullValid(false);
 
-        setChoiceRenderer(new ChoiceRenderer<GroupId>() {
+        setChoiceRenderer(new ChoiceRenderer<>() {
             @Override
             public Object getDisplayValue(GroupId id) {
                 Group group = Context.getGroupsDbi().getById(id);

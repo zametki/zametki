@@ -11,6 +11,7 @@ public class PL {
             ));
 
 
+    @SuppressWarnings("unused")
     public static String pl(int n, @NotNull String word) {
         return PL.pl(n, word);
     }

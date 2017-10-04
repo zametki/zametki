@@ -17,12 +17,8 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class WebUtils {
-
-    private static final Logger log = LoggerFactory.getLogger(WebUtils.class);
 
     @NotNull
     public static byte[] getWebInfResource(@NotNull String path) throws Exception {

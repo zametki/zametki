@@ -17,8 +17,4 @@ public class GroupTreeNode extends DefaultMutableTreeNode {
         return (GroupId) getUserObject();
     }
 
-    @Nullable
-    public GroupTreeNode getParentNode() {
-        return (GroupTreeNode) getParent();
-    }
 }

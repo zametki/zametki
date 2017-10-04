@@ -37,14 +37,14 @@ public class FollowingGroupsSelector extends DropDownChoice<GroupId> {
         setOutputMarkupId(true);
         setDefaultModel(Model.of(modelToFollow.getObject()));
 
-        setChoices(new LoadableDetachableModel<List<? extends GroupId>>() {
+        setChoices(new LoadableDetachableModel<>() {
             @Override
             protected List<? extends GroupId> load() {
                 return Context.getGroupsDbi().getByUser(userId);
             }
         });
 
-        setChoiceRenderer(new ChoiceRenderer<GroupId>() {
+        setChoiceRenderer(new ChoiceRenderer<>() {
             @Override
             public Object getDisplayValue(GroupId id) {
                 Group c = Context.getGroupsDbi().getById(id);

@@ -61,12 +61,4 @@ public class UserSettings implements DbString {
         Context.getUsersDbi().updateSettings(user);
     }
 
-    @NotNull
-    public Set<GroupId> getExpandedGroups() {
-        Set<GroupId> results = new HashSet<>();
-        for (int i = 0; i < expandedGroups.length(); i++) {
-            results.add(new GroupId(expandedGroups.getInt(i)));
-        }
-        return results;
-    }
 }

@@ -1,7 +1,6 @@
 package com.github.zametki.ajax;
 
 import com.github.zametki.Context;
-import com.github.zametki.UserSession;
 import com.github.zametki.annotation.MountPath;
 import com.github.zametki.annotation.Post;
 import com.github.zametki.model.Group;

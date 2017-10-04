@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -19,7 +18,7 @@ public class ValidatorUtils {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)", Pattern.CASE_INSENSITIVE);
 
-    private static final Set<Character> VALID_LOGIN_CHARS = new HashSet<Character>() {{
+    private static final Set<Character> VALID_LOGIN_CHARS = new HashSet<>() {{
         addAll(Arrays.asList('-', '_', '.', ' '));
     }};
 
@@ -64,16 +63,6 @@ public class ValidatorUtils {
             }
         }
         return true;
-    }
-
-    /**
-     * Checks if the specified string is a valid HEX color in 3 or 6 characters form: #FFF or #FFFFFF.
-     *
-     * @param value - color string, may be null.
-     * @return true if {code value}  parameter is a valid HEX color representation. Otherwise returns false.
-     */
-    public static boolean isValidHexColor(@Nullable String value) {
-        return !TextUtils.isEmpty(value) && HEX_COLOR_PATTERN.matcher(value).matches();
     }
 
 
@@ -145,14 +134,4 @@ public class ValidatorUtils {
         return null;
     }
 
-    @Nullable
-    public static String validateRange(@Nullable String value, int minLen, int maxLen, Supplier<String> minMessage, Supplier<String> maxMessage) {
-        if (value == null || value.length() < minLen) {
-            return minMessage.get();
-        }
-        if (value.length() > maxLen) {
-            return maxMessage.get();
-        }
-        return null;
-    }
 }

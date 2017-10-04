@@ -38,6 +38,7 @@ public class ZDateFormat {
         return fixMonthNames ? res.replace("май", "мая") : res;
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     public Instant parse(@NotNull String val) {
         try {
