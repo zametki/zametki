@@ -7,6 +7,11 @@ import {AppStore, Note} from '../Store'
 import NoteMenu from './NoteMenu'
 import NoteEditor from './NoteEditor'
 import NewNoteEditor from './NewNoteEditor'
+import MoveNoteModalOverlay from './overlays/MoveNoteModalOverlay'
+import GroupNavigatorModalOverlay from './overlays/GroupNavigatorModalOverlay'
+import MoveGroupModalOverlay from './overlays/MoveGroupModalOverlay'
+import RenameGroupModalOverlay from './overlays/RenameGroupModalOverlay'
+import CreateGroupModalOverlay from './overlays/CreateGroupModalOverlay'
 
 type DispatchProps = {}
 
@@ -30,6 +35,11 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 <div>
                     {notes}
                 </div>
+                <CreateGroupModalOverlay/>
+                <RenameGroupModalOverlay/>
+                <MoveGroupModalOverlay/>
+                <GroupNavigatorModalOverlay/>
+                <MoveNoteModalOverlay/>
             </div>
         )
     }
@@ -75,7 +85,7 @@ const mapStateToProps = (store: AppStore): StateProps => {
     }
 }
 
-function mapDispatchToProps(dispatch): DispatchProps {
+function mapDispatchToProps(): DispatchProps {
     return {}
 }
 
