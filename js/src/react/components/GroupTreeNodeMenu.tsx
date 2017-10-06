@@ -1,6 +1,8 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
+// noinspection TypeScriptCheckImport
+import {Manager, Target, Popper, Arrow} from 'react-popper'
 import {
     newChangeGroupAction,
     newDeleteGroupAction,
@@ -58,17 +60,23 @@ class GroupTreeNodeMenu extends React.Component<AllProps, {}> {
         let groupId = this.props.groupId
         return (
             <div className="tree-node-menu-block">
-                <div onClick={this.showMenu.bind(this)} className='tree-node-menu-link' title="Действия над группой">
-                    <i className="fa fa-angle-down  f14px"/>
-                </div>
-                <div className='dropdown'>
-                    <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
-                        <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(groupId)}>Новая группа</div>
-                        <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(groupId)}>Переименовать</div>
-                        <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(groupId)}>Переместить</div>
-                        {this.props.isEmpty ? <div className="dropdown-item" onClick={() => this.props.deleteGroup(groupId)}>Удалить</div> : null}
-                    </div>
-                </div>
+                <Manager>
+                    <Target>
+                        <div onClick={this.showMenu.bind(this)} className='tree-node-menu-link' title="Действия над группой">
+                            <i className="fa fa-angle-down  f14px"/>
+                        </div>
+                    </Target>
+                    <Popper placement="bottom">
+                        <div className='dropdown'>
+                            <div className={'dropdown-menu-popper ' + (this.props.menuVisible ? '' : ' d-none')}>
+                                <div className="dropdown-item" onClick={() => this.props.showCreateGroupDialog(groupId)}>Новая группа</div>
+                                <div className="dropdown-item" onClick={() => this.props.showRenameGroupDialog(groupId)}>Переименовать</div>
+                                <div className="dropdown-item" onClick={() => this.props.showMoveGroupDialog(groupId)}>Переместить</div>
+                                {this.props.isEmpty ? <div className="dropdown-item" onClick={() => this.props.deleteGroup(groupId)}>Удалить</div> : null}
+                            </div>
+                        </div>
+                    </Popper>
+                </Manager>
             </div>
         )
     }

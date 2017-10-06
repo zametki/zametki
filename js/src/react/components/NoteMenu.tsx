@@ -1,6 +1,8 @@
 import * as React from 'react'
 import {MouseEvent} from 'react'
 import * as ReactRedux from 'react-redux'
+// noinspection TypeScriptCheckImport
+import {Manager, Target, Popper, Arrow} from 'react-popper'
 import {AppStore} from '../Store'
 import {newDeleteNoteAction, newShowMoveNoteDialogAction, newStartEditNoteAction, newToggleNoteMenuAction} from '../Actions'
 
@@ -49,16 +51,23 @@ class NoteMenu extends React.Component<AllProps, {}> {
     render() {
         return (
             <div>
-                <div onClick={this.showMenu.bind(this)} className='note-menu-link' title="Действия над заметкой">
-                    <i className="fa fa-angle-down txt-muted f14px"/>
-                </div>
-                <div className='dropdown'>
-                    <div className={'dropdown-menu dropdown-menu-right' + (this.props.menuVisible ? ' show' : '')}>
-                        <div className="dropdown-item f14px" onClick={this.onEditNoteClicked.bind(this)}>Редактировать</div>
-                        <div className="dropdown-item f14px" onClick={this.onMoveNoteClicked.bind(this)}>Переместить</div>
-                        <div className="dropdown-item f14px" onClick={this.onDeleteNoteClicked.bind(this)}>Удалить</div>
-                    </div>
-                </div>
+                <Manager>
+                    <Target>
+
+                        <div onClick={this.showMenu.bind(this)} className='note-menu-link' title="Действия над заметкой">
+                            <i className="fa fa-angle-down txt-muted f14px"/>
+                        </div>
+                    </Target>
+                    <Popper placement="bottom">
+                        <div className='dropdown'>
+                            <div className={'dropdown-menu-popper' + (this.props.menuVisible ? '' : ' d-none')}>
+                                <div className="dropdown-item f14px" onClick={this.onEditNoteClicked.bind(this)}>Редактировать</div>
+                                <div className="dropdown-item f14px" onClick={this.onMoveNoteClicked.bind(this)}>Переместить</div>
+                                <div className="dropdown-item f14px" onClick={this.onDeleteNoteClicked.bind(this)}>Удалить</div>
+                            </div>
+                        </div>
+                    </Popper>
+                </Manager>
             </div>
         )
     }
