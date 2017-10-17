@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {SyntheticEvent} from 'react'
 import * as ReactRedux from 'react-redux'
+import TextareaAutosize from 'react-autosize-textarea'
 import {AppStore} from '../Store'
 import {newCreateNoteAction, newToggleAddNoteAction} from '../Actions'
 import {ValidationResult} from './NoteEditor'
@@ -20,9 +21,7 @@ type State = {
 }
 
 class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
-    refs: {
-        textArea: HTMLTextAreaElement,
-    }
+    textArea: HTMLTextAreaElement = null
 
     constructor(props: StateProps & DispatchProps, ctx: any) {
         // noinspection TypeScriptValidateTypes
@@ -35,10 +34,10 @@ class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
         if (this.props.groupId <= 0) {
             validationResult.hasErrors = true
             validationResult.errorMessage = 'Не выбрана группа'
-        } else if (!this.refs || !this.refs.textArea) {
+        } else if (!this.refs || !this.textArea) {
             validationResult.hasErrors = true
         } else {
-            const text = this.refs.textArea.value
+            const text = this.textArea.value
             if (text.length < 1) {
                 validationResult.hasErrors = true
             }
@@ -66,11 +65,11 @@ class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
             <div className="pb-3">
                 <form noValidate={true}>
                     <div className="pt-2">
-                        <textarea ref="textArea"
-                                  className={'form-control new-note-textarea' + (v.hasErrors ? ' form-control-error' : ' form-control-success')}
-                                  onKeyDown={this.onKeyDown.bind(this)}
-                                  onChange={this.onChange.bind(this)}
-                                  autoFocus={true}/>
+                        <TextareaAutosize innerRef={ref => this.textArea = ref}
+                                          className={'form-control new-note-textarea' + (v.hasErrors ? ' form-control-error' : ' form-control-success')}
+                                          onKeyDown={this.onKeyDown.bind(this)}
+                                          onChange={this.onChange.bind(this)}
+                                          autoFocus={true}/>
                         <span ref="textAreaFeedback" className={"form-element-feedback" + (v.hasErrors ? ' form-element-feedback-active' : '')}>{v.errorMessage}</span>
                         <div className="mt-2">
                             <a onClick={this.onCancelClicked.bind(this)}
@@ -92,11 +91,11 @@ class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
 
     onKeyDown(se: SyntheticEvent<any>) {
         const e = se.nativeEvent as KeyboardEvent
-        if (e.target == this.refs.textArea && e.keyCode == 27) {
+        if (e.target == this.textArea && e.keyCode == 27) {
             this.onCancelClicked()
         } else if (e.ctrlKey && e.keyCode == 13) {
             if (!this.state.validationResult.hasErrors) {
-                this.onCreateClicked();
+                this.onCreateClicked()
             }
         }
     }
@@ -110,7 +109,7 @@ class NoteEditor extends React.Component<StateProps & DispatchProps, State> {
             console.error('Validation error: ' + this.state.validationResult.errorMessage)
             return
         }
-        this.props.createNote(this.props.groupId, this.refs.textArea.value)
+        this.props.createNote(this.props.groupId, this.textArea.value)
     }
 
 }

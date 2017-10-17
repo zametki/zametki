@@ -1,8 +1,5 @@
 .new-note-textarea {
-    overflow: hidden;
     word-wrap: break-word;
-    resize: none;
-    height: 58px;
 }
 
 input.form-control-success, input.form-control-success:focus,

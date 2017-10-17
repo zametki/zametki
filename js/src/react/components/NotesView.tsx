@@ -55,7 +55,7 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
 
     private createNoteElement(z: Note): JSX.Element {
         if (this.props.editedNoteIds.indexOf(z.id) >= 0) {
-            return <NoteEditor noteId={z.id}/>
+            return <NoteEditor key={'zametka-editor-' + z.id} noteId={z.id}/>
         }
         return <div key={'zametka-' + z.id} className="zametka-panel">
             <div>

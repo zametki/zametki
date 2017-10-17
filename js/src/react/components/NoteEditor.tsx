@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {SyntheticEvent} from 'react'
 import * as ReactRedux from 'react-redux'
+import TextareaAutosize from 'react-autosize-textarea'
 import {AppStore} from '../Store'
 import {newCancelEditNoteAction, newUpdateNoteAction} from '../Actions'
 
@@ -27,9 +28,7 @@ export type ValidationResult = {
 }
 
 class NoteEditor extends React.Component<OwnProps & StateProps & DispatchProps, State> {
-    refs: {
-        textArea: HTMLTextAreaElement,
-    }
+    textArea: HTMLTextAreaElement = null
 
     constructor(props: OwnProps & StateProps & DispatchProps, ctx: any) {
         // noinspection TypeScriptValidateTypes
@@ -62,12 +61,12 @@ class NoteEditor extends React.Component<OwnProps & StateProps & DispatchProps, 
             <div className="pb-3">
                 <form noValidate={true}>
                     <div className="pt-2">
-                        <textarea ref="textArea"
-                                  className={'form-control new-note-textarea' + (v.hasErrors ? ' form-control-error' : ' form-control-success')}
-                                  defaultValue={this.props.origNoteText}
-                                  onKeyDown={this.onKeyDown.bind(this)}
-                                  onChange={this.onChange.bind(this)}
-                                  autoFocus={true}/>
+                        <TextareaAutosize innerRef={ref => this.textArea = ref}
+                                          className={'form-control new-note-textarea' + (v.hasErrors ? ' form-control-error' : ' form-control-success')}
+                                          defaultValue={this.props.origNoteText}
+                                          onKeyDown={this.onKeyDown.bind(this)}
+                                          onChange={this.onChange.bind(this)}
+                                          autoFocus={true}/>
                         <span ref="textAreaFeedback" className={"form-element-feedback" + (v.hasErrors ? ' form-element-feedback-active' : '')}>{v.errorMessage}</span>
                         <div className="mt-2">
                             <a onClick={this.onCancelClicked.bind(this)}
@@ -84,12 +83,12 @@ class NoteEditor extends React.Component<OwnProps & StateProps & DispatchProps, 
     }
 
     onChange() {
-        this.setState(this.validate(this.refs.textArea.value))
+        this.setState(this.validate(this.textArea.value))
     }
 
     onKeyDown(se: SyntheticEvent<any>) {
         const e = se.nativeEvent as KeyboardEvent
-        if (e.target == this.refs.textArea && e.keyCode == 27) {
+        if (e.target == this.textArea && e.keyCode == 27) {
             this.onCancelClicked()
         } else if (e.ctrlKey && e.keyCode == 13) {
             if (!this.state.validationResult.hasErrors) {
@@ -107,7 +106,7 @@ class NoteEditor extends React.Component<OwnProps & StateProps & DispatchProps, 
             console.error('Validation error: ' + this.state.validationResult.errorMessage)
             return
         }
-        this.props.updateNote(this.props.noteId, this.refs.textArea.value)
+        this.props.updateNote(this.props.noteId, this.textArea.value)
     }
 
 }

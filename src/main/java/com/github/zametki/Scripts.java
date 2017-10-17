@@ -16,8 +16,6 @@ public class Scripts {
 
     public static final HeaderItem PARSLEY_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.8.0/parsley.min.js"), "parsley.js");
 
-    public static final JavaScriptUrlReferenceHeaderItem AUTOSIZE_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.17/autosize.min.js"), "autosize.js");
-
     public static final JavaScriptUrlReferenceHeaderItem LETTERING_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/lettering.js/0.7.0/jquery.lettering.min.js"), "lettering.js");
 
     public static final JavaScriptUrlReferenceHeaderItem FIT_TEXT_JS = forUrl(min("https://cdnjs.cloudflare.com/ajax/libs/FitText.js/1.2.0/jquery.fittext.min.js"), "fittext.js");
