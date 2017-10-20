@@ -58,7 +58,6 @@ class CreateGroupModalOverlay extends React.Component<OwnProps & StateProps & Di
     }
 
     private create(e?: React.FormEvent<any>) {
-        console.log('create!')
         e && e.preventDefault()
         const name = this.refs.nameInput.value
         if (name.length == 0) {

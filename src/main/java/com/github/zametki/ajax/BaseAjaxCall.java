@@ -4,41 +4,46 @@ package com.github.zametki.ajax;
 import com.github.openjson.JSONObject;
 import com.github.zametki.annotation.Post;
 import com.github.zametki.util.UserSessionUtils;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.IRequestCycle;
-import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.util.string.StringValue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class BaseAjaxCall extends WebPage {
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+public abstract class BaseAjaxCall extends AbstractResource {
 
     private static final Logger log = LoggerFactory.getLogger(BaseAjaxCall.class);
     private boolean isPost;
+    private Attributes attributes;
 
-    public BaseAjaxCall() {
+    @Override
+    protected ResourceResponse newResourceResponse(Attributes attributes) {
         UserSessionUtils.initializeSession();
         isPost = getClass().isAnnotationPresent(Post.class);
-        getRequestCycle().scheduleRequestHandlerAfterCurrent(new IRequestHandler() {
-
-            public void detach(IRequestCycle requestCycle) {
-                // Nothing to do here.
-            }
-
-            public void respond(IRequestCycle requestCycle) {
-                // Add JSON-encoded string to the response.
-                WebResponse response = (WebResponse) requestCycle.getResponse();
-                response.setContentType(getResponseContentType());
+        this.attributes = attributes;
+        ResourceResponse response = new ResourceResponse();
+        response.setContentType(getResponseContentType());
+        response.setTextEncoding("utf-8");
+        response.setWriteCallback(new WriteCallback() {
+            @Override
+            public void writeData(Attributes attributes) throws IOException {
+                OutputStream outputStream = attributes.getResponse().getOutputStream();
+                Writer writer = new OutputStreamWriter(outputStream);
                 try {
-                    response.write(getResponseText());
+                    writer.write(getResponseText());
                 } catch (Exception e) {
-                    log.error("Error processing request:" + getPage(), e);
-                    response.write(error("internal error"));
+                    log.error("Error processing request:" + getClass().getName(), e);
+                    writer.write(error("internal error"));
                 }
+                writer.flush();
             }
         });
+        return response;
     }
 
     @NotNull
@@ -65,6 +70,6 @@ public abstract class BaseAjaxCall extends WebPage {
     }
 
     public StringValue getParameter(@NotNull String name) {
-        return isPost ? getRequest().getPostParameters().getParameterValue(name) : getPageParameters().get(name);
+        return isPost ? attributes.getRequest().getPostParameters().getParameterValue(name) : attributes.getParameters().get(name);
     }
 }

@@ -20,10 +20,15 @@ export type GroupTree = {
     contextMenuIsActive: boolean
 }
 
+export enum ZType {
+    PLAIN_TEXT = 0
+}
+
 export type Note = {
     id: number,
     group: number,
-    body: string,
+    type: ZType,
+    content: string,
     dateText: string
 }
 

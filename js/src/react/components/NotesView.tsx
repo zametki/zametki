@@ -69,7 +69,7 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 </table>
             </div>
 
-            <div className="zametka-content">{z.body}</div>
+            <div className="zametka-content">{z.content}</div>
         </div>
     }
 }

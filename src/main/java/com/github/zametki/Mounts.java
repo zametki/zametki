@@ -22,6 +22,8 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class Mounts {
     static void mountAll(ZApplication app) {
         mountPages(app,
@@ -39,9 +41,10 @@ public class Mounts {
                 UserProfileSettingsPage.class,
 
                 // Public resources
-                AboutPage.class,
+                AboutPage.class
+        );
 
-                // Ajax
+        mountResources(app,
                 CreateGroupAjaxCall.class,
                 DeleteGroupAjaxCall.class,
                 GetNotesListAjaxCall.class,
@@ -72,10 +75,13 @@ public class Mounts {
     }
 
     private static void mountPages(@NotNull ZApplication app, Class... classes) {
-        for (Class cls : classes) {
-            //noinspection unchecked
-            app.mountPage(cls);
-        }
+        //noinspection unchecked
+        Arrays.stream(classes).forEach(app::mountPage);
+    }
+
+    private static void mountResources(@NotNull ZApplication app, Class... classes) {
+        //noinspection unchecked
+        Arrays.stream(classes).forEach(app::mountResource);
     }
 
     @NotNull

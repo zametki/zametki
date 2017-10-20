@@ -18,6 +18,9 @@ public class Zametka extends Identifiable<ZametkaId> {
     public Instant creationDate = Instant.MIN;
 
     @NotNull
+    public ZType type = ZType.PLAIN_TEXT;
+
+    @NotNull
     public String content = "";
 
     @NotNull
@@ -29,6 +32,7 @@ public class Zametka extends Identifiable<ZametkaId> {
         res.id = new ZametkaId(r.getInt("id"));
         res.userId = new UserId(r.getInt("user_id"));
         res.creationDate = r.getTimestamp("creation_date").toInstant();
+        res.type = ZType.fromDbValue(r.getInt("type"));
         res.content = r.getString("content");
         res.groupId = new GroupId(r.getInt("group_id"));
         return res;

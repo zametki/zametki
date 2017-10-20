@@ -45,11 +45,13 @@ CREATE TABLE groups (
 
 # Персональная заметка
 CREATE TABLE zametka (
-  id            INTEGER AUTO_INCREMENT PRIMARY KEY,
+  id            INTEGER           AUTO_INCREMENT PRIMARY KEY,
   # Автор заметки.
   user_id       INTEGER  NOT NULL REFERENCES users (id),
   # Дата создания заметки.
   creation_date DATETIME NOT NULL,
+  # Тип содержания (content type).
+  type          INTEGER  NOT NULL DEFAULT 0,
   # Соредржание заметки. Сегодня - прямо в ее теле. В будущем можно поменять.
   content       TEXT     NOT NULL,
   # Группа которой принадлежит заметка

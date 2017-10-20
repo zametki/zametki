@@ -13,7 +13,7 @@ public class RenameGroupAjaxCall extends BaseGroupActionAjaxCall {
         if (group == null) {
             return error("Group not found");
         }
-        String name = getPageParameters().get("name").toString("");
+        String name = getParameter("name").toString("");
         if (name.length() < Group.MIN_NAME_LEN || name.length() > Group.MAX_NAME_LEN) {
             return error("Illegal group name");
         }

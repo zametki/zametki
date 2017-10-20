@@ -120,7 +120,7 @@ function mapDispatchToProps(dispatch): DispatchProps {
 
 function mapStateToProps(state: AppStore, ownProps: OwnProps): StateProps {
     const note = state.noteById[ownProps.noteId]
-    const origNoteText = note && note.body
+    const origNoteText = note && note.content
     return {origNoteText}
 }
 

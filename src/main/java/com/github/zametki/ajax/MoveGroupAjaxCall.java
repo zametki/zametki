@@ -15,7 +15,7 @@ public class MoveGroupAjaxCall extends BaseGroupActionAjaxCall {
         if (group == null) {
             return error("Illegal group");
         }
-        GroupId parentGroupId = new GroupId(getPageParameters().get("parentId").toInt(-1));
+        GroupId parentGroupId = new GroupId(getParameter("parentId").toInt(-1));
         if (!parentGroupId.isRoot()) {
             Group parentGroup = Context.getGroupsDbi().getById(parentGroupId);
             if (parentGroup == null || !parentGroup.userId.equals(userId)) {

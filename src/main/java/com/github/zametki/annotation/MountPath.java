@@ -11,9 +11,4 @@ import java.lang.annotation.Target;
 @Documented
 public @interface MountPath {
     String value() default "";
-
-    /**
-     * @return alternate mount paths
-     */
-    String[] alt() default {};
 }

@@ -116,7 +116,8 @@ public class AjaxApiUtils {
         JSONObject json = new JSONObject();
         json.put("id", z.id.intValue);
         json.put("group", z.groupId.intValue);
-        json.put("body", z.content);
+        json.put("type", z.type.id);
+        json.put("content", z.content);
         json.put("dateText", NOTES_LIST_DF.format(z.creationDate));
         return json;
     }

@@ -17,7 +17,7 @@ public class MoveNoteAjaxCall extends BaseGroupActionAjaxCall {
         if (group == null || group.id.isRoot()) {
             return error("Illegal group");
         }
-        ZametkaId zametkaId = new ZametkaId(getPageParameters().get("noteId").toInt(-1));
+        ZametkaId zametkaId = new ZametkaId(getParameter("noteId").toInt(-1));
         Zametka z = Context.getZametkaDbi().getById(zametkaId);
         if (z == null || !z.userId.equals(userId)) {
             return error("Note not found");

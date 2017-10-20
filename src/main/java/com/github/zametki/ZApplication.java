@@ -17,6 +17,9 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.ApplicationSettings;
 import org.jetbrains.annotations.NotNull;
@@ -73,7 +76,6 @@ public class ZApplication extends WebApplication {
     public void mountPage(Class<? extends Page> cls) {
         MountPath a = cls.getAnnotation(MountPath.class);
         Objects.requireNonNull(a, "Page has no @MountPath annotation: " + cls);
-        mount(cls, a.alt()); // first map alt paths. The value on the next line will override them.
         mount(cls, a.value());
     }
 
@@ -85,6 +87,28 @@ public class ZApplication extends WebApplication {
             mountPage(mountPath, cls);
         }
     }
+
+    public void mountResource(@NotNull Class<? extends AbstractResource> cls) {
+        MountPath a = cls.getAnnotation(MountPath.class);
+        Objects.requireNonNull(a, "Resource has no @MountPath annotation: " + cls);
+        mountResource(a.value(), new ResourceReference(cls.getSimpleName()) {
+            AbstractResource resource = newResource(cls);
+
+            private AbstractResource newResource(Class<? extends AbstractResource> cls) {
+                try {
+                    return cls.getConstructor().newInstance();
+                } catch (Exception e) {
+                    throw new IllegalStateException("Failed to instantiate resource: " + cls);
+                }
+            }
+
+            @Override
+            public IResource getResource() {
+                return resource;
+            }
+        });
+    }
+
 
     public Session newSession(Request request, Response response) {
         HttpServletRequest r = (HttpServletRequest) request.getContainerRequest();

@@ -2,6 +2,7 @@ package com.github.zametki;
 
 import com.github.mjdbc.Binders;
 import com.github.mjdbc.Db;
+import com.github.mjdbc.DbFactory;
 import com.github.zametki.db.cache.GroupsCache;
 import com.github.zametki.db.cache.ZametkaCache;
 import com.github.zametki.db.dbi.GroupsDbi;
@@ -41,7 +42,7 @@ public class Context {
                 prodConfig.load(new FileInputStream("/opt/zametki/service.properties"));
             }
             ds = new HikariDataSource(prepareDbConfig("/hikari.properties"));
-            Db db = Db.newInstance(ds);
+            Db db = DbFactory.wrap(ds);
             registerBuiltInTypes(db);
             usersDbi = db.attachDbi(new UsersDbiImpl(db), UsersDbi.class);
             zametkaDbi = db.attachDbi(new ZametkaDbiImpl(db), ZametkaDbi.class);

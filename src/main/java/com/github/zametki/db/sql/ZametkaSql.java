@@ -17,8 +17,8 @@ import java.util.List;
 public interface ZametkaSql {
 
     @NotNull
-    @Sql("INSERT INTO zametka (creation_date, user_id, content, group_id) " +
-            "VALUES (:creationDate, :userId, :content, :groupId)")
+    @Sql("INSERT INTO zametka (creation_date, user_id, type, content, group_id) " +
+            "VALUES (:creationDate, :userId, :type, :content, :groupId)")
     ZametkaId insert(@BindBean Zametka zametka);
 
     @Nullable
