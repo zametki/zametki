@@ -12,8 +12,11 @@ import GroupNavigatorModalOverlay from './overlays/GroupNavigatorModalOverlay'
 import MoveGroupModalOverlay from './overlays/MoveGroupModalOverlay'
 import RenameGroupModalOverlay from './overlays/RenameGroupModalOverlay'
 import CreateGroupModalOverlay from './overlays/CreateGroupModalOverlay'
+import {newStartEditNoteAction} from '../Actions'
 
-type DispatchProps = {}
+type DispatchProps = {
+    startEditNote: (noteId: number) => void
+}
 
 type StateProps = {
     activeGroupName: string,
@@ -69,7 +72,9 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 </table>
             </div>
 
-            <div className="zametka-content">{z.content}</div>
+            <div className="zametka-content" onClick={() => this.props.startEditNote(z.id)}>
+                {z.content}
+            </div>
         </div>
     }
 }
@@ -85,8 +90,10 @@ const mapStateToProps = (store: AppStore): StateProps => {
     }
 }
 
-function mapDispatchToProps(): DispatchProps {
-    return {}
+function mapDispatchToProps(dispatch): DispatchProps {
+    return {
+        startEditNote: noteId => dispatch(newStartEditNoteAction(noteId)),
+    }
 }
 
 export const NotesView = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NotesViewImpl) as React.ComponentClass<{}>
