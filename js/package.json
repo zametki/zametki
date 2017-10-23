@@ -33,6 +33,7 @@
     "react": "16.0.0",
     "react-autosize-textarea": "0.4.9",
     "react-dom": "16.0.0",
+    "react-linkify": "0.2.1",
     "react-popper": "0.7.4",
     "react-redux": "5.0.6",
     "react-select": "1.0.0-rc.10",

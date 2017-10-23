@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {render} from 'react-dom'
 import * as ReactRedux from 'react-redux'
+import Linkify from 'react-linkify'
 
 import {appStore} from '../Reducers'
 import {AppStore, Note} from '../Store'
@@ -12,11 +13,8 @@ import GroupNavigatorModalOverlay from './overlays/GroupNavigatorModalOverlay'
 import MoveGroupModalOverlay from './overlays/MoveGroupModalOverlay'
 import RenameGroupModalOverlay from './overlays/RenameGroupModalOverlay'
 import CreateGroupModalOverlay from './overlays/CreateGroupModalOverlay'
-import {newStartEditNoteAction} from '../Actions'
 
-type DispatchProps = {
-    startEditNote: (noteId: number) => void
-}
+type DispatchProps = {}
 
 type StateProps = {
     activeGroupName: string,
@@ -72,8 +70,10 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 </table>
             </div>
 
-            <div className="zametka-content" onClick={() => this.props.startEditNote(z.id)}>
-                {z.content}
+            <div className="zametka-content">
+                <Linkify>
+                    {z.content}
+                </Linkify>
             </div>
         </div>
     }
@@ -90,13 +90,7 @@ const mapStateToProps = (store: AppStore): StateProps => {
     }
 }
 
-function mapDispatchToProps(dispatch): DispatchProps {
-    return {
-        startEditNote: noteId => dispatch(newStartEditNoteAction(noteId)),
-    }
-}
-
-export const NotesView = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NotesViewImpl) as React.ComponentClass<{}>
+export const NotesView = ReactRedux.connect(mapStateToProps, null)(NotesViewImpl) as React.ComponentClass<{}>
 
 export function renderNotesView(elementId: string) {
     render(
