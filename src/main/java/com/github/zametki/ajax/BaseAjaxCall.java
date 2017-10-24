@@ -28,7 +28,7 @@ public abstract class BaseAjaxCall extends AbstractResource {
         this.attributes = attributes;
         ResourceResponse response = new ResourceResponse();
         response.setContentType(getResponseContentType());
-        response.setTextEncoding("utf-8");
+        response.setTextEncoding("UTF-8");
         response.disableCaching();
         response.setWriteCallback(new WriteCallback() {
             @Override
