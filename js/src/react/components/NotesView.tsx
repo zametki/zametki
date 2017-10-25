@@ -71,7 +71,7 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
             </div>
 
             <div className="zametka-content">
-                <Linkify>
+                <Linkify properties={{target: '_blank'}}>
                     {z.content}
                 </Linkify>
             </div>
