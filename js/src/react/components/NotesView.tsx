@@ -1,15 +1,12 @@
 import * as React from 'react'
-import {render} from 'react-dom'
 import * as ReactRedux from 'react-redux'
+// noinspection TypeScriptCheckImport
 import Linkify from 'react-linkify'
-
-import {appStore} from '../Reducers'
 import {AppStore, Note} from '../Store'
 import NoteMenu from './NoteMenu'
 import NoteEditor from './NoteEditor'
 import NewNoteEditor from './NewNoteEditor'
 import MoveNoteModalOverlay from './overlays/MoveNoteModalOverlay'
-import GroupNavigatorModalOverlay from './overlays/GroupNavigatorModalOverlay'
 import MoveGroupModalOverlay from './overlays/MoveGroupModalOverlay'
 import RenameGroupModalOverlay from './overlays/RenameGroupModalOverlay'
 import CreateGroupModalOverlay from './overlays/CreateGroupModalOverlay'
@@ -23,11 +20,11 @@ type StateProps = {
     editedNoteIds: number[]
 }
 
-class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
+class NotesView extends React.Component<StateProps & DispatchProps, {}> {
     render() {
         const notes = this.renderNotes()
         return (
-            <div>
+            <div className="notes-view">
                 {/*Header*/}
                 <div className="text-center">
                     <div className="group-header">{this.props.activeGroupName}</div>
@@ -39,7 +36,6 @@ class NotesViewImpl extends React.Component<StateProps & DispatchProps, {}> {
                 <CreateGroupModalOverlay/>
                 <RenameGroupModalOverlay/>
                 <MoveGroupModalOverlay/>
-                <GroupNavigatorModalOverlay/>
                 <MoveNoteModalOverlay/>
             </div>
         )
@@ -90,15 +86,5 @@ const mapStateToProps = (store: AppStore): StateProps => {
     }
 }
 
-export const NotesView = ReactRedux.connect(mapStateToProps, null)(NotesViewImpl) as React.ComponentClass<{}>
+export default ReactRedux.connect(mapStateToProps, null)(NotesView) as React.ComponentClass<{}>
 
-export function renderNotesView(elementId: string) {
-    render(
-        <ReactRedux.Provider store={appStore}>
-            <div>
-                <NotesView/>
-            </div>
-        </ReactRedux.Provider>,
-        document.getElementById(elementId)
-    )
-}

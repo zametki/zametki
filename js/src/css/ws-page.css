@@ -1,35 +1,10 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
-.lp-body {
-    padding-top: 55px;
-    height: 100%;
-}
 
-.lp-navbar {
+.ws-navbar {
     height: 55px !important;
     padding-top: 8px !important;
     min-width: 320px;
     background-color: #292b2c !important;
-}
-
-/*
- * Sidebar
- */
-.sidebar {
-    position: fixed;
-    top: 55px;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    padding-top: 7px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    border-right: 1px solid #eee;
-}
-
-/* Sidebar navigation */
-.sidebar {
-    padding-left: 0;
-    padding-right: 0;
 }
 
 .nav-feather-img {
@@ -41,33 +16,21 @@
     margin-right: 10px;
 }
 
-nav::-webkit-scrollbar {
+.sidebar {
+    background-color: white;
+}
+
+.sidebar::-webkit-scrollbar {
     width: 0.5em;
 }
 
-nav::-webkit-scrollbar-track {
+.sidebar::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.075);
 }
 
-nav::-webkit-scrollbar-thumb {
+.sidebar::-webkit-scrollbar-thumb {
     background-color: #DADADA;
     border-radius: 5px;
-}
-
-.sidebar .nav {
-    margin-bottom: 20px;
-}
-
-.sidebar .nav-item {
-    width: 100%;
-}
-
-.sidebar .nav-item + .nav-item {
-    margin-left: 0;
-}
-
-.sidebar .nav-link {
-    border-radius: 0;
 }
 
 .group-header {
@@ -78,8 +41,4 @@ nav::-webkit-scrollbar-thumb {
     font-weight: 500;
     margin-bottom: .5rem;
     line-height: 1.1;
-}
-
-.main {
-    padding-top: 1rem !important;
 }

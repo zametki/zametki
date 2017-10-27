@@ -11,7 +11,8 @@ import {
     DeleteGroupPayload,
     DeleteNotePayload,
     MoveGroupPayload,
-    MoveNotePayload, newCancelEditNoteAction,
+    MoveNotePayload,
+    newCancelEditNoteAction,
     newChangeGroupAction,
     newStartUpdateNotesListAction,
     newToggleAddNoteAction,
@@ -28,16 +29,18 @@ import {
     ToggleGroupTreeNodePayload,
     ToggleNoteMenuPayload,
     UpdateGroupTreeFilterPayload,
-    UpdateGroupTreePayload, UpdateNotePayload,
+    UpdateGroupTreePayload,
+    UpdateNotePayload,
     UpdateNotesListPayload,
+    UpdateSidebarStatePayload,
     ZAction
 } from './Actions'
 import {ClientStorage} from '../utils/ClientStorage'
 import {CREATE_GROUP_MODAL_ID} from './components/overlays/CreateGroupModalOverlay'
 import {RENAME_GROUP_MODAL_ID} from "./components/overlays/RenameGroupModalOverlay"
 import {MOVE_GROUP_MODAL_ID} from './components/overlays/MoveGroupModalOverlay'
-import {GROUP_NAVIGATOR_MODAL_ID} from './components/overlays/GroupNavigatorModalOverlay'
 import {MOVE_NOTE_MODAL_ID} from './components/overlays/MoveNoteModalOverlay'
+import {isDockedSidebarMode} from '../utils/UIUtils'
 
 const REDUCERS = {}
 REDUCERS[ActionType.UpdateGroupTree] = updateGroupTree
@@ -52,7 +55,6 @@ REDUCERS[ActionType.RenameGroup] = renameGroup
 REDUCERS[ActionType.ShowMoveGroupDialog] = showMoveGroupDialog
 REDUCERS[ActionType.MoveGroup] = moveGroup
 REDUCERS[ActionType.HideModal] = hideModal
-REDUCERS[ActionType.ShowGroupNavigator] = showGroupNavigator
 REDUCERS[ActionType.DeleteGroup] = deleteGroup
 REDUCERS[ActionType.StartUpdateNotesList] = startUpdateNotesList
 REDUCERS[ActionType.UpdateNotesList] = updateNotesList
@@ -65,6 +67,7 @@ REDUCERS[ActionType.UpdateNote] = updateNote
 REDUCERS[ActionType.DeleteNote] = deleteNote
 REDUCERS[ActionType.StartEditNote] = startEditNote
 REDUCERS[ActionType.CancelEditNote] = cancelEditNote
+REDUCERS[ActionType.UpdateSidebarState] = updateSidebarState
 
 type AsyncDispatch = (newAction: ZAction<any>) => void
 
@@ -206,11 +209,6 @@ function hideModal(state: AppStore): AppStore {
     return {...state, activeModalId: null}
 }
 
-function showGroupNavigator(state: AppStore): AppStore {
-    // noinspection TypeScriptValidateTypes
-    return {...state, activeModalId: GROUP_NAVIGATOR_MODAL_ID}
-}
-
 function deleteGroup(state: AppStore, payload: DeleteGroupPayload): AppStore {
     const group = state.groupTree.nodeById[payload.groupId]
     if (!group) {
@@ -346,6 +344,12 @@ function startEditNote(state: AppStore, payload: StartEditNotePayload) {
 function cancelEditNote(state: AppStore, payload: CancelEditNotePayload) {
     const editedNoteIds = state.editedNoteIds.filter(noteId => noteId !== payload.noteId)
     return {...state, editedNoteIds}
+}
+
+function updateSidebarState(state: AppStore, payload: UpdateSidebarStatePayload) {
+    const docked = isDockedSidebarMode() && payload.open
+    const sidebar = {...state.sidebar, docked, open: payload.open}
+    return {...state, sidebar}
 }
 
 const composeWithEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || Redux.compose

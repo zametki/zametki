@@ -15,16 +15,11 @@ import org.jetbrains.annotations.NotNull;
 @MountPath("/my")
 public class WorkspacePage extends BaseUserPage {
 
-    private final ContainerWithId navbarView = new ContainerWithId("navbar");
-    private final ContainerWithId groupsView = new ContainerWithId("groups");
-    private final ContainerWithId notesView = new ContainerWithId("notes");
+    private final ContainerWithId workspaceView = new ContainerWithId("workspace");
 
     public WorkspacePage(PageParameters pp) {
         super(pp);
-
-        add(navbarView);
-        add(groupsView);
-        add(notesView);
+        add(workspaceView);
     }
 
     @Override
@@ -39,9 +34,7 @@ public class WorkspacePage extends BaseUserPage {
 
         JSONObject initContext = new JSONObject();
         initContext.put("groups", groups);
-        initContext.put("notesViewId", notesView.getMarkupId());
-        initContext.put("navbarViewId", navbarView.getMarkupId());
-        initContext.put("groupsViewId", groupsView.getMarkupId());
+        initContext.put("workspaceElementId", workspaceView.getMarkupId());
         return "$site.Server2Client.init(" + initContext.toString() + ");";
     }
 

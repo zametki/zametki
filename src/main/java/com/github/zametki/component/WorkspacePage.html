@@ -2,25 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 <wicket:extend>
-
-    <script>
-        var cls = document.createAttribute("class");
-        cls.value = "lp-body";
-        document.getElementsByTagName("body")[0].setAttributeNode(cls);
-    </script>
-
-    <div wicket:id="navbar"></div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="d-none d-lg-block col-lg-3 col-xl-2 sidebar">
-                <div wicket:id="groups"></div>
-            </nav>
-            <main class="col-sm-12 col-md-12 col-lg-9 col-xl-10 ml-auto pt-3">
-                <div wicket:id="notes" class="mt-2"></div>
-            </main>
-        </div>
-    </div>
+    <div wicket:id="workspace"></div>
 </wicket:extend>
 
 </html>

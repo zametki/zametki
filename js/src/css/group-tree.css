@@ -1,3 +1,7 @@
+.tree {
+    min-width: 310px;
+}
+
 .tree-junction-td {
     width: 4px;
     vertical-align: top;
@@ -75,3 +79,4 @@
 .tree-node-active .tree-node-menu-link {
     color: white;
 }
+

@@ -1,30 +1,29 @@
 import * as React from 'react'
-import {render} from 'react-dom'
 import * as ReactRedux from 'react-redux'
-import {appStore} from '../Reducers'
 import LogoPanel from './LogoPanel'
 import {AppStore, GROUP_TREE_INVALID_ID} from '../Store'
-import {newChangeGroupAction, newShowGroupNavigatorAction, newToggleAddNoteAction} from '../Actions'
+import {newChangeGroupAction, newToggleAddNoteAction, newUpdateSidebarState} from '../Actions'
 
 type OwnProps = {}
 
 type DispatchProps = {
     resetActiveGroup: () => void
-    showGroupNavigator: () => void
+    toggleSidebar: (open: boolean) => void
     toggleAddNote: () => void
 }
 
 type StateProps = {
     lentaMode: boolean,
-    addNoteIsActive: boolean
+    addNoteIsActive: boolean,
+    sidebarOpen: boolean
 }
 
-class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, any> {
+class Navbar extends React.Component<StateProps & OwnProps & DispatchProps, any> {
 
     render() {
         // noinspection HtmlUnknownTarget
         return (
-            <div className="navbar navbar-dark fixed-top lp-navbar">
+            <div className="navbar navbar-dark fixed-top ws-navbar">
                 <div className="navbar-logo">
                     <a href="/">
                         <img src="/img/feather_32.png" className="nav-feather-img"/>
@@ -72,7 +71,7 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
     }
 
     onShowGroupSelectorClicked() {
-        this.props.showGroupNavigator()
+        this.props.toggleSidebar(!this.props.sidebarOpen)
     }
 
     onAddNoteLinkClicked() {
@@ -83,26 +82,18 @@ class NavbarImpl extends React.Component<StateProps & OwnProps & DispatchProps, 
 const mapStateToProps = (store: AppStore): StateProps => {
     return {
         lentaMode: store.activeGroupId == GROUP_TREE_INVALID_ID,
-        addNoteIsActive: store.addNoteIsActive
+        addNoteIsActive: store.addNoteIsActive,
+        sidebarOpen: store.sidebar.open
     }
 }
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        showGroupNavigator: () => dispatch(newShowGroupNavigatorAction()),
+        toggleSidebar: (open) => dispatch(newUpdateSidebarState(open)),
         resetActiveGroup: () => dispatch(newChangeGroupAction(GROUP_TREE_INVALID_ID)),
         toggleAddNote: () => dispatch(newToggleAddNoteAction())
     }
-
 }
 
-export const Navbar = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NavbarImpl) as React.ComponentClass<OwnProps>
+export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Navbar) as React.ComponentClass<OwnProps>
 
-export function renderNavbarView(elementId: string) {
-    render(
-        <ReactRedux.Provider store={appStore}>
-            <Navbar/>
-        </ReactRedux.Provider>,
-        document.getElementById(elementId)
-    )
-}

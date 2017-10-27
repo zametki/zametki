@@ -1,4 +1,5 @@
 import {ClientStorage} from '../utils/ClientStorage'
+import {isDockedSidebarMode} from '../utils/UIUtils'
 
 export const GROUP_TREE_INVALID_ID = -1
 export const GROUP_TREE_ROOT_NODE_ID = 0
@@ -43,6 +44,10 @@ export type AppStore = {
     notesViewState: {
         lastActionNoteId: number
         noteMenuNoteId: number
+    },
+    sidebar: {
+        open: boolean,
+        docked: boolean
     }
 }
 
@@ -65,6 +70,10 @@ export const storeInitialState: AppStore = {
     notesViewState: {
         lastActionNoteId: undefined,
         noteMenuNoteId: undefined
+    },
+    sidebar: {
+        open: isDockedSidebarMode(),
+        docked: isDockedSidebarMode()
     }
 }
 

@@ -19,7 +19,6 @@ export class ActionType {
     static ShowMoveGroupDialog = 'ShowMoveGroupDialog'
     static MoveGroup = 'MoveGroup'
     static HideModal = 'HideModal'
-    static ShowGroupNavigator = 'ShowGroupNavigator'
     static DeleteGroup = 'DeleteGroup'
     static StartUpdateNotesList = 'StartUpdateNotesList'
     static UpdateNotesList = 'UpdateNotesList'
@@ -32,6 +31,7 @@ export class ActionType {
     static ToggleAddNote = 'ToggleAddNote'
     static CreateNote = 'CreateNote'
     static UpdateNote = 'UpdateNote'
+    static UpdateSidebarState = 'UpdateSidebarState'
 }
 
 // TODO: use common payload for groupId or noteId only payloads.
@@ -60,6 +60,7 @@ export type ToggleNoteMenuPayload = { noteId: number, active: boolean }
 export type ToggleAddNotePayload = {}
 export type CreateNotePayload = { groupId: number, text: string }
 export type UpdateNotePayload = { noteId: number, text: string }
+export type UpdateSidebarStatePayload = { open: boolean }
 
 export const newUpdateGroupTreeAction = (nodes: GroupTreeNode[]): ZAction<UpdateGroupTreePayload> => ({
     type: ActionType.UpdateGroupTree,
@@ -121,11 +122,6 @@ export const newHideModalAction = (): ZAction<HideModalPayload> => ({
     payload: {}
 })
 
-export const newShowGroupNavigatorAction = (): ZAction<ShowGroupNavigatorPayload> => ({
-    type: ActionType.ShowGroupNavigator,
-    payload: {}
-})
-
 export const newDeleteGroupAction = (groupId: number): ZAction<ShowGroupNavigatorPayload> => ({
     type: ActionType.DeleteGroup,
     payload: {groupId}
@@ -184,4 +180,9 @@ export const newCreateNoteAction = (groupId: number, text: string): ZAction<Crea
 export const newUpdateNoteAction = (noteId: number, text: string): ZAction<UpdateNotePayload> => ({
     type: ActionType.UpdateNote,
     payload: {noteId, text}
+})
+
+export const newUpdateSidebarState = (open: boolean): ZAction<UpdateSidebarStatePayload> => ({
+    type: ActionType.UpdateSidebarState,
+    payload: {open}
 })

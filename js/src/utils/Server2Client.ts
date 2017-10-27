@@ -2,18 +2,17 @@
  * Interface used by server code to trigger client actions.
  */
 import {GroupTreeNode} from '../react/Store'
-import {renderGroupTreeView} from '../react/components/GroupTreeView'
 import {newStartUpdateNotesListAction, newUpdateGroupTreeAction} from '../react/Actions'
 import {appStore} from '../react/Reducers'
-import {renderNavbarView} from '../react/components/Navbar'
-import {renderNotesView} from '../react/components/NotesView'
 import Shortcuts from './Shortcuts'
+import {renderWorkspace} from '../react/components/Workspace'
 
 interface InitContext {
     groups: GroupTreeNode[],
-    groupsViewId: string,
-    navbarViewId: string
-    notesViewId: string
+    workspaceElementId: string
+    // groupsViewId: string,
+    // navbarViewId: string
+    // notesViewId: string
 }
 
 function init(ctx: InitContext) {
@@ -21,10 +20,11 @@ function init(ctx: InitContext) {
     appStore.dispatch(newUpdateGroupTreeAction(ctx.groups))
     appStore.dispatch(newStartUpdateNotesListAction(appStore.getState().activeGroupId))
 
+    renderWorkspace(ctx.workspaceElementId)
     // render all components
-    renderNotesView(ctx.notesViewId)
-    renderNavbarView(ctx.navbarViewId)
-    renderGroupTreeView(ctx.groupsViewId)
+    // renderNotesView(ctx.notesViewId)
+    // renderNavbarView(ctx.navbarViewId)
+    // renderGroupTreeView(ctx.groupsViewId)
 
     Shortcuts.bindWorkspacePageKeys()
 }
