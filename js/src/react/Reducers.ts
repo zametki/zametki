@@ -163,7 +163,8 @@ function createGroup(state: AppStore, payload: CreateGroupPayload): AppStore {
             appStore.dispatch(newUpdateGroupTreeAction(xhr.response.groups))
         }
     }
-    xhr.send(`groupId=${payload.parentGroupId}&name=${payload.name}`)
+    const encodedName = encodeURIComponent(payload.name)
+    xhr.send(`groupId=${payload.parentGroupId}&name=${encodedName}`)
     return state
 }
 
@@ -298,7 +299,8 @@ function createNote(state: AppStore, payload: CreateNotePayload): AppStore {
             }
         }
     }
-    xhr.send(`groupId=${payload.groupId}&text=${payload.text}`)
+    const encodedText = encodeURIComponent(payload.text)
+    xhr.send(`groupId=${payload.groupId}&text=${encodedText}`)
     return state
 }
 
@@ -314,7 +316,8 @@ function updateNote(state: AppStore, payload: UpdateNotePayload): AppStore {
             appStore.dispatch(newUpdateNotesListAction(xhr.response.notes))
         }
     }
-    xhr.send(`noteId=${payload.noteId}&text=${payload.text}`)
+    const encodedText = encodeURIComponent(payload.text)
+    xhr.send(`noteId=${payload.noteId}&text=${encodedText}`)
     return state
 }
 

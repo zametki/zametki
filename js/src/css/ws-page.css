@@ -19,7 +19,6 @@
 .sidebar {
     background-color: white;
 }
-
 .sidebar::-webkit-scrollbar {
     width: 0.5em;
 }
