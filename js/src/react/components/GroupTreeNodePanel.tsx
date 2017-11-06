@@ -1,10 +1,11 @@
 import * as React from 'react'
 import * as ReactRedux from 'react-redux'
 import {AppStore, GroupTreeNode} from '../Store'
-import {newChangeGroupAction, newToggleGroupTreeNodeAction} from '../Actions'
+import {newChangeGroupAction, newToggleGroupTreeNodeAction, newUpdateSidebarState} from '../Actions'
 import GroupTreeCountsBadge from './GroupTreeCountsBadge'
 import GroupTreeNodeMenu from './GroupTreeNodeMenu'
 import {appStore} from '../Reducers'
+import {isDockedSidebarMode} from '../../utils/UIUtils'
 
 type OwnProps = {
     nodeId: number
@@ -99,7 +100,12 @@ const mapStateToProps = (state: AppStore, ownProps: OwnProps): StateProps => {
 
 function mapDispatchToProps(dispatch): DispatchProps {
     return {
-        activateGroup: (groupId: number) => dispatch(newChangeGroupAction(groupId)),
+        activateGroup: (groupId: number) => {
+            dispatch(newChangeGroupAction(groupId))
+            if (!isDockedSidebarMode()) {
+                dispatch(newUpdateSidebarState(false))
+            }
+        },
         toggleExpandedState: (nodeId, expanded) => dispatch(newToggleGroupTreeNodeAction(nodeId, expanded))
     }
 }
