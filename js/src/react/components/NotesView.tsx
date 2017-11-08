@@ -17,18 +17,21 @@ type StateProps = {
     activeGroupName: string,
     noteIds: number[]
     noteById: { [noteId: number]: Note }
-    editedNoteIds: number[]
+    editedNoteIds: number[],
+    showLoadingIndicator: boolean
 }
 
 class NotesView extends React.Component<StateProps & DispatchProps, {}> {
     render() {
         const notes = this.renderNotes()
+        const loadingIndicator = this.props.showLoadingIndicator ? (<div>loading...</div>) : null
         return (
             <div className="notes-view">
                 {/*Header*/}
                 <div className="text-center">
                     <div className="group-header">{this.props.activeGroupName}</div>
                 </div>
+                {loadingIndicator}
                 <NewNoteEditor/>
                 <div>
                     {notes}
@@ -82,7 +85,8 @@ const mapStateToProps = (store: AppStore): StateProps => {
         activeGroupName,
         noteIds: store.noteIds,
         noteById: store.noteById,
-        editedNoteIds: store.editedNoteIds
+        editedNoteIds: store.editedNoteIds,
+        showLoadingIndicator: store.notesViewState.hasPendingNotesListRequest
     }
 }
 

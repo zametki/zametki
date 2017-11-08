@@ -231,6 +231,9 @@ function deleteGroup(state: AppStore, payload: DeleteGroupPayload): AppStore {
 }
 
 function startUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayload): AppStore {
+    if (state.notesViewState.hasPendingNotesListRequest) {
+        return state
+    }
     const xhr = new XMLHttpRequest()
     xhr.open('GET', `/ajax/notes/${payload.groupId}`, true)
     xhr.responseType = 'json'
@@ -240,7 +243,7 @@ function startUpdateNotesList(state: AppStore, payload: StartUpdateNotesListPayl
         }
     }
     xhr.send()
-    return state
+    return {...state, notesViewState: {...state.notesViewState, hasPendingNotesListRequest: true}}
 }
 
 function updateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppStore {
@@ -251,7 +254,7 @@ function updateNotesList(state: AppStore, payload: UpdateNotesListPayload): AppS
         noteIds.push(n.id)
     })
     // noinspection TypeScriptValidateTypes
-    return {...state, noteIds, noteById}
+    return {...state, noteIds, noteById, notesViewState: {...state.notesViewState, hasPendingNotesListRequest: false}}
 }
 
 function toggleNoteMenu(state: AppStore, payload: ToggleNoteMenuPayload): AppStore {

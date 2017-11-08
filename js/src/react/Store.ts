@@ -39,11 +39,12 @@ export type AppStore = {
     activeGroupId: number,
     noteIds: number[],
     addNoteIsActive: boolean,
-    noteById: { [noteId: number]: Note }
+    noteById: { [noteId: number]: Note },
     editedNoteIds: number[],
     notesViewState: {
-        lastActionNoteId: number
-        noteMenuNoteId: number
+        lastActionNoteId: number,
+        noteMenuNoteId: number,
+        hasPendingNotesListRequest: boolean
     },
     sidebar: {
         open: boolean,
@@ -69,7 +70,8 @@ export const storeInitialState: AppStore = {
     editedNoteIds: [],
     notesViewState: {
         lastActionNoteId: undefined,
-        noteMenuNoteId: undefined
+        noteMenuNoteId: undefined,
+        hasPendingNotesListRequest: false
     },
     sidebar: {
         open: isDockedSidebarMode(),
