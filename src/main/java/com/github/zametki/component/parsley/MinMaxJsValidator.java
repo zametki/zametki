@@ -34,7 +34,7 @@ public class MinMaxJsValidator extends RequiredFieldJsValidator {
     }
 
     public boolean validate(@Nullable String value, AjaxRequestTarget target, @Nullable Component errorContainer, @Nullable Component componentToFocus) {
-        String errorMessage = ValidatorUtils.validateRange(value, min, max, minMessage, maxMessage);
+        String errorMessage = ValidatorUtils.INSTANCE.validateRange(value, min, max, minMessage, maxMessage);
         if (errorMessage == null) {
             return true;
         }

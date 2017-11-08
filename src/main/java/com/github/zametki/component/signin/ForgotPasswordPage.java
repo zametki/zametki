@@ -99,16 +99,16 @@ public class ForgotPasswordPage extends BasePage {
                 VerificationRecord resetRequest = new VerificationRecord(user, VerificationRecordType.PasswordReset, "");
                 Context.getUsersDbi().createVerificationRecord(resetRequest);
 
-                feedback.info("На почтовый адрес '" + user.email + "' было выслано письмо с инструкцией о том, как изменить пароль");
+                feedback.info("На почтовый адрес '" + user.getEmail() + "' было выслано письмо с инструкцией о том, как изменить пароль");
                 form.setVisible(false);
                 backHomeLink.setVisible(true);
                 target.add(panel);
                 try {
                     String url = WebUtils.getFullPageUrl(ResetPasswordPage.class, ResetPasswordPage.getPageParams(resetRequest.hash));
                     String subject = Constants.BRAND_NAME + " - восстановление пароля";
-                    String body = "Имя Вашего пользователя: " + user.login + "\n" +
+                    String body = "Имя Вашего пользователя: " + user.getLogin() + "\n" +
                             "Для того, чтобы изменить пароль, используйте следующую ссылку: " + url;
-                    MailClient.sendMail(user.email, subject, body);
+                    MailClient.sendMail(user.getEmail(), subject, body);
                 } catch (Exception e) {
                     log.error("Error sending email", e);
                     feedback.error("Внутренняя ошибка! Пожалуйста сообщите на " + MailClient.SUPPORT_EMAIL);

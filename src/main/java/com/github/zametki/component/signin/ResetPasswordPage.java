@@ -118,7 +118,7 @@ public class ResetPasswordPage extends BasePage {
                 }
                 String password1 = password1Field.getModelObject();
                 String password2 = password2Field.getModelObject();
-                String err = ValidatorUtils.validatePassword(password1, password2);
+                String err = ValidatorUtils.INSTANCE.validatePassword(password1, password2);
                 if (err != null) {
                     ParsleyUtils.addParsleyError(target, password1Error, err);
                     JsUtils.focus(target, password1Field);
@@ -129,9 +129,9 @@ public class ResetPasswordPage extends BasePage {
                     feedback.error("Пользователь не найден!");
                     return;
                 }
-                user.passwordHash = UserSessionUtils.password2Hash(password1);
+                user.setPasswordHash(UserSessionUtils.password2Hash(password1));
                 Context.getUsersDbi().updatePassword(user, r1);
-                feedback.success("Пароль изменен. Используйте новый пароль чтобы войти в систему! Ваш email: " + user.email);
+                feedback.success("Пароль изменен. Используйте новый пароль чтобы войти в систему! Ваш email: " + user.getEmail());
                 form.setVisible(false);
                 loginLink.setVisible(true);
                 target.add(resetBlock);

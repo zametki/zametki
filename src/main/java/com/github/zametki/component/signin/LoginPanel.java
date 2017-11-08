@@ -64,12 +64,12 @@ public class LoginPanel extends Panel {
                     return;
                 }
                 String password = passwordField.getModelObject();
-                if (!UserSessionUtils.checkPassword(password, user.passwordHash)) {
+                if (!UserSessionUtils.checkPassword(password, user.getPasswordHash())) {
                     ParsleyUtils.addParsleyError(target, passwordError, "Неверный пароль!");
                     JsUtils.focus(target, passwordError);
                     return;
                 }
-                if (user.terminationDate != null) {
+                if (user.getTerminationDate() != null) {
                     ParsleyUtils.addParsleyError(target, loginError, "Пользователь заблокирован!");
                     JsUtils.focus(target, emailOrLoginField);
                     return;

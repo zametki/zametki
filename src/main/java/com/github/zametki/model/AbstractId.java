@@ -43,6 +43,9 @@ public class AbstractId implements DbInt, IClusterable, Comparable<AbstractId> {
     public boolean isValid() {
         return intValue > 0;
     }
+    public boolean isInvalid() {
+        return !isValid();
+    }
 
     public boolean isRoot() {
         return !isValid();

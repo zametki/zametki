@@ -11,7 +11,22 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <kotlin.version>1.2.0-rc-39</kotlin.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>kotlin-eap</id>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>kotlin-eap</id>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <!-- build settings (filtering) -->
     <build>
@@ -37,18 +52,50 @@
 
         <!-- Plugins -->
         <plugins>
+            <!-- Kotlin Compiler -->
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/java</source>
+                                <source>.idea/libraries</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Java Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.7.0</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>1.9</source>
-                    <target>1.9</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <debug>true</debug>
                     <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
+
             <!--WAR file assembler-->
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
@@ -161,6 +208,13 @@
             <artifactId>annotations</artifactId>
             <version>13.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Kotlin code -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
 
     </dependencies>

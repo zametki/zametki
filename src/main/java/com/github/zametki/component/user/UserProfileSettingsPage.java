@@ -105,20 +105,20 @@ public class UserProfileSettingsPage extends BaseUserPage {
                 User user = WebUtils.getUserOrRedirectHome();
                 String oldPassword = oldPasswordField.getModelObject();
                 String oldPasswordHash = UserSessionUtils.password2Hash(oldPassword);
-                if (!user.passwordHash.equals(oldPasswordHash)) {
+                if (!user.getPasswordHash().equals(oldPasswordHash)) {
                     ParsleyUtils.addParsleyError(target, oldPasswordError, "Неверный пароль");
                     JsUtils.focus(target, oldPasswordField);
                     return;
                 }
                 String password1 = password1Field.getModelObject();
                 String password2 = password2Field.getModelObject();
-                String err = ValidatorUtils.validatePassword(password1, password2);
+                String err = ValidatorUtils.INSTANCE.validatePassword(password1, password2);
                 if (err != null) {
                     ParsleyUtils.addParsleyError(target, password1Error, err);
                     JsUtils.focus(target, password1Field);
                     return;
                 }
-                user.passwordHash = UserSessionUtils.password2Hash(password1);
+                user.setPasswordHash(UserSessionUtils.password2Hash(password1));
                 Context.getUsersDbi().updatePassword(user, null);
                 feedback.success("Пароль изменен");
                 homePageLink.setVisible(true);

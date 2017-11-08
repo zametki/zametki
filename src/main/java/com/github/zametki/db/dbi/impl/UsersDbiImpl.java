@@ -49,7 +49,7 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
      */
     @Override
     public void createUser(@NotNull User user) {
-        user.uid = UUID.randomUUID().toString();
+        user.setUid(UUID.randomUUID().toString());
         user.id = usersSql.insertUser(user);
 
         Group g = new Group();
@@ -60,7 +60,7 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
 
     @Override
     public void updateLastLoginDate(@NotNull User user) {
-        user.lastLoginDate = Instant.now();
+        user.setLastLoginDate(Instant.now());
         usersSql.updateLastLoginDate(user);
     }
 
@@ -80,7 +80,7 @@ public final class UsersDbiImpl extends AbstractDbi implements UsersDbi {
     public void updatePassword(@NotNull User user, @Nullable VerificationRecord r) {
         assertTrue(r == null || (r.type == VerificationRecordType.PasswordReset && user.id.equals(r.userId)),
                 () -> "Некорректная запись: " + r + " user: " + user);
-        usersSql.updatePasswordHash(user.id, user.passwordHash);
+        usersSql.updatePasswordHash(user.id, user.getPasswordHash());
         if (r != null) {
             vrSql.updateVerificationDate(r.id, new Date());
         }

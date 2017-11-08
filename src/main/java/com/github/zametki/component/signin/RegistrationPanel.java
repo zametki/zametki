@@ -85,7 +85,7 @@ public class RegistrationPanel extends Panel {
                     JsUtils.focus(target, emailField);
                     return;
                 }
-                if (!ValidatorUtils.isValidEmail(email)) {
+                if (!ValidatorUtils.INSTANCE.isValidEmail(email)) {
                     ParsleyUtils.addParsleyError(target, emailError, "Некорректный формат email");
                     JsUtils.focus(target, emailField);
                     return;
@@ -97,7 +97,7 @@ public class RegistrationPanel extends Panel {
                     return;
                 }
                 String login = loginField.getInputString();
-                if (!ValidatorUtils.isValidLogin(login)) {
+                if (!ValidatorUtils.INSTANCE.isValidLogin(login)) {
                     ParsleyUtils.addParsleyError(target, loginError, "Недопустимый псевдоним");
                     JsUtils.focus(target, loginField);
                     return;
@@ -110,7 +110,7 @@ public class RegistrationPanel extends Panel {
                 }
                 String password1 = password1Field.getModelObject();
                 String password2 = password2Field.getModelObject();
-                String err = ValidatorUtils.validatePassword(password1, password2);
+                String err = ValidatorUtils.INSTANCE.validatePassword(password1, password2);
                 if (err != null) {
                     ParsleyUtils.addParsleyError(target, password1Error, err);
                     JsUtils.focus(target, password1Field);
@@ -118,11 +118,11 @@ public class RegistrationPanel extends Panel {
                 }
 
                 user = new User();
-                user.login = login;
-                user.registrationDate = Instant.now();
-                user.lastLoginDate = user.registrationDate;
-                user.email = email;
-                user.passwordHash = UserSessionUtils.password2Hash(password1);
+                user.setLogin(login);
+                user.setRegistrationDate(Instant.now());
+                user.setLastLoginDate(user.getRegistrationDate());
+                user.setEmail(email);
+                user.setPasswordHash(UserSessionUtils.password2Hash(password1));
                 Context.getUsersDbi().createUser(user);
 
                 target.add(form);

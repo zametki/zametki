@@ -14,7 +14,7 @@ public class Group extends Identifiable<GroupId> {
     public GroupId parentId = GroupId.ROOT;
 
     @NotNull
-    public UserId userId = UserId.INVALID_ID;
+    public UserId userId = UserId.Companion.getINVALID_ID();
 
     @NotNull
     public String name = "";

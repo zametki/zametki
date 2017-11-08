@@ -71,7 +71,7 @@ public class UserSession extends WebSession {
         String res = "session:" + hashCode();
         User user = getUser();
         if (user != null) {
-            res += "|user:" + user.login;
+            res += "|user:" + user.getLogin();
         }
         res += "|ip:" + ip;
         return res;

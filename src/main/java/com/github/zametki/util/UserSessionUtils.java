@@ -51,7 +51,7 @@ public class UserSessionUtils {
                 return;
             }
             String passwordHash = autoLoginData.substring(sep + 1);
-            if (user.passwordHash.equals(passwordHash)) {
+            if (user.getPasswordHash().equals(passwordHash)) {
                 login(user);
             }
         } finally {
@@ -63,8 +63,8 @@ public class UserSessionUtils {
         log.info("login: " + user);
 
         UserSession.get().setUser(user);
-        UserSessionUtils.setUserAutoLoginInfo(user.id.getDbValue() + ID_PASSWORD_SEPARATOR_CHAR + user.passwordHash);
-        user.lastLoginDate = Instant.now();
+        UserSessionUtils.setUserAutoLoginInfo(user.id.getDbValue() + ID_PASSWORD_SEPARATOR_CHAR + user.getPasswordHash());
+        user.setLastLoginDate(Instant.now());
         Context.getUsersDbi().updateLastLoginDate(user);
     }
 

@@ -49,7 +49,7 @@ public class UserSettings implements DbString {
         if (user == null) {
             return new UserSettings("");
         }
-        return user.settings;
+        return user.getSettings();
     }
 
     public static void set(@NotNull UserSettings us) {
@@ -57,7 +57,7 @@ public class UserSettings implements DbString {
         if (user == null) {
             return;
         }
-        user.settings = us;
+        user.setSettings(us);
         Context.getUsersDbi().updateSettings(user);
     }
 

@@ -12,7 +12,7 @@ public class Zametka extends Identifiable<ZametkaId> {
     public static final int MAX_CONTENT_LEN = 65_535;
 
     @NotNull
-    public UserId userId = UserId.INVALID_ID;
+    public UserId userId = UserId.Companion.getINVALID_ID();
 
     @NotNull
     public Instant creationDate = Instant.MIN;

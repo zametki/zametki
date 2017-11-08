@@ -30,7 +30,7 @@ public class WorkspacePage extends BaseUserPage {
 
     @NotNull
     public String getInitScript() {
-        JSONArray groups = AjaxApiUtils.getGroups(WebUtils.getUserIdOrRedirectHome());
+        JSONArray groups = AjaxApiUtils.INSTANCE.getGroups(WebUtils.getUserIdOrRedirectHome());
 
         JSONObject initContext = new JSONObject();
         initContext.put("groups", groups);
@@ -39,7 +39,7 @@ public class WorkspacePage extends BaseUserPage {
     }
 
     static {
-        AjaxApiUtils.ROOT_GROUP.name = "root";
+        AjaxApiUtils.INSTANCE.getROOT_GROUP().name = "root";
     }
 
 }

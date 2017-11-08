@@ -12,7 +12,7 @@ public class EmailJsValidator extends RequiredFieldJsValidator {
         super(errorContainer);
 
         attributeMap.put("data-parsley-type", "email");
-        attributeMap.put("data-parsley-maxlength", User.EMAIL_MAX_LENGTH);
-        attributeMap.put("data-parsley-maxlength-message", "Максимально допустимая длина email: " + PL.npl(User.EMAIL_MAX_LENGTH, " символ"));
+        attributeMap.put("data-parsley-maxlength", User.Companion.getEMAIL_MAX_LENGTH());
+        attributeMap.put("data-parsley-maxlength-message", "Максимально допустимая длина email: " + PL.npl(User.Companion.getEMAIL_MAX_LENGTH(), " символ"));
     }
 }
