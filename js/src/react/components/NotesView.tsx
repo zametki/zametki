@@ -24,7 +24,7 @@ type StateProps = {
 class NotesView extends React.Component<StateProps & DispatchProps, {}> {
     render() {
         const notes = this.renderNotes()
-        const loadingIndicator = this.props.showLoadingIndicator ? (<div>loading...</div>) : null
+        const loadingIndicator = null //TODO: this.props.showLoadingIndicator ? (<div>loading...</div>) : null
         return (
             <div className="notes-view">
                 {/*Header*/}
@@ -86,7 +86,7 @@ const mapStateToProps = (store: AppStore): StateProps => {
         noteIds: store.noteIds,
         noteById: store.noteById,
         editedNoteIds: store.editedNoteIds,
-        showLoadingIndicator: store.notesViewState.hasPendingNotesListRequest
+        showLoadingIndicator: store.pendingOps.dataUpdate
     }
 }
 
