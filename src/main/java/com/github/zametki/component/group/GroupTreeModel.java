@@ -38,10 +38,10 @@ public class GroupTreeModel extends DefaultTreeModel {
                 .collect(Collectors.toList());
 
         Map<GroupId, GroupTreeNode> nodeById = new HashMap<>();
-        GroupTreeNode rootNode = nodeById.computeIfAbsent(GroupId.ROOT, GroupTreeNode::new);
+        GroupTreeNode rootNode = nodeById.computeIfAbsent(GroupId.Companion.getROOT(), GroupTreeNode::new);
         for (Group g : groups) {
-            GroupTreeNode n = nodeById.computeIfAbsent(g.id, i -> new GroupTreeNode(g.id));
-            GroupTreeNode parentNode = nodeById.computeIfAbsent(g.parentId, u -> new GroupTreeNode(g.parentId));
+            GroupTreeNode n = nodeById.computeIfAbsent(g.getId(), i -> new GroupTreeNode(g.getId()));
+            GroupTreeNode parentNode = nodeById.computeIfAbsent(g.getParentId(), u -> new GroupTreeNode(g.getParentId()));
             if (isParent(parentNode, n)) {
                 rootNode.add(n);
                 log.error("Loop found: {}", g);

@@ -67,13 +67,13 @@ public class ResetPasswordPage extends BasePage {
             return;
         }
 
-        if (r.verificationDate != null) {
+        if (r.getVerificationDate() != null) {
             resetBlock.setVisible(false);
             feedback.error("Код уже был использован!");
             return;
         }
 
-        boolean expired = r.creationDate.isBefore(Instant.now().minus(Duration.ofHours(REQUEST_VALID_HOURS)));
+        boolean expired = r.getCreationDate().isBefore(Instant.now().minus(Duration.ofHours(REQUEST_VALID_HOURS)));
         if (expired) {
             resetBlock.setVisible(false);
             feedback.error("Время действия кода истекло. Создайте запрос снова!");
@@ -105,7 +105,7 @@ public class ResetPasswordPage extends BasePage {
         form.add(password2Field);
 
 
-        VerificationRecordId recordId = r.id;
+        VerificationRecordId recordId = r.getId();
         form.add(new ValidatingJsAjaxSubmitLink("submit_link", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -124,7 +124,7 @@ public class ResetPasswordPage extends BasePage {
                     JsUtils.focus(target, password1Field);
                     return;
                 }
-                User user = Context.getUsersDbi().getUserById(r1.userId);
+                User user = Context.getUsersDbi().getUserById(r1.getUserId());
                 if (user == null) {
                     feedback.error("Пользователь не найден!");
                     return;

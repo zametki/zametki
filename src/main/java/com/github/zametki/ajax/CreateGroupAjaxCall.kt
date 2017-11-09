@@ -16,7 +16,7 @@ class CreateGroupAjaxCall : BaseGroupActionAjaxCall() {
             return error("Illegal group name")
         }
         val newGroup = Group()
-        newGroup.parentId = if (group != null) group.id else GroupId.ROOT
+        newGroup.parentId = if (group != null) group.id!! else GroupId.ROOT
         newGroup.name = name
         newGroup.userId = userId
         Context.getGroupsDbi().create(newGroup)

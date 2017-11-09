@@ -44,7 +44,7 @@ public class UserSession extends WebSession {
     }
 
     public void setUser(@NotNull User user) {
-        this.userId = user.id;
+        this.userId = user.getId();
     }
 
     public boolean isInitialized() {

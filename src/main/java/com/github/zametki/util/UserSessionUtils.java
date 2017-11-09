@@ -63,7 +63,7 @@ public class UserSessionUtils {
         log.info("login: " + user);
 
         UserSession.get().setUser(user);
-        UserSessionUtils.setUserAutoLoginInfo(user.id.getDbValue() + ID_PASSWORD_SEPARATOR_CHAR + user.getPasswordHash());
+        UserSessionUtils.setUserAutoLoginInfo(user.getId().getDbValue() + ID_PASSWORD_SEPARATOR_CHAR + user.getPasswordHash());
         user.setLastLoginDate(Instant.now());
         Context.getUsersDbi().updateLastLoginDate(user);
     }

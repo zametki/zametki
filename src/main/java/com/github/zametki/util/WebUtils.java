@@ -46,7 +46,7 @@ public class WebUtils {
 
     @NotNull
     public static UserId getUserIdOrRedirectHome() {
-        return getUserOrRedirectHome().id;
+        return getUserOrRedirectHome().getId();
     }
 
     public static User getUserOrRedirectHome() {

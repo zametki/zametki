@@ -9,7 +9,7 @@ import com.github.zametki.model.Group
 class DeleteGroupAjaxCall : BaseNNGroupActionAjaxCall() {
 
     override fun getResponseTextNN(group: Group): String {
-        val nChildren = Context.getZametkaDbi().countByGroup(group.userId, group.id)
+        val nChildren = Context.getZametkaDbi().countByGroup(group.userId, group.id!!)
         if (nChildren > 0) {
             return error("Group is not empty")
         }

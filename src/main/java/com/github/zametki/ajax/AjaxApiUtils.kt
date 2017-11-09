@@ -28,7 +28,7 @@ object AjaxApiUtils {
         val json = JSONObject()
         val groupId = node.groupId
         val g = (if (groupId.isRoot) ROOT_GROUP else Context.getGroupsDbi().getById(groupId)) ?: return null
-        json.put("id", if (g.id == null) 0 else g.id.intValue)
+        json.put("id", if (g.id == null) 0 else g.id!!.intValue)
         json.put("name", g.name)
         json.put("parentId", g.parentId.intValue)
         json.put("level", node.level)
@@ -91,7 +91,7 @@ object AjaxApiUtils {
 
     private fun toJSON(z: Zametka): JSONObject {
         val json = JSONObject()
-        json.put("id", z.id.intValue)
+        json.put("id", z.id!!.intValue)
         json.put("group", z.groupId.intValue)
         json.put("type", z.type.id)
         json.put("content", z.content)

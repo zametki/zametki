@@ -10,7 +10,7 @@ import com.github.zametki.model.ZametkaId
 class MoveNoteAjaxCall : BaseNNGroupActionAjaxCall() {
 
     override fun getResponseTextNN(group: Group): String {
-        if (group.id.isRoot) {
+        if (group.id!!.isRoot) {
             return error("Illegal group")
         }
         val zametkaId = ZametkaId(getParameter("noteId").toInt(-1))
@@ -20,7 +20,7 @@ class MoveNoteAjaxCall : BaseNNGroupActionAjaxCall() {
         }
         val oldGroupId = z.groupId
         if (z.groupId != group.id) {
-            z.groupId = group.id
+            z.groupId = group.id!!
             Context.getZametkaDbi().update(z)
         }
         return AjaxApiUtils.getNotesAndGroupsAsResponse(userId, oldGroupId)

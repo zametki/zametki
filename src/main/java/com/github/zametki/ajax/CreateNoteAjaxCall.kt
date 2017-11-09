@@ -18,13 +18,13 @@ class CreateNoteAjaxCall : BaseNNGroupActionAjaxCall() {
             return error("Illegal text length: " + text.length)
         }
         val z = Zametka()
-        z.groupId = group.id
+        z.groupId = group.id!!
         z.creationDate = Instant.now()
         z.userId = userId
         z.content = text
         Context.getZametkaDbi().create(z)
 
-        return AjaxApiUtils.getNotesAndGroupsAsResponse(userId, group.id)
+        return AjaxApiUtils.getNotesAndGroupsAsResponse(userId, group.id!!)
     }
 
 }

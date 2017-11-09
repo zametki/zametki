@@ -32,7 +32,7 @@ class User : Identifiable<UserId>() {
 
     var settings = UserSettings("")
 
-    override fun toString() = "U[" + (if (id == null) "?" else "" + id.dbValue) + "|" + email + "]"
+    override fun toString() = "U[" + (if (id == null) "?" else "" + id!!.dbValue) + "|" + email + "]"
 
     companion object {
 

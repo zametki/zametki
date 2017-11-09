@@ -104,7 +104,7 @@ public class ForgotPasswordPage extends BasePage {
                 backHomeLink.setVisible(true);
                 target.add(panel);
                 try {
-                    String url = WebUtils.getFullPageUrl(ResetPasswordPage.class, ResetPasswordPage.getPageParams(resetRequest.hash));
+                    String url = WebUtils.getFullPageUrl(ResetPasswordPage.class, ResetPasswordPage.getPageParams(resetRequest.getHash()));
                     String subject = Constants.BRAND_NAME + " - восстановление пароля";
                     String body = "Имя Вашего пользователя: " + user.getLogin() + "\n" +
                             "Для того, чтобы изменить пароль, используйте следующую ссылку: " + url;

@@ -39,7 +39,7 @@ public class WorkspacePage extends BaseUserPage {
     }
 
     static {
-        AjaxApiUtils.INSTANCE.getROOT_GROUP().name = "root";
+        AjaxApiUtils.INSTANCE.getROOT_GROUP().setName("root");
     }
 
 }
