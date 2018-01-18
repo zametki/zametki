@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.2.0-rc-39</kotlin.version>
+        <kotlin.version>1.2.10</kotlin.version>
     </properties>
 
     <repositories>
@@ -155,7 +155,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.7.2</version>
+            <version>2.7.4</version>
             <scope>compile</scope>
         </dependency>
 
@@ -169,7 +169,7 @@
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-extensions</artifactId>
-            <version>8.0.0-M7</version>
+            <version>8.0.0-M8</version>
             <scope>compile</scope>
         </dependency>
 
@@ -200,6 +200,13 @@
             <artifactId>commons-text</artifactId>
             <version>1.1</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- DB -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.45</version>
         </dependency>
 
         <!-- Compile time tools-->
